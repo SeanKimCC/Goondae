@@ -1,0 +1,456 @@
+
+/* Goon Bok Mu */
+
+body{
+	margin: 0px;
+}
+
+#pageHeader{
+	height: 50px;
+	background-color: #575787;
+	width: 100%;
+	text-align: center;
+	font-size: 25px;
+}
+#wolgeupPageHeader{
+	height: 50px;
+	background-color: #85bb65;
+	width: 100%;
+	text-align: center;
+	font-size: 25px;
+}
+
+#contents {
+	margin-top: 20px; 
+	text-align: center;
+}
+
+.goonbokmu-body{
+	/*background-color: #141414;*/
+	/*color: #fff;*/
+	background-color: #f8f8f8;
+}
+
+#goonbokmuTitle{
+	text-align: center;
+	vertical-align: middle;
+	line-height: 50px;
+	color: #f6f6f6;
+	font-family: 'Nanum Square Bold';
+}
+
+.goonbokmu-title-text{
+	margin: 0 auto;
+	width: 100%;
+	left: 0;
+	top: 0;
+	text-align: center;
+	position: absolute;
+}
+.compensation-title-text{
+	position: absolute;
+	right: 0;
+	margin-right: 10px;
+	font-size: 17px;
+}
+.compensation-calculator{
+	width: 34px;
+	height: 34px;
+	position: absolute;
+	right: 0;
+	margin-top: 8px;
+	margin-right: 7px;
+}
+.compensation-arrow-icon{
+	margin-bottom: -1px;
+}
+.compensation-calculator:hover {
+	cursor: pointer;
+}
+.compensation-title-text:hover {
+	cursor: pointer;
+}
+
+.title-box{
+	font-family: 'Nanum Square Bold';
+	font-size: 21px;
+	text-align: center;
+	margin-bottom: 10px;
+}
+
+.result-box{
+	font-family: 'Nanum Square Bold';
+	text-align: center;
+	font-size: 20px;
+	padding-top: 10px;
+	line-height:1.4em;
+}
+
+
+.warning-box{
+	font-family: 'Nanum Square';
+	text-align: center;
+	font-size: 12px;
+	color: #ddaa00;
+	margin-top: 10px;
+}
+.recent-warning{
+	color: red;
+}
+
+
+.btn-group{
+	display: inline-block;
+	margin: 20px auto 5px auto;
+	text-align: center;
+	width: 70%;
+	font-family: 'Nanum Square Bold';
+}
+
+.btn-default{
+	border: 1px solid grey;
+}
+
+.btn-last{
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+.btn-first{
+	border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+.btn-selected{
+	
+}
+
+.goonbokmu-btn{
+	display:inline-block;
+	margin-left: -5px !important;
+	font-size: 17px;
+	font-family: 'Nanum Square Bold';
+	height: 30px;
+	padding: 0 10px;
+}
+
+.goonbokmu-btn:focus{
+	box-shadow: none !important;
+}
+
+.goonbokmu-btn:hover{
+	cursor: pointer;
+	background-color: #f3f3f3;
+}
+
+.cal__type--selected{
+	background-color: #bbb !important;
+}
+
+/**GBM END**/
+
+
+
+/* MOVIES TO WATCH CSS */
+
+/* #load{ //todo: insert image
+    width:100%;
+    height:100%;
+    position:fixed;
+    z-index:9999;
+    background:url("../images/loading.svg") no-repeat center center #f8f8f8;
+} */
+
+.movie-underlined-subsection{
+	width: 100%;
+	font-family: 'Lato', sans-serif;
+	border-bottom: 1px solid white;
+	color: white;
+	font-size: 24px;
+	font-weight: 200;
+	margin-bottom: 10px;
+}
+
+.generic-movies-poster-thumbnail{
+	display: inline-block;
+	border: 3px solid #444;
+	height: 240px;
+	width: 162px;
+	margin: 10px 15px 0px 15px;
+	background-size: cover;
+}
+
+.generic-movies-poster-thumbnail:hover{
+	cursor: pointer;
+}
+
+.poster-gallery-table{
+	text-align: center;
+	overflow-x: auto;
+	overflow-y: hidden;
+	white-space: nowrap;
+}
+
+.selected-video{
+	border-color: #777 !important;
+}
+
+/* NEED DIFFERENT HEIGHTS FOR DIFFERENT SCREEN SIZES */
+.movies-poster-container{
+	height: 250px;
+}
+
+/***********************************************
+**********ARROW FOR MOVIE POSTERS***************
+************************************************/
+
+.movies-selector-container{
+	width: 100%;
+	height: 15px;
+}
+
+.movies-selector-arrow{
+	border-bottom: 15px solid #777;
+	border-left: 15px solid transparent;
+	border-right: 15px solid transparent;
+	display: inline-block;
+	width: 0;
+	height: 0;
+	margin-bottom: 15px;
+}
+
+.selector-arrow-box{
+	display: inline-block;
+	width: 162px;
+	margin: 0px 15px 0px 15px;
+	visibility: hidden;
+}
+
+.selected-arrow{
+	visibility: visible !important; 
+}
+
+/***********************************************
+********* END OF ARROW FOR MOVIE POSTERS *******
+************************************************/
+
+
+/***********************************************
+************* YOUTUBE EMBED CONTAINER **********
+************************************************/
+
+.embed-youtube-container{
+	width: 100%;
+	height: 450px;
+	background-color: #777;
+	padding-top: 25px;
+	padding-left: 50px;
+	position: relative; /* for hide-content's absolute position to work */
+	display: none;
+}
+
+#embedYoutubeContainer{
+	/*display: none;*/
+	/*display: none;*/
+}
+
+.hidden-container-animation{
+	height: 0px;
+    -webkit-transition: height 0.5s linear;
+       -moz-transition: height 0.5s linear;
+        -ms-transition: height 0.5s linear;
+         -o-transition: height 0.5s linear;
+            transition: height 0.5s linear;
+}
+
+.open-container-animation{
+     height: 450px;
+     -webkit-transition: height 0.5s linear;
+        -moz-transition: height 0.5s linear;
+         -ms-transition: height 0.5s linear;
+          -o-transition: height 0.5s linear;
+             transition: height 0.5s linear;
+}
+
+
+.youtube-video{
+	margin-left: 30px;
+}
+
+.black-background-div{
+	width: 700px;
+	height: 394px;
+	display: inline-block;
+	background-color: black;
+}
+
+.hide-content{
+	visibility: hidden;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	left: 0;
+	top: 0;
+	background-color: #777;
+}
+
+.order-arrow{
+	position: absolute;
+	top: 48%;
+	width: 30px;
+	height: 40px;
+	text-align: center;
+	font-size: 40px !important;
+}
+
+.next-arrow{
+	right: 10px;
+}
+
+.prev-arrow{
+	left: 10px;
+}
+
+.order-arrow:hover{
+	cursor: pointer;
+}
+
+.review-trailer-toggle{
+	position: absolute;
+	top: 15px;
+	right: 10px;
+	width: 150px;
+	height: 35px;
+	border: 2px solid rgb(0,121,254);
+	border-radius: 6px;
+}
+
+.review-trailer-toggle:hover{
+	cursor: pointer;
+}
+
+.review-trailer-btns{
+	position: absolute;
+	bottom: 0;
+	text-align: center;
+	width: 50%;
+	height: 100%;
+	padding-top:3px;
+}
+
+.trailer-btn{
+	left: 0;
+}
+
+.review-btn{
+	right: 0;
+}
+
+.review-trailer-selected{
+	background-color: rgb(0,121,254);
+}
+
+.warning-box{
+	margin-bottom: 10px;
+}
+
+/***********************************************
+********* END OF YOUTUBE EMBED CONTAINER *******
+************************************************/
+
+/***********************************************
+************ GENERIC ADDITION CLASSES **********
+************************************************/
+.no-highlight{
+	-webkit-user-select: none; /* webkit (safari, chrome) browsers */
+    -moz-user-select: none; /* mozilla browsers */
+    -khtml-user-select: none; /* webkit (konqueror) browsers */
+    -ms-user-select: none; /* IE10+ */
+}
+
+/***********************************************
+********* END OF GENERIC ADDITION CLASSES ******
+************************************************/
+
+@media only screen and (max-width: 700px) {
+  .cal{
+    width: 85% !important;
+  }
+
+  .btn-group{
+  	width: 85% !important;
+  }
+
+}
+
+@media only screen and (min-width: 800px){
+	.compensation-calculator{
+		display: none;
+	}
+	.result-box{
+		font-size: 18px !important;
+	}
+}
+
+@media only screen and (max-width: 799px){
+	.compensation-title-text{
+		display: none;
+	}
+}
+
+
+/************* <a> link style **********/
+.compensation-title-text{
+	color: #f6f6f6;
+}
+
+.compensation-title-text:link {
+    color: #f6f6f6; 
+    background-color: transparent; 
+    text-decoration: none;
+}
+
+.compensation-title-text:visited {
+    color: #f6f6f6;
+    background-color: transparent;
+    text-decoration: none;
+}
+
+.compensation-title-text:hover {
+    color: #f6f6f6;
+    background-color: transparent;
+    text-decoration: underline;
+}
+
+.compensation-title-text:active {
+    color: yellow;
+    background-color: transparent;
+    text-decoration: underline;
+}
+
+.compensation-calculator-link{
+	color: #f6f6f6;
+}
+
+.compensation-calculator-link:link {
+    color: #f6f6f6; 
+    background-color: transparent; 
+    text-decoration: none;
+}
+
+.compensation-calculator-link:visited {
+    color: #f6f6f6;
+    background-color: transparent;
+    text-decoration: none;
+}
+
+.compensation-calculator-link:hover {
+    color: #f6f6f6;
+    background-color: transparent;
+    text-decoration: underline;
+}
+
+.compensation-calculator-link:active {
+    color: yellow;
+    background-color: transparent;
+    text-decoration: underline;
+}

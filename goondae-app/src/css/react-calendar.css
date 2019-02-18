@@ -1,0 +1,12 @@
+.cal {
+  width: 70%;
+  max-width: 60rem;
+  min-width: 30rem;
+  margin: 0 auto;
+  background-color: #fff;
+  border-radius: 3px;
+  overflow: hidden;
+  box-shadow: 0 4px 22px 0 rgba(0, 0, 0, 0.05);
+  border: solid 1px #e7e9ed;
+}
+

@@ -1,0 +1,10 @@
+@font-face {
+    font-family: "Nanum Square";
+    src: url("../fonts/NanumSquare/NanumSquare.ttf") format('truetype');
+}
+@font-face {
+    font-family: "Nanum Square Bold";
+    src: url("../fonts/NanumSquare/NanumSquare-Bold.ttf") format('truetype');
+    /*font-weight: bold;*/
+}
+
