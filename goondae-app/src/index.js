@@ -6,6 +6,7 @@ import './css/goonbokmu-content.css';
 import './css/vanillacalendar.css';
 import './css/react-calendar.css';
 import './css/react-calendar-override.css';
+import './css/bootstrap-4.0.0/bootstrap.css';
 import PageHeader from './js/navBar.js';
 import ServiceTypeBtnsGroup from './js/serviceTypeBtns.js';
 import CalendarInput from './js/calendarInput.js';
@@ -25,7 +26,7 @@ class CalculatorPage extends React.Component{
 		var mm = today.getMonth() + 1; //January is 0!
 		var yyyy = today.getFullYear();
 		
-		this.serviceTypes = ["육군", "해군", "공군", "해병대", "의경", "해경", "소방원", "사회복무요원"];
+		this.serviceTypes = ["육군", "해군", "공군", "해병대", "의경", "해경", "소방원", "공익"];
 		this.numMonths = [21, 23, 24, 21, 21, 23, 23, 24];
 		this.shortenedNumMonths = [18, 20, 22, 18, 18, 20, 20, 21]; 
 		this.perRankMonthlyPay2017 = [163000, 176400, 195000, 216000];

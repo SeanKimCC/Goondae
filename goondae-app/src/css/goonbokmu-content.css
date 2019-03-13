@@ -47,7 +47,7 @@ body{
 	text-align: center;
 	position: absolute;
 }
-.compensation-title-text{
+.compensation-link{
 	position: absolute;
 	right: 0;
 	margin-right: 10px;
@@ -64,10 +64,14 @@ body{
 .compensation-arrow-icon{
 	margin-bottom: -1px;
 }
+.compensation-link-icon{
+	font-size:25px !important;
+	margin-top: 3px;
+}
 .compensation-calculator:hover {
 	cursor: pointer;
 }
-.compensation-title-text:hover {
+.compensation-link:hover {
 	cursor: pointer;
 }
 
@@ -100,7 +104,7 @@ body{
 
 
 .btn-group{
-	display: inline-block;
+	display: inline-block !important;
 	margin: 20px auto 5px auto;
 	text-align: center;
 	width: 70%;
@@ -121,13 +125,13 @@ body{
 	border-bottom-left-radius: 5px;
 }
 .btn-selected{
-	
+	background-color: #bbb !important;
 }
 
 .goonbokmu-btn{
 	display:inline-block;
 	margin-left: -5px !important;
-	font-size: 17px;
+	font-size: 15px !important;
 	font-family: 'Nanum Square Bold';
 	height: 30px;
 	padding: 0 10px;
@@ -377,7 +381,7 @@ body{
   }
 
   .btn-group{
-  	width: 85% !important;
+  	width: 90% !important;
   }
 
 }
@@ -386,42 +390,56 @@ body{
 	.compensation-calculator{
 		display: none;
 	}
+	.compensation-link-icon{
+		display: none;
+	}
 	.result-box{
 		font-size: 18px !important;
 	}
 }
 
 @media only screen and (max-width: 799px){
-	.compensation-title-text{
+	.compensation-link-text{
 		display: none;
 	}
 }
 
 
 /************* <a> link style **********/
-.compensation-title-text{
+
+.navbar-text-replacement-icon{
+	width: 100%;
+	text-align: right;
+	padding-right: 10px;
+	padding-top: 12px;
+}
+.navbar-text-replacement-icon:hover{
+	cursor:pointer;
+}
+
+.compensation-link{
 	color: #f6f6f6;
 }
 
-.compensation-title-text:link {
+.compensation-link:link {
     color: #f6f6f6; 
     background-color: transparent; 
     text-decoration: none;
 }
 
-.compensation-title-text:visited {
+.compensation-link:visited {
     color: #f6f6f6;
     background-color: transparent;
     text-decoration: none;
 }
 
-.compensation-title-text:hover {
+.compensation-link:hover {
     color: #f6f6f6;
     background-color: transparent;
     text-decoration: underline;
 }
 
-.compensation-title-text:active {
+.compensation-link:active {
     color: yellow;
     background-color: transparent;
     text-decoration: underline;

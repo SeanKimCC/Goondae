@@ -3,13 +3,28 @@ import React from 'react';
 class DaysWolgeupSwitcher extends React.Component{
 	
 	render(){
+		var classNames = "compensation-arrow-icon fa " + this.props.btnClass;
 		return(
-			<a className="compensation-title-text" onClick={this.props.onClick}>
-				{this.props.value}	
-			</a>
+			<div id="goonbokmuTitle">
+				<span className="goonbokmu-title-text">
+					{this.props.pageTitleText}
+				</span>
+				<a className="compensation-link compensation-link-text" onClick={this.props.onClick}>
+					<span> {this.props.btnText}	</span>
+					<span className="compensation-arrow-icon fa fa-arrow-right"></span>
+				</a>
+				<a className="compensation-link compensation-link-icon" onClick={this.props.onClick}>
+					<span className={classNames}></span>
+				</a>
+			</div>
+			
 		);
 	}
 	
+	
+}
+
+class DNSChanger extends React.Component{
 	
 }
 
@@ -20,21 +35,19 @@ class PageHeader extends React.Component{
 		console.log(isDaysNotWolgeup);
 		const pageTitleText = isDaysNotWolgeup ? "군복무 계산기" : "군인 월급 계산기";
 		const switchPageBtnText = !isDaysNotWolgeup ? "군복무 계산기" : "군인 월급 계산기";
-		
+		const btnClass = !isDaysNotWolgeup ? "fa-hourglass-half" : "fa-won-sign";
 		
 		
 		return(
 			<div id="pageHeader">
-				<div id="goonbokmuTitle">
-					<span className="goonbokmu-title-text">
-						{pageTitleText}
-					</span>
-					<DaysWolgeupSwitcher
-						value = {switchPageBtnText}
-						onClick={() => this.props.onClick()}
-					/>
-					<span className="compensation-arrow-icon fa fa-arrow-right"></span>
-				</div>
+				
+				<DaysWolgeupSwitcher
+					pageTitleText = {pageTitleText}
+					btnText = {switchPageBtnText}
+					btnClass = {btnClass}
+					onClick={() => this.props.onClick()}
+				/>
+				
 			</div>
 			
 		);
