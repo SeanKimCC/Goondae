@@ -179,7 +179,7 @@ class ResultBox extends React.Component{
 		const endMonth = endDate.getMonth();
 		
 		//dates at which you'll be paid
-		while (currentDate <= endDate || (currentDate.getMonth() == endMonth && currentDate.getFullYear() == endYear)){
+		while (currentDate <= endDate || (currentDate.getMonth() === endMonth && currentDate.getFullYear() === endYear)){
 			var currentDayOfM = currentDate.getDate();
 			var currentDayOfW = currentDate.getDay();
 			if((currentDayOfM === 10 && (currentDayOfW !== 0 && currentDayOfW !== 6)) || ((currentDayOfM === 8 || currentDayOfM === 9) && currentDayOfW === 5)){ // 10th and not weekend, or 8~9th and friday
@@ -469,7 +469,7 @@ class ResultBox extends React.Component{
 		const selectedDate = this.props.selectedDate;
 		var formattedSelectedDate = selectedDate[2] + "년 " + selectedDate[1] + "월 " + selectedDate[0] + "일";
 		
-		const numDaysLeft = 1; 
+		// const numDaysLeft = 1; 
 		var updatedDaysLeft = this.calculateUpdatedDaysLeft();
 		var updatedDate = updatedDaysLeft[0];
 		var updatedDaysSubtracted = updatedDaysLeft[1];

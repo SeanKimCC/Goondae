@@ -11,7 +11,13 @@ import PageHeader from './js/navBar.js';
 import ServiceTypeBtnsGroup from './js/serviceTypeBtns.js';
 import CalendarInput from './js/calendarInput.js';
 import ResultBox from './js/resultBox.js';
+import LoginModal from './js/loginModal.js';
+import axios from 'axios';
+import Modal from 'react-modal';
 
+
+
+Modal.setAppElement('#root');
 class CalculatorPage extends React.Component{
 	constructor(props){
 		super(props);
@@ -19,6 +25,9 @@ class CalculatorPage extends React.Component{
 		this.typeBtnClickHandler = this.typeBtnClickHandler.bind(this);
 		this.onClickDay = this.onClickDay.bind(this);
 		this.onSwitcherClick = this.onSwitcherClick.bind(this);
+		this.openModal = this.openModal.bind(this);
+    	// this.afterOpenModal = this.afterOpenModal.bind(this);
+    	this.closeModal = this.closeModal.bind(this);
 		
 		
 		var today = new Date();
@@ -45,9 +54,23 @@ class CalculatorPage extends React.Component{
 			selectedType : 0,
 			selectedDate : [dd, mm, yyyy],
 			isDaysNotWolgeup: true,
+			modalIsOpen: false
 		};
 	}
+	
+	openModal() {
+		this.setState({modalIsOpen: true});
+	}
 
+	// afterOpenModal() {
+	// 	// references are now sync'd and can be accessed.
+	// 	this.subtitle.style.color = '#f00';
+	// }
+
+	closeModal() {
+		this.setState({modalIsOpen: false});
+	}
+	
 	typeBtnClickHandler(typeNum) {
 		console.log(typeNum);
 		this.setState({
@@ -79,6 +102,22 @@ class CalculatorPage extends React.Component{
 		console.log(this.state.selectedDate);
 	}
 	
+	componentDidMount() {
+		console.log('hello');
+        let getUsers = () => {
+            axios.post('https://goondae-server.run.goorm.io/users/login', {
+				email: 'johnjin5@email.com',
+				password: '123z123z'
+				
+			}).then(response => {
+               console.log(response);
+            });
+        };
+
+        getUsers();
+
+    }
+	
 	render(){
 		return(
 			<div>
@@ -87,6 +126,14 @@ class CalculatorPage extends React.Component{
 					isDaysNotWolgeup={this.state.isDaysNotWolgeup}
 					onClick={this.onSwitcherClick}
 					/>
+				<button onClick={this.openModal}>Open Modal</button>
+				<LoginModal
+				  modalIsOpen={this.state.modalIsOpen}
+				  
+				  closeModal={this.closeModal}
+				  contentLabel="Example Modal"
+				  subtitle={this.subtitle}
+				/>
 				<div id="contents">
 					<div className="title-box">입대일을 선택해주세요</div>
 					

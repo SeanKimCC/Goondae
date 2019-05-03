@@ -1,0 +1,10 @@
+Detailed Todo list for Backend:
+
+	- User model
+		- Start date
+		- type of service
+		- level
+		- rank
+		- vacation type / dates
+		
+	
