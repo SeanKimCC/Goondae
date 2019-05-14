@@ -1,11 +1,16 @@
 import React from 'react';
 
+class MenuButton extends React.Component{
+	
+}
+
+
 class DaysWolgeupSwitcher extends React.Component{
 	
 	render(){
 		var classNames = "compensation-arrow-icon fa " + this.props.btnClass;
 		return(
-			<div id="goonbokmuTitle">
+			<div>
 				<span className="goonbokmu-title-text">
 					{this.props.pageTitleText}
 				</span>
@@ -33,21 +38,24 @@ class PageHeader extends React.Component{
 	render(){
 		const isDaysNotWolgeup = this.props.isDaysNotWolgeup;
 		console.log(isDaysNotWolgeup);
-		const pageTitleText = isDaysNotWolgeup ? "군복무 계산기" : "군인 월급 계산기";
-		const switchPageBtnText = !isDaysNotWolgeup ? "군복무 계산기" : "군인 월급 계산기";
+		const pageTitleText = isDaysNotWolgeup ? "군복무 계산기" : "군월급 계산기";
+		const switchPageBtnText = !isDaysNotWolgeup ? "군복무 계산기" : "군월급 계산기";
 		const btnClass = !isDaysNotWolgeup ? "fa-hourglass-half" : "fa-won-sign";
 		
 		
 		return(
 			<div id="pageHeader">
-				
-				<DaysWolgeupSwitcher
-					pageTitleText = {pageTitleText}
-					btnText = {switchPageBtnText}
-					btnClass = {btnClass}
-					onClick={() => this.props.onClick()}
-				/>
-				
+				<div id="goonbokmuTitle">
+					<DaysWolgeupSwitcher
+						pageTitleText = {pageTitleText}
+						btnText = {switchPageBtnText}
+						btnClass = {btnClass}
+						onClick={() => this.props.onClick()}
+						onClickOpenLoginModal = {() => this.props.onClickOpenLoginModal}
+					/>
+					<button className="login-modal-open-btn modal-open-btn btn btn-default" onClick={() => this.props.onClickOpenLoginModal()}>로그인</button>
+					<button className="signup-modal-open-btn modal-open-btn btn btn-default" onClick={() => this.props.onClickOpenSignupModal()}>가입하기</button>
+				</div>
 			</div>
 			
 		);

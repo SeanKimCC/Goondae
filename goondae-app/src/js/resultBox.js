@@ -42,7 +42,8 @@ class ResultBox extends React.Component{
 	calculateOriginalDaysLeft(){
 		const numMonths = this.props.numMonths[this.props.selectedType];
 		const selectedDate = this.props.selectedDate;
-		const date = new Date(selectedDate[2],selectedDate[1]-1,selectedDate[0]);
+		// const date = new Date(selectedDate[2],selectedDate[1]-1,selectedDate[0]);
+		const date = new Date(selectedDate.getTime());
 		
 		var newDate = date;
 		
@@ -56,7 +57,8 @@ class ResultBox extends React.Component{
 	calculateEarliestDate(){
 		const shortenedNumMonths = this.props.shortenedNumMonths[this.props.selectedType];
 		const selectedDate = this.props.selectedDate;
-		const date = new Date(selectedDate[2],selectedDate[1]-1,selectedDate[0]);
+		// const date = new Date(selectedDate[2],selectedDate[1]-1,selectedDate[0]);
+		const date = new Date(selectedDate.getTime());
 		
 		var newDate = date;
 		
@@ -69,7 +71,8 @@ class ResultBox extends React.Component{
 	calculateUpdatedDaysLeft(){ // numShortenedDays
 		
 		const selectedDate = this.props.selectedDate;
-		const date = new Date(selectedDate[2],selectedDate[1]-1,selectedDate[0]);
+		// const date = new Date(selectedDate[2],selectedDate[1]-1,selectedDate[0]);
+		const date = new Date(selectedDate.getTime());
 		
 		var subtractStartDay;
 		switch (this.props.selectedType){
@@ -122,7 +125,8 @@ class ResultBox extends React.Component{
 		const endDate = this.calculateUpdatedDaysLeft()[0];
 		
 		//variable for current date. Starts at start date
-		var currentDate = new Date(startDate[2],startDate[1]-1,startDate[0]);
+		// var currentDate = new Date(startDate[2],startDate[1]-1,startDate[0]);
+		var currentDate = new Date(startDate.getTime());
 		
 		const perRankMonthlyPay2017 = this.props.perRankMonthlyPay2017;
 		const perRankMonthlyPay2018 = this.props.perRankMonthlyPay2018;
@@ -321,9 +325,12 @@ class ResultBox extends React.Component{
 		const selectedDate = this.props.selectedDate;
 		const endDate = this.calculateUpdatedDaysLeft()[0];
 		
-		var tempDate = new Date(selectedDate[2],selectedDate[1]-1,selectedDate[0]);
-		var tempTempDate = new Date(selectedDate[2],selectedDate[1]-1,selectedDate[0]);
-		var tempDateForDatesArray = new Date(selectedDate[2],selectedDate[1]-1,selectedDate[0]);
+		// var tempDate = new Date(selectedDate[2],selectedDate[1]-1,selectedDate[0]);
+		// var tempTempDate = new Date(selectedDate[2],selectedDate[1]-1,selectedDate[0]);
+		// var tempDateForDatesArray = new Date(selectedDate[2],selectedDate[1]-1,selectedDate[0]);
+		var tempDate = new Date(selectedDate.getTime());
+		var tempTempDate = new Date(selectedDate.getTime());
+		var tempDateForDatesArray = new Date(selectedDate.getTime());
 		var count = 0;
 		var firstDayOfNextMonth = new Date(tempDate.getFullYear(), tempDate.getMonth() + 1, 1);
 		
@@ -441,7 +448,8 @@ class ResultBox extends React.Component{
 		var today = new Date();
 		startCount = 0;
 		
-		tempDate = new Date(selectedDate[2],selectedDate[1]-1,selectedDate[0]);
+		// tempDate = new Date(selectedDate[2],selectedDate[1]-1,selectedDate[0]);
+		tempDate = new Date(selectedDate.getTime());
 		
 		var monthCount = 0;
 		while(today >= payDates[monthCount] && monthCount < count && today <= endDate){
@@ -467,7 +475,8 @@ class ResultBox extends React.Component{
 
 		
 		const selectedDate = this.props.selectedDate;
-		var formattedSelectedDate = selectedDate[2] + "년 " + selectedDate[1] + "월 " + selectedDate[0] + "일";
+		// var formattedSelectedDate = selectedDate[2] + "년 " + selectedDate[1] + "월 " + selectedDate[0] + "일";
+		var formattedSelectedDate = selectedDate.getFullYear() + "년 " + (selectedDate.getMonth() + 1) + "월 " + selectedDate.getDate() + "일";
 		
 		// const numDaysLeft = 1; 
 		var updatedDaysLeft = this.calculateUpdatedDaysLeft();
