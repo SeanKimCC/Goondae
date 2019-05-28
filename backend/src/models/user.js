@@ -51,8 +51,10 @@ const userSchema = new mongoose.Schema({
 	avatar: {
 		type: Buffer
 	},
-	elistmentDate: {
+	startDate: {
 		type: Date
+		// required: true
+		
 		
 	}
 }, {

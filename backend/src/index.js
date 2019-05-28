@@ -4,6 +4,7 @@ const Task = require('./models/task');
 const User = require('./models/user');
 const userRouter = require('./routers/user');
 const taskRouter = require('./routers/task');
+const auth = require('./middleware/auth');
 
 const app= express();
 const port = process.env.PORT || 5000;
@@ -45,6 +46,7 @@ const port = process.env.PORT || 5000;
 // app.use((req, res, next) => {
 // 	res.status(503).send('The site is under maintenance');
 // });
+app.use('/auth', auth);
 
 app.use(express.json());
 app.use(userRouter);

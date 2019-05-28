@@ -1,0 +1,18 @@
+.day-in-month-calendar{
+	font-size: 20px;
+	width:calc(100%/7);
+	height:100%;
+	display:inline-block;
+}
+.month-calendar-row{
+	width:100%;
+	height: 33px;
+	border: 1px solid;
+}
+.month-calendar{
+	width: 280px;
+	border: 1px solid;
+}
+.white-color{
+	color: white;
+}

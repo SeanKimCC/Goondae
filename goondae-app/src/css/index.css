@@ -1,9 +1,65 @@
+html, body{
+	height: 100%;
+}
+
 #root{
 	font-family: "Nanum Square Bold";
+	height: 100%;
+}
+#mainPageContainer{
+	height:100%;
 }
 
 @media only screen and (min-width: 451px){
 	.menu-btn{
 		display: none;
 	}
+}
+
+.loading-screen{
+	position:absolute;
+	height: 100%;
+	width: 100%;
+	opacity: 0.6;
+	background-color: #aaa;
+	/* z-index: 1; */
+}
+
+/*******CSS LOADER*********/
+.lds-dual-ring {
+	display: inline-block;
+	width: 64px;
+	height: 64px;
+	position: absolute;
+	left: 50%;
+	margin-left: -64px;
+	top: 50%;
+	margin-top: -64px;
+
+}
+.lds-dual-ring:after {
+  content: " ";
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 1px;
+  border-radius: 50%;
+  border: 7px solid #000;
+  border-color: #000 transparent #000 transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+/*******CSS LOADER*********/
+
+.overlay-whole-screen{
+	background-color:rgba(41,48,59,0.55);
+	width: 100%;
+	height: 100%;
 }

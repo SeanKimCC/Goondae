@@ -4,6 +4,8 @@ const router = new express.Router();
 const bcrypt = require('bcryptjs');
 const auth = require('../middleware/auth');
 const multer = require('multer');
+const cookieParser = require('cookie-parser');
+router.use(cookieParser());
 const sharp = require('sharp');
 const avatar = multer({
 	// dest:'avatar',
@@ -29,6 +31,7 @@ router.all('/*', function(req, res, next) {
 });
 
 router.post('/users', async (req, res) => {
+	
 	const user = new User(req.body);
 	
 	// user.save().then(() => {
@@ -43,6 +46,7 @@ router.post('/users', async (req, res) => {
 		res.status(201).send({user, token});
 	} catch(e){
 		res.status(400).send(e);
+		console.log(e);
 	}
 	
 });
@@ -64,9 +68,12 @@ router.post('/users/login', async (req,res) => {
 });
 
 router.post('/users/logout', auth, async(req,res)=>{
+	console.log("logout token ", req.body.token);
+	const token = req.body.token;
 	try{
 		req.user.tokens = req.user.tokens.filter((token)=>{
-			return token.token !== req.token;
+			// return token.token !== req.token;
+			return token.token !== token;
 		});
 		await req.user.save();
 		res.send(req.user);
@@ -86,7 +93,8 @@ router.post('/users/logoutAll', auth, async(req,res)=>{
 });
 
 router.get('/users', async(req,res) => {
-	
+	// console.log("cookies", req.cookies['token']);
+	console.log("cookies", req.cookies);
 	try{
 		const users = await User.find();
 		res.send(users);
@@ -96,13 +104,7 @@ router.get('/users', async(req,res) => {
  	
 });
 
-router.get('/users/me', auth, async (req, res) => {
-	// User.find({}).then((users)=> {
-	// 	res.send(users);
-	// }).catch((e)=>{
-	// 	res.status(500).send();
-	// });
-	
+router.get('/users/me/:token', auth, async (req, res) => {
 	res.send(req.user);
 });
 
@@ -111,14 +113,15 @@ router.get('/users/:id', async (req, res)=>{
 	const _id = req.params.id;
 	try {
 		const user = await User.findById(_id);
+		console.log(user);
 		if(!user) {
 			return res.status(404).send();
 		}
+		res.send(user);
 	} catch(e) {
 		res.status(500).send(e);	
 	}
 
-	console.log(req.params);
 });
 
 

@@ -1,14 +1,32 @@
 import React from 'react';
 
+
 class MenuButton extends React.Component{
+	
+	render(){
+		const openOrNot = this.props.isMenuBarOpen ? "open" : "";
+		 return(
+			<div id="nav-icon2" className={openOrNot} onClick={this.props.toggleMenuBar}>
+				<span></span>
+				<span></span>
+				<span></span>
+				<span></span>
+				<span></span>
+				<span></span>
+			</div>
+		 );
+	}
 	
 }
 
+class MenuBar extends React.Component{
+
+}
 
 class DaysWolgeupSwitcher extends React.Component{
 	
 	render(){
-		var classNames = "compensation-arrow-icon fa " + this.props.btnClass;
+		var classNames = "compensation-arrow-icon fa " + this.props.btnClass + (this.props.showSwitchCalcBtn ? "" : " hidden");
 		return(
 			<div>
 				<span className="goonbokmu-title-text">
@@ -35,27 +53,71 @@ class DNSChanger extends React.Component{
 
 class PageHeader extends React.Component{
 	
+	pageTitle(){
+		switch (this.props.pageNum){
+			case 0:
+				return "군대닷컴";
+			case 1:
+				return "휴가 달력";
+			case 2:
+				return "미래의 나에게";
+			case 3:
+				return "식단표";
+			case 4:
+				return "자유게시판";
+			case 5:
+				return "계산기";
+			case -1:
+				return "wrong";
+			default:
+				return "wrong";
+		}
+	}
+	
 	render(){
+		let pageTitleText = this.pageTitle();
+		let showSwitchCalcBtn = false;
+		if(this.props.pageNum == 5){
+			const isDaysNotWolgeup = this.props.isDaysNotWolgeup;
+			pageTitleText = isDaysNotWolgeup ? "군복무 계산기" : "군월급 계산기";
+			showSwitchCalcBtn = true;
+		}
+		console.log('page header render');
 		const isDaysNotWolgeup = this.props.isDaysNotWolgeup;
 		console.log(isDaysNotWolgeup);
-		const pageTitleText = isDaysNotWolgeup ? "군복무 계산기" : "군월급 계산기";
 		const switchPageBtnText = !isDaysNotWolgeup ? "군복무 계산기" : "군월급 계산기";
 		const btnClass = !isDaysNotWolgeup ? "fa-hourglass-half" : "fa-won-sign";
+		const token = localStorage.getItem('token');
+		let isLoggedIn = false;
+		if(token){
+			isLoggedIn = true;
+		}
+		const loginBtnClass = "login-modal-open-btn modal-open-btn btn btn-default " + (isLoggedIn ? "hidden" : "");
+		const signupBtnClass = "signup-modal-open-btn modal-open-btn btn btn-default " + (isLoggedIn ? "hidden" : "");
+		const logoutBtnClass = "logout-modal-open-btn modal-open-btn btn btn-default " + (isLoggedIn ? "" : "hidden");
 		
 		
 		return(
 			<div id="pageHeader">
+				
+				
 				<div id="goonbokmuTitle">
 					<DaysWolgeupSwitcher
 						pageTitleText = {pageTitleText}
 						btnText = {switchPageBtnText}
 						btnClass = {btnClass}
-						onClick={() => this.props.onClick()}
+						onClick={() => this.props.onSwitcherClick()}
 						onClickOpenLoginModal = {() => this.props.onClickOpenLoginModal}
+						showSwitchCalcBtn = {showSwitchCalcBtn}
 					/>
-					<button className="login-modal-open-btn modal-open-btn btn btn-default" onClick={() => this.props.onClickOpenLoginModal()}>로그인</button>
-					<button className="signup-modal-open-btn modal-open-btn btn btn-default" onClick={() => this.props.onClickOpenSignupModal()}>가입하기</button>
+					<button className={loginBtnClass} onClick={() => this.props.onClickOpenLoginModal()}>로그인</button>
+					<button className={signupBtnClass} onClick={() => this.props.onClickOpenSignupModal()}>가입하기</button>
+					<button className={logoutBtnClass} onClick={() => this.props.onClickLogout()}>로그아웃</button>
 				</div>
+				<MenuButton
+					toggleMenuBar={this.props.toggleMenuBar}
+					isMenuBarOpen={this.props.isMenuBarOpen}	
+				/>
 			</div>
 			
 		);

@@ -61,12 +61,15 @@
 	border: 1px solid white;
 	color: white;
 	font-weight: bold;
-	background-color: #575787;
-	font-size: 15px;
-}
-.login-modal-open-btn:hover{
+	/* background-color: #575787; */
 	color: #575787;
 	background-color: white;
+	font-size: 15px;
+}
+.modal-open-btn:hover{
+	color: #575787;
+	background-color: #eee; 
+	
 }
 
 .login-modal-field-icon{
@@ -78,14 +81,21 @@
 .login-modal-loading{
 	background-color: #777 !important;
 }
-.login-modal-error-message{
-	background-color: #FAEBEB;
-	border-color: #FAEBEB;
+.modal-message{
 	border-radius: 5px;
-	color: #521822;
 	padding: 15px 20px;
 	font-size: 15px;
 	margin-bottom: 7px;
+}
+.modal-success-message{
+	background-color: #dcffd7;
+	border-color: #dcffd7;
+	color: #205220;
+}
+.modal-error-message{
+	background-color: #FAEBEB;
+	border-color: #FAEBEB;
+	color: #521822;
 }
 .hidden{
 	display: none;
@@ -101,7 +111,7 @@
 	.login-modal-open-btn{
 		right: 240px;
 	}
-	.signup-modal-open-btn{
+	.signup-modal-open-btn, .logout-modal-open-btn{
 		right: 150px;
 	}
 }

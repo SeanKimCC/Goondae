@@ -21,6 +21,7 @@ const customStyles = {
 };
 
 Modal.setAppElement('#root');
+const loginAxios = axios.create();
 
 class LoginHeader extends React.Component{
 	render() {
@@ -47,7 +48,7 @@ class LoginBox extends React.Component{
 		console.log(this.props.isLoggingIn);
 		const loginBtnClass = "login-modal-login-button " + (this.props.isLoggingIn ? "login-modal-loading" : "" );
 		
-		const loginErrorMessage = "login-modal-error-message " + (this.props.showErrorMessage ? "" : "hidden");
+		const loginErrorMessage = "modal-message modal-error-message " + (this.props.showErrorMessage ? "" : "hidden");
 		
 		return (
 			<div className="login-modal-box">
@@ -111,7 +112,7 @@ class LoginModal extends React.Component{
 	}
 	componentDidMount(){
 		var self = this;
-		axios.interceptors.request.use(function (config) {
+		loginAxios.interceptors.request.use(function (config) {
 
 			// spinning start to show
 			// UPDATE: Add this code to show global loading indicator
@@ -119,29 +120,30 @@ class LoginModal extends React.Component{
 			self.setState({
 				isLoggingIn: true
 			});
-			console.log('started');
+			console.log('started logging in');
 			return config
 
 			}, function (error) {
 				console.log('error request');
 				self.setState({
 					isLoggingIn: false,
-					email: '',
-					password: '',
+					// email: '',
+					// password: '',
 					showErrorMessage:true
 				});
 				return Promise.reject(error);
 		});
-		axios.interceptors.response.use(function (response) {
+		loginAxios.interceptors.response.use(function (response) {
 
 			// spinning hide
 			// UPDATE: Add this code to hide global loading indicator
 			// document.body.classList.remove('loading-indicator');
-			console.log('finished');
+			console.log('finished logging in');
 			self.setState({
 				isLoggingIn: false,
 				email: '',
-				password: ''
+				password: '',
+				showErrorMessage:false
 			});
 
 			return response;
@@ -149,8 +151,8 @@ class LoginModal extends React.Component{
 				console.log('error response');
 				self.setState({
 					isLoggingIn: false,
-					email: '',
-					password: '',
+					// email: '',
+					// password: '',
 					showErrorMessage:true
 				});
 				return Promise.reject(error);
@@ -183,12 +185,18 @@ class LoginModal extends React.Component{
 		console.log(this.state.isLoggingIn);
 		try{
 			let getUsers = await
-			axios.post('https://goondae-server.run.goorm.io/users/login', {
+			loginAxios.post('https://goondae-server.run.goorm.io/users/login', {
 				email: this.state.email,
 				password: this.state.password
 				
 			});
 			console.log(getUsers);
+			
+			//saving in local storage vs cookie
+			console.log("token ", getUsers.data.token);
+			localStorage.setItem('token', getUsers.data.token);
+			// document.cookie = 'token='+getUsers.data.token;
+			// console.log(document.cookie);
 			this.props.closeLoginModal();
 		}catch(e){
 			console.log(e);

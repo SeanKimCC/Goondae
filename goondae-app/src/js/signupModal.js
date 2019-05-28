@@ -20,6 +20,7 @@ const customStyles = {
   }
 };
 Modal.setAppElement('#root');
+const signupAxios = axios.create();
 
 class SignupHeader extends React.Component{
 	render() {
@@ -46,29 +47,32 @@ class SignupBox extends React.Component{
 		console.log(this.props.isLoggingIn);
 		const loginBtnClass = "login-modal-login-button " + (this.props.isLoggingIn ? "login-modal-loading" : "" );
 		
-		const loginErrorMessage = "login-modal-error-message " + (this.props.showErrorMessage ? "" : "hidden");
+		const signupErrorMessage = "modal-message modal-error-message " + (this.props.showErrorMessage ? "" : "hidden");
+		const signupSuccessMessage = "modal-message modal-success-message " + (this.props.showSuccessMessage ? "" : "hidden");
+		console.log(signupSuccessMessage, this.props.showSuccessMessage);
 		
 		
-		const startDateArr = this.props.startDate;
-		console.log(startDateArr);
+		const startDate = this.props.selectedDate;
+		console.log(startDate);
 		// const selectedDate = new Date(selectedDateArr[2], selectedDateArr[1]-1, selectedDateArr[0]);
 		// console.log(selectedDate);
-		const startDate = startDateArr[2] + '-' + (startDateArr[1]>9 ? '' : '0') + startDateArr[1] + '-' + (startDateArr[0]>9 ? '' : '0') + startDateArr[0];
-		console.log(startDate);
+		const startDateObj = startDate.getFullYear() + '-' + ((startDate.getMonth()+1)>9 ? '' : '0') +(startDate.getMonth()+1) + '-' + (startDate.getDate()>9 ? '' : '0') + startDate.getDate();
+		console.log(startDateObj);
 		
 		return (
 			<div className="login-modal-box">
 				<div>
 				</div>
-				<div className={loginErrorMessage}>아이디와 비밀번호를 확인하고<br/> 다시 입력해 주십시오.</div>
+				<div className={signupErrorMessage}>아이디와 비밀번호를 확인하고<br/> 다시 입력해 주십시오.</div>
+				<div className={signupSuccessMessage}>가입이 완료되었습니다!</div>
 				<form>
 					<div className="login-field">
-						<span className="fas fa-envelope login-modal-field-icon"></span>
-						<input className="login-modal-input-box" type="date" name="startDate" onChange={(e) => this.props.handleDateChange(e)} placeholder="입대일자" value={startDate}/>
+						<span className="fas fa-calendar-day login-modal-field-icon"></span>
+						<input className="login-modal-input-box" type="date" name="startDate" onChange={(e) => this.props.handleDateChange(e)} placeholder="입대일자" value={startDateObj}/>
 
 					</div>
 					<div className="login-field">
-						<span className="fas fa-envelope login-modal-field-icon"></span>
+						<span className="fas fa-signature login-modal-field-icon"></span>
 						<input className="login-modal-input-box" type="text" name="name" onChange={(e) => this.props.handleChange(e)} placeholder="성명"/>
 
 					</div>
@@ -86,7 +90,7 @@ class SignupBox extends React.Component{
 					</div>
 					
 					<div className="login-field">
-						<input className={loginBtnClass} type="button" name="submit" onClick={() => this.props.handleSubmit()} value="로그인" />
+						<input className={loginBtnClass} type="button" name="submit" onClick={() => this.props.handleSignupSubmit()} value="가입하기" />
 					</div>
 					<div className="login-field">
 						<a link="" onClick={() => this.props.openSignupModal()}></a>
@@ -104,20 +108,21 @@ class SignupModal extends React.Component{
 		super(props);
 		this.handleChange = this.handleChange.bind(this);
 		this.handleDateChange = this.handleDateChange.bind(this);
-		this.handleSubmit = this.handleSubmit.bind(this);
+		this.handleSignupSubmit = this.handleSignupSubmit.bind(this);
 		this.closeSignupModal = this.closeSignupModal.bind(this);
 		// this.handlePasswordChange = this.handlePasswordChange.bind(this);
 		this.state = {
 			email: '',
 			password: '',
-			startDate: this.props.selectedDate,
-			showErrorMessage: false
+			// startDate: this.props.selectedDate,
+			showErrorMessage: false,
+			showSuccessMessage: false
 		};
 		
 	}
 	componentDidMount(){
 		var self = this;
-		axios.interceptors.request.use(function (config) {
+		signupAxios.interceptors.request.use(function (config) {
 
 			// spinning start to show
 			// UPDATE: Add this code to show global loading indicator
@@ -125,39 +130,43 @@ class SignupModal extends React.Component{
 			self.setState({
 				isSigningUp: true
 			});
-			console.log('started');
+			console.log('started signing in');
 			return config;
 
 			}, function (error) {
 				console.log('error request');
 				self.setState({
 					isSigningUp: false,
-					email: '',
-					password: '',
-					showErrorMessage:true
+					// email: '',
+					// password: '',
+					showErrorMessage:true,
+					showSuccessMessage: false
 				});
 				return Promise.reject(error);
 		});
-		axios.interceptors.response.use(function (response) {
+		signupAxios.interceptors.response.use(function (response) {
 
 			// spinning hide
 			// UPDATE: Add this code to hide global loading indicator
 			// document.body.classList.remove('loading-indicator');
-			console.log('finished');
+			console.log('finished1111');
 			self.setState({
 				isSigningUp: false,
-				email: '',
-				password: ''
+				// email: '',
+				// password: '',
+				showSuccessMessage: true,
+				showErrorMessage: false
 			});
 
 			return response;
 			}, function (error) {
 				console.log('error response');
 				self.setState({
-					v: false,
-					email: '',
-					password: '',
-					showErrorMessage:true
+					isSigningUp: false,
+					// email: '',
+					// password: '',
+					showErrorMessage:true,
+					showSuccessMessage:false
 				});
 				return Promise.reject(error);
 		});
@@ -179,11 +188,11 @@ class SignupModal extends React.Component{
 	
 	closeSignupModal(){
 		this.props.closeSignupModal();
-		this.setState({showErrorMessage:false, email:'', password:'', isSigningIn: false});
+		this.setState({showErrorMessage:false, email:'', password:'', isSigningIn: false, showSuccessMessage:false});
 		console.log('closing modal');
 		
 	}
-	async handleSubmit(){
+	async handleSignupSubmit(){
 		
 		console.log('hello');
 		console.log(this.state.email);
@@ -191,13 +200,15 @@ class SignupModal extends React.Component{
 		console.log(this.state.isSigningUp);
 		try{
 			let getUsers = await
-			axios.post('https://goondae-server.run.goorm.io/users/login', {
+			signupAxios.post('https://goondae-server.run.goorm.io/users', {
+				name: this.state.name,
 				email: this.state.email,
-				password: this.state.password
-				
+				password: this.state.password,
+				startDate: this.props.selectedDate
 			});
 			console.log(getUsers);
-			this.props.closeModal();
+			
+			// this.props.closeModal();
 		}catch(e){
 			console.log(e);
 		}
@@ -222,12 +233,13 @@ class SignupModal extends React.Component{
 					<SignupHeader closeSignupModal={this.closeSignupModal}/>
 					<SignupBox
 						showErrorMessage={this.state.showErrorMessage}
+						showSuccessMessage={this.state.showSuccessMessage}
 						handleChange={this.handleChange}
 						handleDateChange={this.handleDateChange}
-						handleSubmit={this.handleSubmit}
+						handleSignupSubmit={this.handleSignupSubmit}
 						isSigningUp={this.state.isSigningUp}
 						closeSignupModal={this.closeSignupModal}
-						startDate={this.state.startDate}
+						selectedDate={this.props.selectedDate}
 					/>					
 				</Modal>
 			</div>
