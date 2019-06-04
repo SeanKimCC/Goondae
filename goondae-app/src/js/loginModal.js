@@ -197,6 +197,14 @@ class LoginModal extends React.Component{
 			localStorage.setItem('token', getUsers.data.token);
 			// document.cookie = 'token='+getUsers.data.token;
 			// console.log(document.cookie);
+			
+			console.log(getUsers.data.user.startDate);
+			var startDate = new Date(getUsers.data.user.startDate);
+			
+			console.log(startDate.getDate());
+			this.props.onChangeDay(startDate);
+			localStorage.setItem('startDate', startDate);
+			// set the startDate item of local storage to the startDate of the user
 			this.props.closeLoginModal();
 		}catch(e){
 			console.log(e);

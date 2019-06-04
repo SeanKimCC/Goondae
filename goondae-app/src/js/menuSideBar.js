@@ -11,9 +11,9 @@ class MenuBar extends React.Component{
 			<div className={menuScreenClass}>
 				<div className={menuBarClass}>
 					<div id="menuBarTitle" className={menuBarItemClass}><Link to="/" onClick={this.props.updatePageNum} value="">타이틀 모집병과</Link></div>
-					<div className={menuBarItemClass}><Link to="/vacation/" onClick={this.props.updatePageNum} value="vacation">휴가</Link></div>
-					<div className={menuBarItemClass}><Link to="/futureMe/" onClick={this.props.updatePageNum} value="futureMe">미래의 나에게</Link></div>
+					<div className={menuBarItemClass}><Link to="/vacation/" onClick={this.props.updatePageNum} value="vacation">휴가표</Link></div>
 					<div className={menuBarItemClass}><Link to="/meal/" onClick={this.props.updatePageNum} value="meal">식단표</Link></div>
+					<div className={menuBarItemClass}><Link to="/futureMe/" onClick={this.props.updatePageNum} value="futureMe">미래의 나에게</Link></div>					
 					<div className={menuBarItemClass}><Link to="/calculator/" onClick={this.props.updatePageNum} value="calculator">복무/월급 계산기</Link></div>
 					<div className={menuBarItemClass}><Link to="/openBoard/" onClick={this.props.updatePageNum} value="openBoard">자유게시판</Link></div>
 				</div>

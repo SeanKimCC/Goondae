@@ -86,11 +86,13 @@ class PageHeader extends React.Component{
 		const isDaysNotWolgeup = this.props.isDaysNotWolgeup;
 		console.log(isDaysNotWolgeup);
 		const switchPageBtnText = !isDaysNotWolgeup ? "군복무 계산기" : "군월급 계산기";
+		const headerId = isDaysNotWolgeup ? "pageHeader" : "wolgeupPageHeader";
 		const btnClass = !isDaysNotWolgeup ? "fa-hourglass-half" : "fa-won-sign";
 		const token = localStorage.getItem('token');
 		let isLoggedIn = false;
 		if(token){
 			isLoggedIn = true;
+			//TODO: When I deleted the account in the database after login, the token was saved in the local storage, but there wasn't an actual user to be logged into in the database. This resulted in the user not being able to logout of an unexisting user. This might be a case that can be ignored.
 		}
 		const loginBtnClass = "login-modal-open-btn modal-open-btn btn btn-default " + (isLoggedIn ? "hidden" : "");
 		const signupBtnClass = "signup-modal-open-btn modal-open-btn btn btn-default " + (isLoggedIn ? "hidden" : "");
@@ -98,7 +100,7 @@ class PageHeader extends React.Component{
 		
 		
 		return(
-			<div id="pageHeader">
+			<div id={headerId}>
 				
 				
 				<div id="goonbokmuTitle">

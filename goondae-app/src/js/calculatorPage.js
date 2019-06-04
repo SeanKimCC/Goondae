@@ -47,7 +47,7 @@ class CalculatorPage extends React.Component{
 		this.shortenedNumMonths = [18, 20, 22, 18, 18, 20, 20, 21]; 
 		this.perRankMonthlyPay2017 = [163000, 176400, 195000, 216000];
 		this.perRankMonthlyPay2018 = [306100, 331300, 366200, 405700];
-		this.perRankMonthlyPay2020 = [510200, 552200, 610400, 676100];
+		this.perRankMonthlyPay2020 = [408100, 441700, 488200, 504900];
 		// this props can be in the children components as they are not needed in the other sibling components
 		
 		
@@ -192,6 +192,7 @@ class CalculatorPage extends React.Component{
 					
 					<CalendarInput 
 						onClick = {this.props.onClickDay}
+						selectedDate = {this.props.selectedDate}
 						/>
 					
 					<ServiceTypeBtnsGroup 

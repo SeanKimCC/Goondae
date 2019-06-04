@@ -45,7 +45,7 @@ class SignupBox extends React.Component{
 	
 	render() {
 		console.log(this.props.isLoggingIn);
-		const loginBtnClass = "login-modal-login-button " + (this.props.isLoggingIn ? "login-modal-loading" : "" );
+		const signupBtnClass = "login-modal-login-button " + (this.props.isSigningUp ? "login-modal-loading" : "" );
 		
 		const signupErrorMessage = "modal-message modal-error-message " + (this.props.showErrorMessage ? "" : "hidden");
 		const signupSuccessMessage = "modal-message modal-success-message " + (this.props.showSuccessMessage ? "" : "hidden");
@@ -90,7 +90,7 @@ class SignupBox extends React.Component{
 					</div>
 					
 					<div className="login-field">
-						<input className={loginBtnClass} type="button" name="submit" onClick={() => this.props.handleSignupSubmit()} value="가입하기" />
+						<input className={signupBtnClass} type="button" name="submit" onClick={() => this.props.handleSignupSubmit()} value="가입하기" />
 					</div>
 					<div className="login-field">
 						<a link="" onClick={() => this.props.openSignupModal()}></a>
@@ -114,7 +114,7 @@ class SignupModal extends React.Component{
 		this.state = {
 			email: '',
 			password: '',
-			// startDate: this.props.selectedDate,
+			startDate: this.props.selectedDate,
 			showErrorMessage: false,
 			showSuccessMessage: false
 		};
@@ -199,12 +199,15 @@ class SignupModal extends React.Component{
 		console.log(this.state.password);
 		console.log(this.state.isSigningUp);
 		try{
+			console.log(this.state.startDate);
+			const startDate = new Date(this.state.startDate);
+			console.log(startDate);
 			let getUsers = await
 			signupAxios.post('https://goondae-server.run.goorm.io/users', {
 				name: this.state.name,
 				email: this.state.email,
 				password: this.state.password,
-				startDate: this.props.selectedDate
+				startDate: startDate
 			});
 			console.log(getUsers);
 			
@@ -239,7 +242,7 @@ class SignupModal extends React.Component{
 						handleSignupSubmit={this.handleSignupSubmit}
 						isSigningUp={this.state.isSigningUp}
 						closeSignupModal={this.closeSignupModal}
-						selectedDate={this.props.selectedDate}
+						selectedDate={this.state.startDate}
 					/>					
 				</Modal>
 			</div>

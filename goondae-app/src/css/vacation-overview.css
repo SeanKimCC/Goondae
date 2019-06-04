@@ -1,0 +1,27 @@
+.vacation-overview-container{
+	width: 80%;
+	height: 80%;
+	margin-top: 20px;
+	margin-left: 20px;
+}
+.vacation-table-wrapper{
+	/* display: table-row; */
+}
+
+.vacation-rank-bar{
+	float:left;
+	/* display:table-cell; */
+	height:100%;
+	width:75px;
+	background-color: #aaa;
+}
+
+
+.vacation-total-days-viewer{
+	/* float:right; */
+	margin-left:75px;
+	background-color: black;
+	/* display:table-cell; */
+	height:100%;
+	width: calc(100% - 75px);
+}

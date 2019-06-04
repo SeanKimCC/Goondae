@@ -9,8 +9,6 @@ class CalendarInput extends React.Component {
 		var maxDate = new Date('January 1, 2025');
 		
 		this.state = {
-			date: new Date(),
-			day: new Date(),
 			minDate: minDate,
 			maxDate: maxDate,
 		};
@@ -43,7 +41,7 @@ class CalendarInput extends React.Component {
 					maxDate={this.state.maxDate}
 					minDate={this.state.minDate}
 					onChange={this.props.onClick}
-					value={this.state.date}
+					value={this.props.selectedDate}
 					onClickDay={this.onClickDay}
 				/>
 			</div>

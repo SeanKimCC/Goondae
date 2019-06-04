@@ -1,6 +1,8 @@
 import React from 'react';
 
 
+const payMonths = [4,11,18];
+const oneDay = 24*60*60*1000;
 
 class ResultBox extends React.Component{
 	getDaysInThisMonth(date) {
@@ -97,7 +99,6 @@ class ResultBox extends React.Component{
 				break;
 		}
 
-		const oneDay = 24*60*60*1000; 	
 
 		var diffDays = Math.round(Math.abs((subtractStartDay.getTime() - date.getTime())/(oneDay)));
 
@@ -134,11 +135,10 @@ class ResultBox extends React.Component{
 		
 		const perRankMonthlyPay = [perRankMonthlyPay2017, perRankMonthlyPay2018, perRankMonthlyPay2020];
 		
-		var payMonths = [4,11,18];
+		
 		
 		//calculate the number of days you work on the first month and the last month
 		
-		const oneDay = 24*60*60*1000; 
 		const firstDayOfFirstMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
 		const firstDayOfSecondMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
 		
@@ -320,7 +320,7 @@ class ResultBox extends React.Component{
 		
 		const perRankMonthlyPay = [perRankMonthlyPay2017, perRankMonthlyPay2018, perRankMonthlyPay2020];
 		
-		var payMonths = [4,7,7];
+		var numPayMonths = [4,7,7];
 		
 		const selectedDate = this.props.selectedDate;
 		const endDate = this.calculateUpdatedDaysLeft()[0];
@@ -334,7 +334,7 @@ class ResultBox extends React.Component{
 		var count = 0;
 		var firstDayOfNextMonth = new Date(tempDate.getFullYear(), tempDate.getMonth() + 1, 1);
 		
-		const oneDay = 24*60*60*1000; 	
+		 	
 		
 		
 		var numDaysFirstMonth = (tempDate.getTime() - firstDayOfNextMonth.getTime())/oneDay;
@@ -376,7 +376,7 @@ class ResultBox extends React.Component{
 		var startCount = 0;
 		if(firstMonthPayFlag){
 			startCount = 1;
-			payMonths[0] += 1;
+			numPayMonths[0] += 1;
 		}
 		
 		if(tempDateForDatesArray.getDate() > 10){
@@ -406,11 +406,11 @@ class ResultBox extends React.Component{
 				payCategoryYear = 2;
 			}
 			
-			if(startCount < payMonths[0]){
+			if(startCount < numPayMonths[0]){
 				monthlySalary[startCount] += perRankMonthlyPay[payCategoryYear][0];	
-			} else if(startCount < (payMonths[0] + payMonths[1])){
+			} else if(startCount < (numPayMonths[0] + numPayMonths[1])){
 				monthlySalary[startCount] += perRankMonthlyPay[payCategoryYear][1];	
-			} else if(startCount < (payMonths[0] + payMonths[1] + payMonths[2])){
+			} else if(startCount < (numPayMonths[0] + numPayMonths[1] + numPayMonths[2])){
 				monthlySalary[startCount] += perRankMonthlyPay[payCategoryYear][2];	
 			} else {
 				monthlySalary[startCount] += perRankMonthlyPay[payCategoryYear][3];	

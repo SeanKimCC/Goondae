@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import '../css/index.css';
-import '../css/vacation-page.css';
-import CalendarInput from '../js/calendarInput.js';
+import '../../css/index.css';
+import '../../css/vacation-page.css';
+import CalendarInput from '../../js/calendarInput.js';
 import axios from 'axios';
 import Modal from 'react-modal';
 
@@ -87,6 +87,30 @@ class YearCalendar extends React.Component{
 }
 
 const vacationPageAxios = axios.create();
+
+class VacationCalendarView extends React.Component{
+	render(){
+		return(
+			<div className="month-calendar">
+				<div className="day-name-row">
+					<div className="day-in-month-calendar">월</div>
+					<div className="day-in-month-calendar">화</div>
+					<div className="day-in-month-calendar">수</div>
+					<div className="day-in-month-calendar">목</div>
+					<div className="day-in-month-calendar">금</div>
+					<div className="day-in-month-calendar">토</div>
+					<div className="day-in-month-calendar">일</div>
+				</div>
+				<MonthCalendar
+					startDayNum={2}	
+				/>
+
+				<button onClick={this.props.getUserData}>here</button>
+			</div>
+		);
+	}
+}
+
 class VacationPage extends React.Component{
 	constructor(props){
 		super(props);
