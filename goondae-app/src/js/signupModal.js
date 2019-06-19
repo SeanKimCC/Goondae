@@ -207,7 +207,8 @@ class SignupModal extends React.Component{
 				name: this.state.name,
 				email: this.state.email,
 				password: this.state.password,
-				startDate: startDate
+				startDate: startDate,
+				mealUnit: 0
 			});
 			console.log(getUsers);
 			

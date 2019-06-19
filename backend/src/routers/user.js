@@ -25,10 +25,14 @@ const avatar = multer({
 router.all('/*', function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "https://goondae-alfpy.run.goorm.io");
   // res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  res.header("Access-Control-Allow-Methods", "POST, GET");
+  res.header("Access-Control-Allow-Methods", "POST, GET, PATCH");
   res.header("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
   next();
 });
+
+// router.get('/*', auth, async(req, res) => {
+	
+// });
 
 router.post('/users', async (req, res) => {
 	
@@ -126,9 +130,12 @@ router.get('/users/:id', async (req, res)=>{
 
 
 router.patch('/users/me', auth, async(req, res) => {
+	console.log(req.body);
 	const updates = Object.keys(req.body);
-	const allowedUpdates = ['name', 'email', 'password', 'age'];
-	const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
+	const allowedUpdates = ['name', 'email', 'password', 'age', 'mealUnit'];
+	
+	const isValidOperation = updates.every((update) => (update==="token" || allowedUpdates.includes(update)));
+	console.log(isValidOperation);
 	
 	if(!isValidOperation){
 		return res.status(400).send({error: 'Invalid updates!'});

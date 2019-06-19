@@ -19,6 +19,7 @@ import LoadingScreen from './js/loading.js';
 import CalculatorPage from './js/calculatorPage.js';
 import VacationPage from './js/vacationPage/vacationPage.js';
 import VacationOverview from './js/vacationPage/vacationOverview.js';
+import MealPlanPage from './js/mealPlanPage.js';
 import MenuBar from './js/menuSideBar.js';
 import axios from 'axios';
 import Modal from 'react-modal';
@@ -29,6 +30,7 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 Modal.setAppElement('#root');
 const logoutAxios = axios.create();
+const userDataAxios = axios.create();
 class MainPage extends React.Component{
 	constructor(props){
 		super(props);
@@ -39,23 +41,34 @@ class MainPage extends React.Component{
 		this.logoutCurrentUser = this.logoutCurrentUser.bind(this);
 		this.typeBtnClickHandler = this.typeBtnClickHandler.bind(this);
 		this.onClickDay = this.onClickDay.bind(this);
-		this.onSwitcherClick = this.onSwitcherClick.bind(this);
+		this.onCalcSwitcherClick = this.onCalcSwitcherClick.bind(this);
 		this.toggleMenuBar = this.toggleMenuBar.bind(this);
 		this.returnCalculatorPage = this.returnCalculatorPage.bind(this);
 		this.returnMainPage = this.returnMainPage.bind(this);
 		this.returnVacationOverview = this.returnVacationOverview.bind(this);
+		this.returnMealPlanPage = this.returnMealPlanPage.bind(this);
+		this.handleMealUnitChange = this.handleMealUnitChange.bind(this);
+		this.saveMealUnitChange = this.saveMealUnitChange.bind(this);
 		this.updatePageNum = this.updatePageNum.bind(this);
+		this.getUserData = this.getUserData.bind(this);
 		
 		const token = localStorage.getItem('token');
 		var defaultDate = new Date();
+		var mealUnit = 0;
 		// localStorage.setItem('startDate', defaultDate);
 		if(token){
 			//if there is token, get the selected date from local storage
+			var userData = this.getUserData();
+			console.log("this is user data:", userData);
 			defaultDate = new Date(localStorage.getItem('startDate'));
+			if(localStorage.getItem('mealUnit')){
+				mealUnit = localStorage.getItem('mealUnit');
+			}
 			if(defaultDate){
 				defaultDate = new Date();
 			}
 		}
+	
 		
 		this.state = {
 			selectedType : 0,
@@ -66,7 +79,8 @@ class MainPage extends React.Component{
 			isLoading: false,
 			isMenuBarOpen: false,
 			pageNum: this.returnPageCodeBasedOnURL(),
-			isDaysNotWolgeup: true
+			isDaysNotWolgeup: true,
+			mealUnit: mealUnit,
 		};
 	}
 	
@@ -101,7 +115,7 @@ class MainPage extends React.Component{
 		
 	}
 	
-	onSwitcherClick(){
+	onCalcSwitcherClick(){
 		const isDaysNotWolgeup = this.state.isDaysNotWolgeup;
 		
 		this.setState({
@@ -127,6 +141,26 @@ class MainPage extends React.Component{
 		this.setState({loginModalIsOpen: false});
 	}
 	
+	async getUserData(){
+		const token = localStorage.getItem('token');
+		console.log(token);
+		
+		try{
+			let getUsers = await userDataAxios.get('https://goondae-server.run.goorm.io/users/me/'+token); //req.params.token
+			console.log(localStorage.getItem('token'));
+			console.log(getUsers.data.startDate);
+			// return getUsers;
+			this.setState({
+				selectedDate: new Date(getUsers.data.startDate),
+				mealUnit: getUsers.data.mealUnit
+			});
+			localStorage.setItem('mealUnit', this.state.mealUnit);
+			
+			// this.props.closeModal();
+		}catch(e){
+			console.log(e);
+		}
+	}
 	
 	async logoutCurrentUser(){
 		console.log('logging out');
@@ -165,6 +199,7 @@ class MainPage extends React.Component{
 
 			// getUsers();
 		var self = this;
+		
 		logoutAxios.interceptors.request.use(function (config) {
 
 			// spinning start to show
@@ -204,6 +239,35 @@ class MainPage extends React.Component{
 				});
 				return Promise.reject(error);
 		});
+		
+		userDataAxios.interceptors.request.use(function (config) {
+			self.setState({
+				isLoading: true
+			});
+			console.log('started');
+			return config;
+
+			}, function (error) {
+				console.log('error request');
+				self.setState({
+					isLoading: false
+				});
+				return Promise.reject(error);
+		});
+		userDataAxios.interceptors.response.use(function (response) {
+			self.setState({
+				isLoading: false
+			});
+
+			return response;
+			}, function (error) {
+				console.log('error response');
+				self.setState({
+					isLoading: false
+				});
+				return Promise.reject(error);
+		});
+											   
 
     }
 
@@ -215,7 +279,7 @@ class MainPage extends React.Component{
 		return <CalculatorPage 
 						onClickDay={this.onClickDay}
 						typeBtnClickHandler={i => this.typeBtnClickHandler(i)}
-						onSwitcherClick={this.onSwitcherClick}
+						onCalcSwitcherClick={this.onCalcSwitcherClick}
 						selectedDate={this.state.selectedDate}
 						selectedType={this.state.selectedType}
 						isDaysNotWolgeup={this.state.isDaysNotWolgeup}
@@ -223,6 +287,28 @@ class MainPage extends React.Component{
 	}
 	returnVacationPage(){
 		return <VacationPage/>
+	}
+	returnMealPlanPage(){
+		console.log(this.state.mealUnit)
+		return <MealPlanPage handleMealUnitChange={this.handleMealUnitChange} mealUnit={this.state.mealUnit} saveMealUnitChange={this.saveMealUnitChange}/>
+	}
+	handleMealUnitChange(mealUnit){
+		console.log(mealUnit.value);
+		this.setState({mealUnit : mealUnit.value});
+	}
+	async saveMealUnitChange(){
+		const token = localStorage.getItem('token');
+		try{
+			let getLogoutUser = await
+			userDataAxios.patch('https://goondae-server.run.goorm.io/users/me', {
+				token: token,
+				mealUnit: this.state.mealUnit
+			});
+			
+		}catch(e){
+			console.log("hello catch here");
+			console.log(e);
+		}
 	}
 	
 	returnMainPage(){
@@ -317,7 +403,7 @@ class MainPage extends React.Component{
 					/>
 					<PageHeader 
 						isDaysNotWolgeup={this.state.isDaysNotWolgeup}
-						onSwitcherClick={this.onSwitcherClick}
+						onCalcSwitcherClick={this.onCalcSwitcherClick}
 						onClickOpenLoginModal={this.openLoginModal}
 						onClickOpenSignupModal={this.openSignupModal}
 						onClickLogout={this.logoutCurrentUser}
@@ -346,6 +432,7 @@ class MainPage extends React.Component{
 					<Route path="/vacation/" component={this.returnVacationPage}/>
 					<Route exact path="/" component={this.returnMainPage}/>
 					<Route path="/vacation-overview" component={this.returnVacationOverview}/>
+					<Route path="/meal/" component={this.returnMealPlanPage}/>
 				</div>
 			</Router>
 		);

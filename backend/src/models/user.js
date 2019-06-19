@@ -56,6 +56,10 @@ const userSchema = new mongoose.Schema({
 		// required: true
 		
 		
+	},
+	mealUnit: {
+		type: Number,
+		default: 0
 	}
 }, {
 	timestamps: true

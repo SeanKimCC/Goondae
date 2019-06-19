@@ -26,25 +26,62 @@ class MenuBar extends React.Component{
 class DaysWolgeupSwitcher extends React.Component{
 	
 	render(){
-		var classNames = "compensation-arrow-icon fa " + this.props.btnClass + (this.props.showSwitchCalcBtn ? "" : " hidden");
+		
+		var switcherClass = "compensation-arrow-icon fa " + this.props.btnClass + (this.props.showSwitchCalcBtn ? "" : " hidden");
+		
+		var daysWolgeupClass = (this.props.showDaysWolgeupSwitcher ? "compensation-link compensation-link-text": " hidden");
+		var vacationClass= (!this.props.showDaysWolgeupSwitcher ? "compensation-link compensation-link-text": " hidden");
+		
+		var daysSwitcherClass = switcherClass + (this.props.showDaysWolgeupSwitcher ? "": " hidden");
+		var vacationSwitcherClass = switcherClass + (!this.props.showDaysWolgeupSwitcher ? "": " hidden");
+		
 		return(
 			<div>
 				<span className="goonbokmu-title-text">
 					{this.props.pageTitleText}
 				</span>
-				<a className="compensation-link compensation-link-text" onClick={this.props.onClick}>
+				<a className={daysWolgeupClass} onClick={this.props.onCalcSwitcherClick}>
 					<span> {this.props.btnText}	</span>
 					<span className="compensation-arrow-icon fa fa-arrow-right"></span>
 				</a>
-				<a className="compensation-link compensation-link-icon" onClick={this.props.onClick}>
-					<span className={classNames}></span>
+				<a className="compensation-link compensation-link-icon" onClick={this.props.onCalcSwitcherClick}>
+					<span className={switcherClass}></span>
+				</a>
+				
+				<a className={vacationClass} onClick={this.props.onCalcSwitcherClick}>
+					<span> {this.props.btnText}	</span>
+					<span className="compensation-arrow-icon fa fa-arrow-right"></span>
+				</a>
+				<a className="compensation-link compensation-link-icon" onClick={this.props.onCalcSwitcherClick}>
+					<span className={vacationSwitcherClass}></span>
+				</a>
+				
+				
+			</div>
+			
+		);
+	}	
+}
+
+class VacationSwitcher extends React.Component {
+	render() {
+		var switcherClass = "compensation-arrow-icon fa " + this.props.btnClass + (this.props.showSwitchCalcBtn ? "" : " hidden");
+		return(
+			<div>
+				<span className="goonbokmu-title-text">
+					{this.props.pageTitleText}
+				</span>
+				<a className="compensation-link compensation-link-text" onClick={this.props.onCalcSwitcherClick}>
+					<span> {this.props.btnText}	</span>
+					<span className="compensation-arrow-icon fa fa-arrow-right"></span>
+				</a>
+				<a className="compensation-link compensation-link-icon" onClick={this.props.onCalcSwitcherClick}>
+					<span className={switcherClass}></span>
 				</a>
 			</div>
 			
 		);
 	}
-	
-	
 }
 
 class DNSChanger extends React.Component{
@@ -98,6 +135,13 @@ class PageHeader extends React.Component{
 		const signupBtnClass = "signup-modal-open-btn modal-open-btn btn btn-default " + (isLoggedIn ? "hidden" : "");
 		const logoutBtnClass = "logout-modal-open-btn modal-open-btn btn btn-default " + (isLoggedIn ? "" : "hidden");
 		
+		let showDaysWolgeupSwitcher = false;
+		let showVacSwitcher = false;
+		if(this.props.pageNum == 5) {
+			showDaysWolgeupSwitcher = true;
+		} else if (this.props.pageNum == 0){
+			showVacSwitcher = false;
+		} 
 		
 		return(
 			<div id={headerId}>
@@ -105,10 +149,12 @@ class PageHeader extends React.Component{
 				
 				<div id="goonbokmuTitle">
 					<DaysWolgeupSwitcher
+						showDaysWolgeupSwitcher = {showDaysWolgeupSwitcher}
+						showVacSwitcher={showVacSwitcher}
 						pageTitleText = {pageTitleText}
 						btnText = {switchPageBtnText}
 						btnClass = {btnClass}
-						onClick={() => this.props.onSwitcherClick()}
+						onCalcSwitcherClick={() => this.props.onCalcSwitcherClick()}
 						onClickOpenLoginModal = {() => this.props.onClickOpenLoginModal}
 						showSwitchCalcBtn = {showSwitchCalcBtn}
 					/>

@@ -1,0 +1,147 @@
+#mealPlanContainer{
+	width: 100%;
+	height: calc(100% - 50px);
+}
+
+#mealUnitSelector{
+	width: 50%;
+	margin: 0px auto;
+	padding-top: 20px;
+	font-size: 14px;
+}
+#mealPlan{
+	width:calc(90% - 30px);
+	/* height: 80%; */
+	height:auto;
+	margin: 10px auto;
+	border: 1px solid;
+}
+.submit-btn {
+	display: inline-block;
+	width: 50px;
+	margin-left: 5px;
+	height: 38px;
+	border: 1px solid grey;
+	background-color: #eee;
+	color: grey;
+	font-size: 15px;
+	margin-top: -12px;
+}
+
+.submit-btn:focus{
+	box-shadow: none;
+}
+.submit-btn:active{
+	background-color:#aaa;
+}
+.meal-unit-select{
+	width: calc(100% - 55px);
+	display: inline-block;
+}
+.hidden {
+	display:none;
+}
+.full-length{
+	width: 100% !important;
+}
+.meal-type-column{
+	display:inline-block;
+	height:auto;
+	border-left: 1px solid;
+	/* top: 0px;
+	position: absolute; */
+}
+.type-meal-cell{
+	/* height:calc(100% / 31); */
+	margin-top:10px;
+	font-size: 10px;
+}
+.type-meal-row{
+	padding-top:7px;
+	width:100%;
+	font-size: 14px;
+	border-bottom: 1px solid;
+	padding-bottom: 7px;
+	
+}
+
+@media screen and (max-width: 600px) {
+	.type-meal-row{
+		font-size:10px !important;
+	}
+	#mealPlan{
+		width:calc(100% - 30px);
+	}
+}
+.meal-cell{
+	display:inline-block;
+	vertical-align: top;
+}
+.type-meal-item{
+	width:100%;
+	padding-left: 10px;
+}
+.type-meal-title-row{
+	width:100%;
+	font-size:12px;
+	font-weight: bold;
+	background-color: #F1F1B9;
+}
+
+.sunday-meal-row{
+	background-color:#FFE5E5;
+}
+.saturday-meal-row{
+	background-color:#DADAFF;
+}
+.weekday-meal-row{
+	background-color:#ECECEC;
+}
+
+.type-meal-title{
+	width:100%;
+	font-size:12px;
+	font-weight: bold;
+	padding-left:10px;
+}
+#dateCell{
+	width: 15%;
+	border-left:none;
+}
+#breakfastCell{
+	width:23%;
+	/* margin-left: 15%; */
+}
+#lunchCell{
+	width:23%;
+	/* margin-left: 38%; */
+}
+#dinnerCell{
+	width:23%;
+	/* margin-left: 61%; */
+}
+#dessertCell{
+	width:16%;
+	/* margin-left: 84%; */
+}
+
+.date-meal-cell{
+	width: 15%;
+	border-left:none;
+}
+.breakfast-meal-cell{
+	width:23%;
+	/* margin-left: 15%; */
+}
+.lunch-meal-cell{
+	width:23%;
+	/* margin-left: 38%; */
+}
+.dinner-meal-cell{
+	width:23%;
+	/* margin-left: 61%; */
+}
+.dessert-meal-cell{
+	width:16%;
+	/* margin-left: 84%; */
+}

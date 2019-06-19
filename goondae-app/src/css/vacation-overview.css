@@ -15,13 +15,49 @@
 	width:75px;
 	background-color: #aaa;
 }
+.vacation-rank-slot{
+	border-bottom: 1px solid;
+	/* height: calc(100% / 5); */
+	width: 75px;
+	display: inline-block;
+	background-color: black;
+	height: 100%;
+}
 
 
 .vacation-total-days-viewer{
 	/* float:right; */
-	margin-left:75px;
-	background-color: black;
+	/* margin-left:75px; */
+	/* background-color: black; */
 	/* display:table-cell; */
 	height:100%;
-	width: calc(100% - 75px);
+	/* width: calc(100% - 75px); */
+	width: 100%;
+}
+
+.vacation-days-row{
+	
+}
+
+.vacation-day-slot{
+	height:100%;
+	background-color: grey;
+	border: 1px solid white;
+	border-radius: 3px;
+	width: calc((100% - 75px) / 16);
+	/* width: 30px; */
+	display: inline-block;
+}
+
+.vacation-day-slot:hover{
+	cursor: pointer;
+	background-color: #aaa;
+}
+.vacation-add-btn{
+	width:calc((100% - 75px) / 16);
+	height:100%;
+	display:inline-block;
+	background-color: green;
+	border: 1px solid white;
+	border-radius: 3px;
 }

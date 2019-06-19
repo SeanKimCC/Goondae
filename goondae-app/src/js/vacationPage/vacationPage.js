@@ -181,7 +181,7 @@ class VacationPage extends React.Component{
 					<div className="day-in-month-calendar">일</div>
 				</div>
 				<MonthCalendar
-					startDayNum={2}	
+					startDayNum={2}
 				/>
 
 				<button onClick={this.getUserData}>here</button>
