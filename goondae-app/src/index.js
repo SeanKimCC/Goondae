@@ -329,25 +329,25 @@ class MainPage extends React.Component{
 		console.log(resultString);
 		switch (resultString){
 			case "":
-				return 0;
+				return 5;
 				break;
 			case "vacation":
-				return 1;
+				return 5;
 				break;
 			case "futureMe":
-				return 2;
+				return 5;
 				break;
 			case "meal":
 				return 3;
 				break;
 			case "openBoard":
-				return 4;
+				return 5;
 				break;
 			case "calculator":
 				return 5;
 				break;
 			default:
-				return -1;
+				return 5;
 				break;
 		}
 			
@@ -360,25 +360,25 @@ class MainPage extends React.Component{
 		let pageNum = -1;
 		switch (pathString){
 			case "":
-				pageNum = 0;
+				pageNum = 5;
 				break;
 			case "vacation":
-				pageNum = 1;
+				pageNum = 5;
 				break;
 			case "futureMe":
-				pageNum = 2;
+				pageNum = 5;
 				break;
 			case "meal":
 				pageNum = 3;
 				break;
 			case "openBoard":
-				pageNum = 4;
+				pageNum = 5;
 				break;
 			case "calculator":
 				pageNum = 5;
 				break;
 			default:
-				pageNum = -1;
+				pageNum = 5;
 				break;
 		}
 		this.setState({
@@ -429,9 +429,7 @@ class MainPage extends React.Component{
 					/>
 
 					<Route path="/calculator/" component={this.returnCalculatorPage}/>
-					<Route path="/vacation/" component={this.returnVacationPage}/>
-					<Route exact path="/" component={this.returnMainPage}/>
-					<Route path="/vacation-overview" component={this.returnVacationOverview}/>
+					<Route exact path="/" component={this.returnCalculatorPage}/>
 					<Route path="/meal/" component={this.returnMealPlanPage}/>
 				</div>
 			</Router>

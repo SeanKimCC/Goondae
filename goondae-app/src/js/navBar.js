@@ -27,10 +27,11 @@ class DaysWolgeupSwitcher extends React.Component{
 	
 	render(){
 		
-		var switcherClass = "compensation-arrow-icon fa " + this.props.btnClass + (this.props.showSwitchCalcBtn ? "" : " hidden");
+		var switcherClass = "compensation-arrow-icon fa " + this.props.btnClass + (this.props.showDaysWolgeupSwitcher ? "" : " hidden");
 		
 		var daysWolgeupClass = (this.props.showDaysWolgeupSwitcher ? "compensation-link compensation-link-text": " hidden");
-		var vacationClass= (!this.props.showDaysWolgeupSwitcher ? "compensation-link compensation-link-text": " hidden");
+		var vacationClass= (this.props.showVacSwitcher ? "compensation-link compensation-link-text": " hidden");
+		console.log(daysWolgeupClass);
 		
 		var daysSwitcherClass = switcherClass + (this.props.showDaysWolgeupSwitcher ? "": " hidden");
 		var vacationSwitcherClass = switcherClass + (!this.props.showDaysWolgeupSwitcher ? "": " hidden");
@@ -123,7 +124,7 @@ class PageHeader extends React.Component{
 		const isDaysNotWolgeup = this.props.isDaysNotWolgeup;
 		console.log(isDaysNotWolgeup);
 		const switchPageBtnText = !isDaysNotWolgeup ? "군복무 계산기" : "군월급 계산기";
-		const headerId = isDaysNotWolgeup ? "pageHeader" : "wolgeupPageHeader";
+		const headerId = (isDaysNotWolgeup || this.props.pageNum == 3) ? "pageHeader" : "wolgeupPageHeader";
 		const btnClass = !isDaysNotWolgeup ? "fa-hourglass-half" : "fa-won-sign";
 		const token = localStorage.getItem('token');
 		let isLoggedIn = false;
@@ -143,6 +144,8 @@ class PageHeader extends React.Component{
 			showVacSwitcher = false;
 		} 
 		
+		console.log(this.props.pageNum, showDaysWolgeupSwitcher);
+		
 		return(
 			<div id={headerId}>
 				
@@ -157,10 +160,8 @@ class PageHeader extends React.Component{
 						onCalcSwitcherClick={() => this.props.onCalcSwitcherClick()}
 						onClickOpenLoginModal = {() => this.props.onClickOpenLoginModal}
 						showSwitchCalcBtn = {showSwitchCalcBtn}
+						displaySwitcher = {this.props.pageNum === 5}
 					/>
-					<button className={loginBtnClass} onClick={() => this.props.onClickOpenLoginModal()}>로그인</button>
-					<button className={signupBtnClass} onClick={() => this.props.onClickOpenSignupModal()}>가입하기</button>
-					<button className={logoutBtnClass} onClick={() => this.props.onClickLogout()}>로그아웃</button>
 				</div>
 				<MenuButton
 					toggleMenuBar={this.props.toggleMenuBar}
@@ -173,58 +174,5 @@ class PageHeader extends React.Component{
 	}
 	
 }
-
-
-// class GoondaeDaysLeft extends React.Component{ //state to upper level and pass it down to resultBox as well.
-// 	constructor(props){
-// 		super(props);
-		
-// 		this.state = {
-// 			isDaysNotWolgeup : true,
-			
-// 		};
-// 	}
-	
-// 	componentDidMount(){
-		
-// 		// const gtmSCript2 = document.createElement("script");
-// 		// const scriptText = document.createTextNode(`window.dataLayer = window.dataLayer || [];
-// 		// function gtag(){dataLayer.push(arguments);}
-// 		// gtag('js', new Date());
-// 		// gtag('config', 'UA-113300855-1');`);
-		
-// 		// gtmSCript2.appendChild(scriptText);
-		
-// 		// document.head.appendChild(gtmSCript2);
-		
-		
-// 		// const gtmScript = document.createElement("script");
-// 		// gtmScript.src = "https://www.googletagmanager.com/gtag/js?id=UA-113300855-1";
-// 		// gtmScript.async = true;
-		
-// 		// document.head.appendChild(gtmScript);
-		
-		
-		
-		
-// 	}
-	
-// 	switcherClicked(){
-// 		const isDaysNotWolgeup = this.state.isDaysNotWolgeup;
-		
-// 		this.setState({
-// 			isDaysNotWolgeup : !isDaysNotWolgeup
-// 		});
-// 	}
-	
-// 	render() {
-// 		return (
-// 			<PageHeader 
-// 				isDaysNotWolgeup={this.props.isDaysNotWolgeup}
-// 				onClick={() => this.switcherClicked()}
-// 			/>
-// 		);
-// 	}
-// }
 
 export default PageHeader;
