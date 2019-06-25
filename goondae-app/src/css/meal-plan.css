@@ -60,9 +60,12 @@
 	padding-top:7px;
 	width:100%;
 	font-size: 14px;
-	border-bottom: 1px solid;
+	border-bottom: 1px solid black;
 	padding-bottom: 7px;
 	
+}
+.bbang-shik{
+	background-color:#FFFFB7 !important;
 }
 
 @media screen and (max-width: 600px) {
@@ -90,9 +93,11 @@
 
 .sunday-meal-row{
 	background-color:#FFE5E5;
+	color: #A70C0C;
 }
 .saturday-meal-row{
 	background-color:#DADAFF;
+	color: #171782;
 }
 .weekday-meal-row{
 	background-color:#ECECEC;

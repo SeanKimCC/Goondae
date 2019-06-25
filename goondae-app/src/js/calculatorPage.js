@@ -109,24 +109,24 @@ class CalculatorPage extends React.Component{
 	// }
 	
 	async logoutCurrentUser(){
-		console.log('logging out');
-		console.log(localStorage.getItem('token'));
+		// console.log('logging out');
+		// console.log(localStorage.getItem('token'));
 		const token = localStorage.getItem('token');
 		try{
 			let getLogoutUser = await
 			logoutAxios.post('https://goondae-server.run.goorm.io/users/logout', {
 				token: token
 			});
-			console.log(getLogoutUser);
+			// console.log(getLogoutUser);
 			localStorage.removeItem('token');
 			this.setState({
 				isLoggedIn: false
 			});
 			
 		}catch(e){
-			console.log(e);
+			// console.log(e);
 		}
-		console.log(this.state.isLoggingOut);
+		// console.log(this.state.isLoggingOut);
 	}
 	
 	

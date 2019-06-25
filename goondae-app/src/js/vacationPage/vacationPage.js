@@ -35,7 +35,7 @@ class MonthCalendar extends React.Component{
 			weekInMonth.push(0);
 		}
 		for(var i = 0; i < numDaysInMonth; i++){
-			console.log(daysInMonth);
+			// console.log(daysInMonth);
 			weekInMonth.push(i+1);
 			dayNumOfDay++;
 			if(dayNumOfDay == 7){
@@ -45,7 +45,7 @@ class MonthCalendar extends React.Component{
 			}
 		}
 		daysInMonth.push(weekInMonth);
-		console.log(daysInMonth);
+		// console.log(daysInMonth);
 		const numRows = daysInMonth.length;
 		let hello = [];
 		
@@ -60,7 +60,7 @@ class MonthCalendar extends React.Component{
 			return (<div className="month-calendar-row">{k}</div>);
 		});
 		
-		console.log(hello);
+		// console.log(hello);
 		// const moves = history.map((step, move) => {
 		// 	const desc = move ?
 		// 		'Go to move #' + move :
@@ -125,16 +125,16 @@ class VacationPage extends React.Component{
 	
 	async getUserData(){
 		const token = localStorage.getItem('token');
-		console.log(token);
+		// console.log(token);
 		
 		try{
 			let getUsers = await
 			vacationPageAxios.get('https://goondae-server.run.goorm.io/users/me/'+token); //req.params.token
-			console.log(getUsers);
+			// console.log(getUsers);
 			
 			// this.props.closeModal();
 		}catch(e){
-			console.log(e);
+			// console.log(e);
 		}
 	}
 	
@@ -147,7 +147,7 @@ class VacationPage extends React.Component{
 			return config;
 
 			}, function (error) {
-				console.log('error request');
+				// console.log('error request');
 				self.setState({
 					isGettingUserData: false
 				});

@@ -91,10 +91,10 @@ class OverviewTotalDaysViewer extends React.Component{
 	
 	render(){
 		let vacationRows = [];
-		console.log(this.props.numMonths);
+		// console.log(this.props.numMonths);
 		const numRows = this.props.numMonths;
 		for(var i = 0; i < numRows; i++){
-			console.log(i);
+			// console.log(i);
 			vacationRows.push(this.renderSingleRow(i, numRows));
 		}
 		
@@ -132,7 +132,7 @@ class VacationOverview extends React.Component{
 		for(var i = 0; i < this.state.numMonthService; i++){
 			
 		}
-		console.log(this.state.num)
+		// console.log(this.state.num)
 		return(
 			
 			<div className="vacation-overview-container">

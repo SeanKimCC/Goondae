@@ -45,7 +45,7 @@ class LoginBox extends React.Component{
 
 	
 	render() {
-		console.log(this.props.isLoggingIn);
+		// console.log(this.props.isLoggingIn);
 		const loginBtnClass = "login-modal-login-button " + (this.props.isLoggingIn ? "login-modal-loading" : "" );
 		
 		const loginErrorMessage = "modal-message modal-error-message " + (this.props.showErrorMessage ? "" : "hidden");
@@ -120,11 +120,11 @@ class LoginModal extends React.Component{
 			self.setState({
 				isLoggingIn: true
 			});
-			console.log('started logging in');
+			// console.log('started logging in');
 			return config
 
 			}, function (error) {
-				console.log('error request');
+				// console.log('error request');
 				self.setState({
 					isLoggingIn: false,
 					// email: '',
@@ -138,7 +138,7 @@ class LoginModal extends React.Component{
 			// spinning hide
 			// UPDATE: Add this code to hide global loading indicator
 			// document.body.classList.remove('loading-indicator');
-			console.log('finished logging in');
+			// console.log('finished logging in');
 			self.setState({
 				isLoggingIn: false,
 				email: '',
@@ -162,7 +162,7 @@ class LoginModal extends React.Component{
 	
 
 	handleChange(e){
-		console.log(e.target.value);
+		// console.log(e.target.value);
 		this.setState({[e.target.name]: e.target.value});
 	}
 	
@@ -174,15 +174,15 @@ class LoginModal extends React.Component{
 	closeLoginModal(){
 		this.props.closeLoginModal();
 		this.setState({showErrorMessage:false, email:'', password:'', isLoggingIn: false});
-		console.log('closing modal');
+		// console.log('closing modal');
 		
 	}
 	async handleSubmit(){
 		
-		console.log('hello');
-		console.log(this.state.email);
-		console.log(this.state.password);
-		console.log(this.state.isLoggingIn);
+		// console.log('hello');
+		// console.log(this.state.email);
+		// console.log(this.state.password);
+		// console.log(this.state.isLoggingIn);
 		try{
 			let getUsers = await
 			loginAxios.post('https://goondae-server.run.goorm.io/users/login', {
@@ -190,18 +190,18 @@ class LoginModal extends React.Component{
 				password: this.state.password
 				
 			});
-			console.log(getUsers);
+			// console.log(getUsers);
 			
 			//saving in local storage vs cookie
-			console.log("token ", getUsers.data.token);
+			// console.log("token ", getUsers.data.token);
 			localStorage.setItem('token', getUsers.data.token);
 			// document.cookie = 'token='+getUsers.data.token;
 			// console.log(document.cookie);
 			
-			console.log(getUsers.data.user.startDate);
+			// console.log(getUsers.data.user.startDate);
 			var startDate = new Date(getUsers.data.user.startDate);
 			
-			console.log(startDate.getDate());
+			// console.log(startDate.getDate());
 			this.props.onChangeDay(startDate);
 			localStorage.setItem('startDate', startDate);
 			// set the startDate item of local storage to the startDate of the user
@@ -209,7 +209,7 @@ class LoginModal extends React.Component{
 		}catch(e){
 			console.log(e);
 		}
-		console.log(this.state.isLoggingIn);
+		// console.log(this.state.isLoggingIn);
         
 
         // getUsers();

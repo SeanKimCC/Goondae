@@ -31,7 +31,7 @@ class DaysWolgeupSwitcher extends React.Component{
 		
 		var daysWolgeupClass = (this.props.showDaysWolgeupSwitcher ? "compensation-link compensation-link-text": " hidden");
 		var vacationClass= (this.props.showVacSwitcher ? "compensation-link compensation-link-text": " hidden");
-		console.log(daysWolgeupClass);
+		// console.log(daysWolgeupClass);
 		
 		var daysSwitcherClass = switcherClass + (this.props.showDaysWolgeupSwitcher ? "": " hidden");
 		var vacationSwitcherClass = switcherClass + (!this.props.showDaysWolgeupSwitcher ? "": " hidden");
@@ -120,9 +120,9 @@ class PageHeader extends React.Component{
 			pageTitleText = isDaysNotWolgeup ? "군복무 계산기" : "군월급 계산기";
 			showSwitchCalcBtn = true;
 		}
-		console.log('page header render');
+		// console.log('page header render');
 		const isDaysNotWolgeup = this.props.isDaysNotWolgeup;
-		console.log(isDaysNotWolgeup);
+		// console.log(isDaysNotWolgeup);
 		const switchPageBtnText = !isDaysNotWolgeup ? "군복무 계산기" : "군월급 계산기";
 		const headerId = (isDaysNotWolgeup || this.props.pageNum == 3) ? "pageHeader" : "wolgeupPageHeader";
 		const btnClass = !isDaysNotWolgeup ? "fa-hourglass-half" : "fa-won-sign";
@@ -144,7 +144,7 @@ class PageHeader extends React.Component{
 			showVacSwitcher = false;
 		} 
 		
-		console.log(this.props.pageNum, showDaysWolgeupSwitcher);
+		// console.log(this.props.pageNum, showDaysWolgeupSwitcher);
 		
 		return(
 			<div id={headerId}>

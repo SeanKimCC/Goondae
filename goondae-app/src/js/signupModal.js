@@ -44,20 +44,20 @@ class SignupBox extends React.Component{
 
 	
 	render() {
-		console.log(this.props.isLoggingIn);
+		// console.log(this.props.isLoggingIn);
 		const signupBtnClass = "login-modal-login-button " + (this.props.isSigningUp ? "login-modal-loading" : "" );
 		
 		const signupErrorMessage = "modal-message modal-error-message " + (this.props.showErrorMessage ? "" : "hidden");
 		const signupSuccessMessage = "modal-message modal-success-message " + (this.props.showSuccessMessage ? "" : "hidden");
-		console.log(signupSuccessMessage, this.props.showSuccessMessage);
+		// console.log(signupSuccessMessage, this.props.showSuccessMessage);
 		
 		
 		const startDate = this.props.selectedDate;
-		console.log(startDate);
+		// console.log(startDate);
 		// const selectedDate = new Date(selectedDateArr[2], selectedDateArr[1]-1, selectedDateArr[0]);
 		// console.log(selectedDate);
 		const startDateObj = startDate.getFullYear() + '-' + ((startDate.getMonth()+1)>9 ? '' : '0') +(startDate.getMonth()+1) + '-' + (startDate.getDate()>9 ? '' : '0') + startDate.getDate();
-		console.log(startDateObj);
+		// console.log(startDateObj);
 		
 		return (
 			<div className="login-modal-box">
@@ -130,11 +130,11 @@ class SignupModal extends React.Component{
 			self.setState({
 				isSigningUp: true
 			});
-			console.log('started signing in');
+			// console.log('started signing in');
 			return config;
 
 			}, function (error) {
-				console.log('error request');
+				// console.log('error request');
 				self.setState({
 					isSigningUp: false,
 					// email: '',
@@ -149,7 +149,7 @@ class SignupModal extends React.Component{
 			// spinning hide
 			// UPDATE: Add this code to hide global loading indicator
 			// document.body.classList.remove('loading-indicator');
-			console.log('finished1111');
+			// console.log('finished1111');
 			self.setState({
 				isSigningUp: false,
 				// email: '',
@@ -160,7 +160,7 @@ class SignupModal extends React.Component{
 
 			return response;
 			}, function (error) {
-				console.log('error response');
+				// console.log('error response');
 				self.setState({
 					isSigningUp: false,
 					// email: '',
@@ -172,36 +172,36 @@ class SignupModal extends React.Component{
 		});
 	}
 	handleDateChange(e){
-		console.log("hello" , e.target.value);
+		// console.log("hello" , e.target.value);
 		// const dateValue = e.target.value;
 		// console.log(dateValue.substr(5,2));
 		// const newDate = dateValue.substr(0,4) + "-" + dateValue.substr(5,2)  + "-" + dateValue.substr(8,2) ;
 		const newDate = new Date(e.target.value);
-		console.log(newDate);
+		// console.log(newDate);
 		this.setState({[e.target.name]: newDate});
 	}
 	
 	handleChange(e){
-		console.log(e.target.value);
+		// console.log(e.target.value);
 		this.setState({[e.target.name]: e.target.value});
 	}
 	
 	closeSignupModal(){
 		this.props.closeSignupModal();
 		this.setState({showErrorMessage:false, email:'', password:'', isSigningIn: false, showSuccessMessage:false});
-		console.log('closing modal');
+		// console.log('closing modal');
 		
 	}
 	async handleSignupSubmit(){
 		
-		console.log('hello');
-		console.log(this.state.email);
-		console.log(this.state.password);
-		console.log(this.state.isSigningUp);
+		// console.log('hello');
+		// console.log(this.state.email);
+		// console.log(this.state.password);
+		// console.log(this.state.isSigningUp);
 		try{
-			console.log(this.state.startDate);
+			// console.log(this.state.startDate);
 			const startDate = new Date(this.state.startDate);
-			console.log(startDate);
+			// console.log(startDate);
 			let getUsers = await
 			signupAxios.post('https://goondae-server.run.goorm.io/users', {
 				name: this.state.name,
@@ -210,13 +210,13 @@ class SignupModal extends React.Component{
 				startDate: startDate,
 				mealUnit: 0
 			});
-			console.log(getUsers);
+			// console.log(getUsers);
 			
 			// this.props.closeModal();
 		}catch(e){
 			console.log(e);
 		}
-		console.log(this.state.isSigningUp);
+		// console.log(this.state.isSigningUp);
         
 
         // getUsers();

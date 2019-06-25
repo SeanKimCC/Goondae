@@ -22,9 +22,9 @@ class ResultBox extends React.Component{
 	}
 	
 	formatMoney(money){
-		console.log(money);
+		// console.log(money);
 		var lenMoney = money.length;
-		console.log(lenMoney);
+		// console.log(lenMoney);
 		var formattedMoney = "";
 		var commaPos = lenMoney % 3;
 		if (commaPos === 0){
@@ -36,7 +36,7 @@ class ResultBox extends React.Component{
 				commaPos += 3;
 			}
 			formattedMoney = formattedMoney.concat(money[i]);
-			console.log(formattedMoney);
+			// console.log(formattedMoney);
 		}
 		return formattedMoney;
 	}
@@ -167,7 +167,7 @@ class ResultBox extends React.Component{
 		var firstDate = currentDate.getDate();
 		var firstDay = currentDate.getDay();
 		
-		console.log("firstDay: ", firstDay);
+		// console.log("firstDay: ", firstDay);
 		var carryOverFlag = 0;
 		
 		if(firstDate > 10 || (firstDate > 8 && firstDay > 4)){
@@ -177,9 +177,9 @@ class ResultBox extends React.Component{
 			currentDate.setDate(8);
 		} 
 		
-		console.log(currentDate);
+		// console.log(currentDate);
 		const endYear = endDate.getFullYear();
-		console.log(endYear);
+		// console.log(endYear);
 		const endMonth = endDate.getMonth();
 		
 		//dates at which you'll be paid
@@ -291,7 +291,7 @@ class ResultBox extends React.Component{
 
 		
 		
-		console.log(listOfPayAmounts); 
+		// console.log(listOfPayAmounts); 
 		
 		var payTotal = 0;
 		var payTillNow = 0;

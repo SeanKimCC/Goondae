@@ -28,8 +28,8 @@ class MealPlanPage extends React.Component{
 		setDate.setMonth(parseInt(date.substring(0,2))-1);
 		setDate.setDate(parseInt(date.substring(3,5)));
 		const dayOfDate = setDate.getDay();
-		console.log(setDate);
-		console.log(dayOfDate);
+		// console.log(setDate);
+		// console.log(dayOfDate);
 		
 		if(dayOfDate == 0){ // #FFC0C0 #FFE5E5
 			return "sunday-meal-row";
@@ -48,6 +48,19 @@ class MealPlanPage extends React.Component{
 		
 	}
 	
+	checkIncludesArrayOfStrings(arrayStr, origStr){
+		const lenArray = arrayStr.length;
+		for(var i = 0; i < lenArray; i++){
+			// console.log(arrayStr[i], origStr);
+			if(origStr.includes(arrayStr[i])){
+				// console.log("YYYYYYYYYYYYEEEEEEEEEAAAAAAAHHHHHHHH");
+				return true;
+			}
+		}
+		return false;
+		
+	}
+	
 	renderDayMealRow(mealData, i){
 		
 		let newMealsArray = [];
@@ -59,17 +72,25 @@ class MealPlanPage extends React.Component{
 		
 		const keyStringArray = ['dateItem:', 'breakfastItem:', 'lunchItem:', 'dinnerItem:', 'dessertItem:'];
 		
-		
+		let bbangShik = false;
 		let newDayMealStringArray = [];
 		for(var k = 0; k < 5; k++){
 			let newDayMealString = [];
 			for(var j = 0; j < newMealsArray[k].length; j++){
+				if(!bbangShik){
+					bbangShik = this.checkIncludesArrayOfStrings(["버거", "핫도그", "빵"] ,newMealsArray[k][j]);				
+				}
+				
 				newDayMealString.push(this.renderSingleItemOfMeal(newMealsArray[k][j], keyStringArray[k] + j));
 			}
 			newDayMealStringArray.push(newDayMealString);
 		}
-		console.log(newMealsArray[0]);
-		const rowClass = "type-meal-row " + this.getColorWithDate(newMealsArray[0][0]);
+		// console.log(newMealsArray[0]);
+		let rowClass = "type-meal-row " + this.getColorWithDate(newMealsArray[0][0]);
+
+		
+		rowClass += bbangShik ? " bbang-shik" : "";
+	
 		return (<div className={rowClass} key={"row"+i}>
 					<div className="meal-cell date-meal-cell" key={"date:"+i}>{newDayMealStringArray[0]}</div>
 					<div className="meal-cell breakfast-meal-cell" key={"breakfast:"+i}>{newDayMealStringArray[1]}</div>
@@ -83,7 +104,7 @@ class MealPlanPage extends React.Component{
 	
 	render() {
 		var mealDataJson = require('../json/2019-june-meal.json');
-		console.log(mealDataJson);
+		// console.log(mealDataJson);
 		const options = [
 			{value: 0, label: '육군훈련소'},
 			{value: 1, label: '제8902부대'},
@@ -105,8 +126,8 @@ class MealPlanPage extends React.Component{
 		const unitName = defaultOption.label;
 		const currentUnitMealData = mealDataJson[unitName];
 		
-		console.log(currentUnitMealData);
-		console.log(currentUnitMealData.length);
+		// console.log(currentUnitMealData);
+		// console.log(currentUnitMealData.length);
 		
 		const dateCell = [];
 		const breakfastCell = [];
