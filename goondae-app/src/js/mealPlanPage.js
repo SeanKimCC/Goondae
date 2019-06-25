@@ -86,11 +86,11 @@ class MealPlanPage extends React.Component{
 		console.log(mealDataJson);
 		const options = [
 			{value: 0, label: '육군훈련소'},
-			{value: 1, label: '제8902부대'},
-			{value: 2, label: '제5021부대'},
-			{value: 3, label: '제6282부대'},
-			{value: 4, label: '제3296부대'},
-			{value: 5, label: '제7369부대'},
+			{value: 1, label: '제2급양대'},
+			{value: 2, label: '제3급양대'},
+			{value: 3, label: '제8급양대'},
+			{value: 4, label: '제11급양대'},
+			{value: 5, label: '제5급양대'},
 			{value: 6, label: '제6176부대'},
 			{value: 7, label: '제1691부대'},
 			{value: 8, label: '제5322부대'},

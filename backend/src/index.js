@@ -4,6 +4,8 @@ const Task = require('./models/task');
 const User = require('./models/user');
 const userRouter = require('./routers/user');
 const taskRouter = require('./routers/task');
+const vacRouter = require('./routers/vacation-date');
+
 const auth = require('./middleware/auth');
 
 const app= express();
@@ -51,6 +53,7 @@ app.use('/auth', auth);
 app.use(express.json());
 app.use(userRouter);
 app.use(taskRouter);
+app.use(vacRouter);
 
 
 
