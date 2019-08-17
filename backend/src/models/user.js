@@ -23,20 +23,16 @@ const userSchema = new mongoose.Schema({
 			}
 		}
 	},
-	vacation:[{
-		vacType:{
-			type: Number, //0 is 정기, 1 is 포상, 2 is 보상, 3 is 위로, 4 is 병가, 5 is 청원
-			required: true
-		},
-		totalDays:{
-			type: Number,
-			required: true
-		},
-		numDaysLeft:{
-			type: Number,
-			required: true
-		}
-	}],
+	// vacation:{
+	// 	totalDays:{
+	// 		type: Number,
+	// 		required: true
+	// 	},
+	// 	numDaysLeft:{
+	// 		type: Number,
+	// 		required: true
+	// 	}
+	// },
 	age: {
 		type: Number,
 		default: 0,

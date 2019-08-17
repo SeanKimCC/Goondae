@@ -25,10 +25,14 @@ const vacationDateSchema = new mongoose.Schema ({
 		type: Date,
 		required: true
 	},
-	numDays:{
-		type: Number,
+	endDate:{
+		type: Date,
 		required: true
 	},
+	// numDays:{
+	// 	type: Number,
+	// 	required: true
+	// },
 	owner:{
 		type: mongoose.Schema.Types.ObjectId,
 		required: true,

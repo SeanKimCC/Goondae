@@ -111,7 +111,13 @@
 	.login-modal-open-btn{
 		right: 240px;
 	}
+	.login-btn-without-switcher{
+		right: 100px !important;
+	}
 	.signup-modal-open-btn, .logout-modal-open-btn{
 		right: 150px;
+	}
+	.signup-btn-without-switcher, .logout-btn-without-switcher {
+		right: 10px !important;
 	}
 }

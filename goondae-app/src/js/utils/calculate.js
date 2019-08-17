@@ -1,27 +1,26 @@
-import React from 'react';
-
 const payMonths = [4,11,18];
 const oneDay = 24*60*60*1000;
-
-class ResultBox extends React.Component{
-	getDaysInThisMonth(date) {
+module.exports={
+	getDaysInThisMonth : function(date) {
 		return new Date(date.getFullYear(), date.getMonth()+1, 0).getDate();
-	}
-	
-	
-	formatDateObject(date){
+	},
+
+
+	formatDateObject : function(date){
 
 		var dd = date.getDate();
 		var mm = date.getMonth() + 1; //January is 0!
 		var yyyy = date.getFullYear();
-		
+
 		var dateString = yyyy.toString() + "년 " + mm.toString() + "월 " + dd.toString() + "일";
-		
+
 		return (dateString);
-	}
-	
-	formatMoney(money){
+	},
+
+	formatMoney : function(money){
+		console.log(money);
 		var lenMoney = money.length;
+		console.log(lenMoney);
 		var formattedMoney = "";
 		var commaPos = lenMoney % 3;
 		if (commaPos === 0){
@@ -33,47 +32,49 @@ class ResultBox extends React.Component{
 				commaPos += 3;
 			}
 			formattedMoney = formattedMoney.concat(money[i]);
+			console.log(formattedMoney);
 		}
 		return formattedMoney;
-	}
-	
-	calculateOriginalDaysLeft(){
-		const numMonths = this.props.numMonths[this.props.selectedType];
-		const selectedDate = this.props.selectedDate;
+	},
+
+	calculateOriginalDaysLeft : function(pnumMonths, pselectedType, pselectedDate){
+		console.log(pselectedDate);
+		const numMonths = pnumMonths[pselectedType];
+		const selectedDate = pselectedDate;
 		// const date = new Date(selectedDate[2],selectedDate[1]-1,selectedDate[0]);
 		const date = new Date(selectedDate.getTime());
-		
+
 		var newDate = date;
-		
+
 		newDate.setMonth(newDate.getMonth() + numMonths);
 		newDate.setDate(newDate.getDate()-1);
-			
+
 
 		return newDate;
-	}
-	
-	calculateEarliestDate(){
-		const shortenedNumMonths = this.props.shortenedNumMonths[this.props.selectedType];
-		const selectedDate = this.props.selectedDate;
+	},
+
+	calculateEarliestDate : function(pshortenedNumMonths, pselectedType, pselectedDate){
+		const shortenedNumMonths = pshortenedNumMonths[pselectedType];
+		const selectedDate = pselectedDate;
 		// const date = new Date(selectedDate[2],selectedDate[1]-1,selectedDate[0]);
 		const date = new Date(selectedDate.getTime());
-		
+
 		var newDate = date;
-		
+
 		newDate.setMonth(newDate.getMonth() + shortenedNumMonths);
 		newDate.setDate(newDate.getDate()-1);
 
 		return newDate;
-	}
-	
-	calculateUpdatedDaysLeft(){ // numShortenedDays
-		
-		const selectedDate = this.props.selectedDate;
+	},
+
+	calculateUpdatedDaysLeft : function(pselectedDate, pselectedType){ // numShortenedDays
+
+		const selectedDate = pselectedDate;
 		// const date = new Date(selectedDate[2],selectedDate[1]-1,selectedDate[0]);
 		const date = new Date(selectedDate.getTime());
-		
+
 		var subtractStartDay;
-		switch (this.props.selectedType){
+		switch (pselectedType){
 			case 0:
 			case 3:
 			case 4:
@@ -99,106 +100,115 @@ class ResultBox extends React.Component{
 		var diffDays = Math.round(Math.abs((subtractStartDay.getTime() - date.getTime())/(oneDay)));
 
 		var daysToSubtract = Math.ceil(diffDays/14);
-		
+
 		const originalDate = this.calculateOriginalDaysLeft();
 		var newDate = new Date(originalDate.getFullYear(), originalDate.getMonth(), originalDate.getDate()-daysToSubtract);
-		
+
 		var earliestDate = this.calculateEarliestDate();
 		if(newDate < earliestDate){
-			
+
 			daysToSubtract = Math.round(Math.abs((earliestDate.getTime() - originalDate.getTime())/(oneDay)));
-			
+
 			return [earliestDate, daysToSubtract];
 		}
-		
+
 		return [newDate, daysToSubtract];
-	}
-	
-	newCalculateSalaryLeft(){
+	},
+
+	newCalculateSalaryLeft : function(pselectedDate, pperRankMonthlyPay2017, pperRankMonthlyPay2018, pperRankMonthlyPay2020 ){
 		//Get start date, today, and end date
-		const startDate = this.props.selectedDate;
+		const startDate = pselectedDate;
 		const todayDateWithHours = new Date();
 		const todayDate = new Date(todayDateWithHours.getFullYear(), todayDateWithHours.getMonth(), todayDateWithHours.getDate());
 		const endDate = this.calculateUpdatedDaysLeft()[0];
-		
+
 		//variable for current date. Starts at start date
 		// var currentDate = new Date(startDate[2],startDate[1]-1,startDate[0]);
 		var currentDate = new Date(startDate.getTime());
-		
-		const perRankMonthlyPay2017 = this.props.perRankMonthlyPay2017;
-		const perRankMonthlyPay2018 = this.props.perRankMonthlyPay2018;
-		const perRankMonthlyPay2020 = this.props.perRankMonthlyPay2020;
-		
+
+		const perRankMonthlyPay2017 = pperRankMonthlyPay2017;
+		const perRankMonthlyPay2018 = pperRankMonthlyPay2018;
+		const perRankMonthlyPay2020 = pperRankMonthlyPay2020;
+
 		const perRankMonthlyPay = [perRankMonthlyPay2017, perRankMonthlyPay2018, perRankMonthlyPay2020];
-		
-		
-		
+
+
+
 		//calculate the number of days you work on the first month and the last month
-		
+
 		const firstDayOfFirstMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
 		const firstDayOfSecondMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
-		
+
 		const daysInFirstMonth = Math.ceil(Math.abs(firstDayOfSecondMonth.getTime() - firstDayOfFirstMonth.getTime())/oneDay);
 		const numDaysFirstMonth = Math.ceil(Math.abs(currentDate.getTime() - firstDayOfSecondMonth.getTime())/oneDay);
 		const ratioFirstMonth = numDaysFirstMonth / daysInFirstMonth;
-		
+
 		const firstDayOfLastMonth = new Date(endDate.getFullYear(), endDate.getMonth(), 1);
 		const firstDayOfMonthAfterLastMonth = new Date(endDate.getFullYear(), endDate.getMonth() + 1, 1);
-		
+
 		const daysInLastMonth = Math.ceil(Math.abs(firstDayOfMonthAfterLastMonth.getTime() - firstDayOfLastMonth.getTime())/oneDay);
-		
+
 		const numDaysLastMonth = Math.ceil(Math.abs(endDate.getTime() - firstDayOfLastMonth.getTime())/oneDay) + 1;
 		const ratioLastMonth = numDaysLastMonth / daysInLastMonth;
-		
-		
-		
-		
+
+		// console.log(currentDate, firstDayOfSecondMonth, endDate);
+		// console.log(numDaysFirstMonth);
+		// console.log(numDaysLastMonth);
+		// console.log("--------");
+		// console.log(currentDate.getDate());
+		// console.log(currentDate.getDay());
+
+
+
 		var listOfPayDays = [];
 		var firstDate = currentDate.getDate();
 		var firstDay = currentDate.getDay();
-		
+
+		console.log("firstDay: ", firstDay);
 		var carryOverFlag = 0;
-		
+
 		if(firstDate > 10 || (firstDate > 8 && firstDay > 4)){
 			listOfPayDays.push(0);
 			carryOverFlag = 1;
 			currentDate.setMonth(currentDate.getMonth() + 1);
 			currentDate.setDate(8);
 		} 
-		
+
+		console.log(currentDate);
 		const endYear = endDate.getFullYear();
+		console.log(endYear);
 		const endMonth = endDate.getMonth();
-		
+
 		//dates at which you'll be paid
 		while (currentDate <= endDate || (currentDate.getMonth() === endMonth && currentDate.getFullYear() === endYear)){
 			var currentDayOfM = currentDate.getDate();
 			var currentDayOfW = currentDate.getDay();
 			if((currentDayOfM === 10 && (currentDayOfW !== 0 && currentDayOfW !== 6)) || ((currentDayOfM === 8 || currentDayOfM === 9) && currentDayOfW === 5)){ // 10th and not weekend, or 8~9th and friday
-				
+
 				listOfPayDays.push(new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()));
-				
-				
+
+
 				currentDate.setMonth(currentDate.getMonth() + 1);
 				currentDate.setDate(8);
 			}
 			else {
 				currentDate.setDate(currentDate.getDate() + 1);
 			}
-			
+
 			//inf loop occurred here
 		}
-		
+
 		var numMonthsOfService = listOfPayDays.length;
 		var listOfPayAmounts = [];
 		var firstMonthNoPayFlag = 0;
 		var monthlySal;
 		var yearIndex;
 		var rankIndex;
-		
+
 		for (var i = 0; i < numMonthsOfService; i++){
 			listOfPayAmounts.push(0);
 		}
-		
+
 		//add first month salary
 		if(listOfPayDays[0] === 0){
 			if(listOfPayDays[1].getFullYear() <= 2017){
@@ -223,11 +233,11 @@ class ResultBox extends React.Component{
 			monthlySal = perRankMonthlyPay[yearIndex][0];
 			listOfPayAmounts[0] += Math.round((ratioFirstMonth * monthlySal)/100) *100;
 		}
-		
+
 		//adding salaries of the entire service except first and last months
 		var currentYear;
 		for (i = 1; i < numMonthsOfService - 1; i++){
-			
+
 			currentYear = listOfPayDays[i].getFullYear();
 			if(currentYear <= 2017){
 				yearIndex = 0;
@@ -236,7 +246,7 @@ class ResultBox extends React.Component{
 			} else{
 				yearIndex = 2;
 			}
-			
+
 			if(i < payMonths[0]){
 				rankIndex = 0;
 			} else if(i < payMonths[1]) {
@@ -246,13 +256,13 @@ class ResultBox extends React.Component{
 			} else {
 				rankIndex = 3;
 			}
-			
+
 			monthlySal = perRankMonthlyPay[yearIndex][rankIndex];
-			
+
 			listOfPayAmounts[i] += monthlySal;
-			
+
 		}
-		
+
 		//Adding last month's salary
 		currentYear = listOfPayDays[i].getFullYear();
 		if(currentYear <= 2017){
@@ -276,41 +286,42 @@ class ResultBox extends React.Component{
 		monthlySal = perRankMonthlyPay[yearIndex][rankIndex];
 		listOfPayAmounts[numMonthsOfService - 1] += Math.round((ratioLastMonth * monthlySal) / 100) * 100;
 
-		
-		
-		
+
+
+		console.log(listOfPayAmounts); 
+
 		var payTotal = 0;
 		var payTillNow = 0;
 		var payRemainder = 0;
-		
+
 		for (i=0; i < numMonthsOfService; i++){
 			payTotal += listOfPayAmounts[i];
 		}
-		
+
 		for (i = 0 ; i < numMonthsOfService; i++){
 			if(todayDate >= listOfPayDays[i]){
 				payTillNow += listOfPayAmounts[i];
 			}
 		}
-		
+
 		payRemainder = payTotal - payTillNow;
-		
+
 		return [payTillNow.toString(), payRemainder.toString(), payTotal.toString()];
-	}
-	
-	calculateSalaryLeft(){
+	},
+
+	calculateSalaryLeft : function(pperRankMonthlyPay2017, pperRankMonthlyPay2018, pperRankMonthlyPay2020, pselectedDate){
 		//calculate first month 
-		const perRankMonthlyPay2017 = this.props.perRankMonthlyPay2017;
-		const perRankMonthlyPay2018 = this.props.perRankMonthlyPay2018;
-		const perRankMonthlyPay2020 = this.props.perRankMonthlyPay2020;
-		
+		const perRankMonthlyPay2017 = pperRankMonthlyPay2017;
+		const perRankMonthlyPay2018 = pperRankMonthlyPay2018;
+		const perRankMonthlyPay2020 = pperRankMonthlyPay2020;
+
 		const perRankMonthlyPay = [perRankMonthlyPay2017, perRankMonthlyPay2018, perRankMonthlyPay2020];
-		
+
 		var numPayMonths = [4,7,7];
-		
-		const selectedDate = this.props.selectedDate;
+
+		const selectedDate = pselectedDate;
 		const endDate = this.calculateUpdatedDaysLeft()[0];
-		
+
 		// var tempDate = new Date(selectedDate[2],selectedDate[1]-1,selectedDate[0]);
 		// var tempTempDate = new Date(selectedDate[2],selectedDate[1]-1,selectedDate[0]);
 		// var tempDateForDatesArray = new Date(selectedDate[2],selectedDate[1]-1,selectedDate[0]);
@@ -319,12 +330,12 @@ class ResultBox extends React.Component{
 		var tempDateForDatesArray = new Date(selectedDate.getTime());
 		var count = 0;
 		var firstDayOfNextMonth = new Date(tempDate.getFullYear(), tempDate.getMonth() + 1, 1);
-		
-		 	
-		
-		
+
+
+
+
 		var numDaysFirstMonth = (tempDate.getTime() - firstDayOfNextMonth.getTime())/oneDay;
-		
+
 		var firstMonthPayFlag = true;
 		var numDaysOfMonth = this.getDaysInThisMonth(tempDate);
 		var tempYear = tempDate.getFullYear(); 
@@ -336,9 +347,9 @@ class ResultBox extends React.Component{
 		} else {
 			payCategoryYear = 2;
 		}
-		
+
 		var firstMonthSalary = Math.round(Math.abs((numDaysFirstMonth/numDaysOfMonth * perRankMonthlyPay[payCategoryYear][0])/100))*100;
-		
+
 		if(tempDate.getDate() === 10){
 			count++;
 		} else if(tempDate.getDate() < 10){
@@ -349,41 +360,41 @@ class ResultBox extends React.Component{
 			tempDate.setMonth(tempDate.getMonth() + 1);
 			tempDate.setDate(10);
 		}
-		
+
 		while(tempDate <= endDate ){
 			tempDate.setMonth(tempDate.getMonth() + 1);
 			count++;
 		}
 		var monthlySalary = Array(count).fill(0);
 		var payDates = Array(count).fill(null);
-		
+
 		monthlySalary[0] = firstMonthSalary;
-		
+
 		var startCount = 0;
 		if(firstMonthPayFlag){
 			startCount = 1;
 			numPayMonths[0] += 1;
 		}
-		
+
 		if(tempDateForDatesArray.getDate() > 10){
 			tempDateForDatesArray.setMonth(tempDateForDatesArray.getMonth() + 1);
 			tempDateForDatesArray.setDate(10);
 		}
-		
+
 		for(var i = 0; i < count-1; i++){
 			payDates[i] = new Date(tempDateForDatesArray);
 			tempDateForDatesArray.setMonth(tempDateForDatesArray.getMonth() + 1);
 		}
-		
+
 		if(endDate.getDate() > 10){
 			payDates[count-1] = new Date(tempDateForDatesArray);	
 		} else {
 			payDates[count-1] = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
 		}
-		
+
 		while(startCount < count){
 			tempYear = tempTempDate.getFullYear();
-			
+
 			if(tempYear <= 2017){
 				payCategoryYear = 0;
 			} else if(tempYear <= 2019) {
@@ -391,7 +402,7 @@ class ResultBox extends React.Component{
 			} else {
 				payCategoryYear = 2;
 			}
-			
+
 			if(startCount < numPayMonths[0]){
 				monthlySalary[startCount] += perRankMonthlyPay[payCategoryYear][0];	
 			} else if(startCount < (numPayMonths[0] + numPayMonths[1])){
@@ -404,9 +415,9 @@ class ResultBox extends React.Component{
 			startCount++;
 			tempTempDate.setMonth(tempTempDate.getMonth() + 1);
 		}
-		
+
 		tempYear = tempTempDate.getFullYear();
-		
+
 		if(tempYear <= 2017){
 			payCategoryYear = 0;
 		} else if(tempYear <= 2019) {
@@ -414,95 +425,38 @@ class ResultBox extends React.Component{
 		} else {
 			payCategoryYear = 2;
 		}
-		
-		
+
+
 		firstDayOfNextMonth = new Date(endDate.getFullYear(), endDate.getMonth() + 1, 1);
 		var numDaysLastMonth = endDate.getDate();
 		numDaysOfMonth = this.getDaysInThisMonth(endDate);
-		
-		
+
+
 		monthlySalary[startCount-1] = Math.round(Math.abs((numDaysLastMonth/numDaysOfMonth * perRankMonthlyPay[payCategoryYear][3])/100))*100;
-		
+
 		var totalSalary = 0;
 		startCount = 0;
 		while(startCount < count){
 			totalSalary += monthlySalary[startCount];
 			startCount ++;
 		}
-		
+
 		var currentAmount = 0;
 		var today = new Date();
 		startCount = 0;
-		
+
 		// tempDate = new Date(selectedDate[2],selectedDate[1]-1,selectedDate[0]);
 		tempDate = new Date(selectedDate.getTime());
-		
+
 		var monthCount = 0;
 		while(today >= payDates[monthCount] && monthCount < count && today <= endDate){
 			currentAmount += monthlySalary[monthCount];
 			monthCount++;
 		}
-		
+
 		var amountLeftToEarn = totalSalary - currentAmount;
-		
-		
+
+
 		return [currentAmount.toString(), amountLeftToEarn.toString(), totalSalary.toString()];
 	}
-
-	
-	
-	
-	
-	render(){
-		// var calculate = require('utils/calculate.js');
-		
-		var salaries = this.newCalculateSalaryLeft();
-		var currentAmount = this.formatMoney(salaries[0]);
-		var amountLeftToEarn = this.formatMoney(salaries[1]);
-		var totalSalary = this.formatMoney(salaries[2]);
-
-		
-		const selectedDate = this.props.selectedDate;
-		// var formattedSelectedDate = selectedDate[2] + "년 " + selectedDate[1] + "월 " + selectedDate[0] + "일";
-		var formattedSelectedDate = selectedDate.getFullYear() + "년 " + (selectedDate.getMonth() + 1) + "월 " + selectedDate.getDate() + "일";
-		
-		// const numDaysLeft = 1; 
-		var updatedDaysLeft = this.calculateUpdatedDaysLeft();
-		var updatedDate = updatedDaysLeft[0];
-		var updatedDaysSubtracted = updatedDaysLeft[1];
-		
-		var originalDate = this.calculateOriginalDaysLeft();
-		
-		var formattedUpdatedDate = this.formatDateObject(updatedDate);
-		var formattedOriginalDate = this.formatDateObject(originalDate);
-		
-		
-		const dayWolgeupResult = this.props.isDaysNotWolgeup ? (
-			<div className="result-box">
-			입대일 : <span>{formattedSelectedDate}</span>
-			<br/>
-			기존 전역일 : <span>{formattedOriginalDate}</span>
-			<br/>
-			단축 후 전역일 : <span>{formattedUpdatedDate}</span>
-			<br/>
-			단축일수 : <span>{updatedDaysSubtracted}일</span>
-			</div>
-		) : (
-			<div className="result-box">
-			입대일 : <span>{formattedSelectedDate}</span>	
-			<br/>
-			입대 후 번 금액 : <span>{currentAmount}</span>
-			<br/>
-			지금부터 전역까지 벌 금액 : <span>{amountLeftToEarn}</span>
-			<br/>
-			입대부터 전역까지 벌 총 금액 : <span>{totalSalary}</span>
-			<br/>
-			</div>
-		);
-			
-		
-		return(<div>{dayWolgeupResult}</div>);
-	}
-}
-
-export default ResultBox;
+};

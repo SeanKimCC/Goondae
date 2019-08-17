@@ -18,7 +18,9 @@ import SignupModal from './js/signupModal.js';
 import LoadingScreen from './js/loading.js';
 import CalculatorPage from './js/calculatorPage.js';
 import VacationPage from './js/vacationPage/vacationPage.js';
+import SpecialtyPage from './js/specialtyPage.js';
 import VacationOverview from './js/vacationPage/vacationOverview.js';
+import NewVacationOverview from './js/vacationPage/newVacationOverview.js';
 import MealPlanPage from './js/mealPlanPage.js';
 import MenuBar from './js/menuSideBar.js';
 import axios from 'axios';
@@ -51,36 +53,43 @@ class MainPage extends React.Component{
 		this.saveMealUnitChange = this.saveMealUnitChange.bind(this);
 		this.updatePageNum = this.updatePageNum.bind(this);
 		this.getUserData = this.getUserData.bind(this);
+		this.loggedIn = this.loggedIn.bind(this);
+		this.loggingIn = this.loggingIn.bind(this);
+		this.finishedLoggingIn = this.finishedLoggingIn.bind(this);
 		
-		const token = localStorage.getItem('token');
-		var defaultDate = new Date();
-		var mealUnit = 0;
-		// localStorage.setItem('startDate', defaultDate);
-		if(token){
-			//if there is token, get the selected date from local storage
-			var userData = this.getUserData();
-			console.log("this is user data:", userData);
-			defaultDate = new Date(localStorage.getItem('startDate'));
-			if(localStorage.getItem('mealUnit')){
-				mealUnit = localStorage.getItem('mealUnit');
-			}
-			if(defaultDate){
-				defaultDate = new Date();
-			}
-		}
+		// const token = localStorage.getItem('token');
+		// var defaultDate = new Date();
+		// var mealUnit = 0;
+		// // localStorage.setItem('startDate', defaultDate);
+		// if(token){
+		// 	//if there is token, get the selected date from local storage
+		// 	var userData = this.getUserData();
+		// 	console.log("this is user data:", userData);
+		// 	defaultDate = new Date(localStorage.getItem('startDate'));
+		// 	if(localStorage.getItem('mealUnit')){
+		// 		mealUnit = localStorage.getItem('mealUnit');
+		// 	}
+		// 	if(defaultDate){
+		// 		defaultDate = new Date();
+		// 	}
+		// }
 	
 		
 		this.state = {
 			selectedType : 0,
-			selectedDate : defaultDate,
+			// selectedDate : defaultDate,
+			selectedDate: new Date(),
 			loginModalIsOpen: false,
 			signupModalIsOpen: false,
 			isLoggedIn: false,
 			isLoading: false,
+			isLoggingIn: false,
 			isMenuBarOpen: false,
 			pageNum: this.returnPageCodeBasedOnURL(),
 			isDaysNotWolgeup: true,
-			mealUnit: mealUnit,
+			// mealUnit: mealUnit,
+			mealUnit: 0,
+			isLoggedIn: false
 		};
 	}
 	
@@ -93,15 +102,6 @@ class MainPage extends React.Component{
 	
 	onClickDay(selectedDate){
 		console.log("!!!!!!!!!!!!!!!!!!! " , selectedDate);
-		// var dd = selectedDate.getDate();
-		// var mm = selectedDate.getMonth() + 1; //January is 0!
-		// var yyyy = selectedDate.getFullYear();
-		
-		// console.log(dd, mm, yyyy);
-		
-		// var formattedSelectedDate = [dd, mm, yyyy];
-		
-		// this.setState({selectedDate:formattedSelectedDate});
 		this.setState({selectedDate:selectedDate});
 		console.log(this.state.selectedDate);
 	}
@@ -152,7 +152,8 @@ class MainPage extends React.Component{
 			// return getUsers;
 			this.setState({
 				selectedDate: new Date(getUsers.data.startDate),
-				mealUnit: getUsers.data.mealUnit
+				mealUnit: getUsers.data.mealUnit,
+				isLoggedIn: true
 			});
 			localStorage.setItem('mealUnit', this.state.mealUnit);
 			
@@ -168,25 +169,38 @@ class MainPage extends React.Component{
 		const token = localStorage.getItem('token');
 		try{
 			let getLogoutUser = await
-			logoutAxios.post('https://goondae-server.run.goorm.io/users/logoutAll', {
+			userDataAxios.post('https://goondae-server.run.goorm.io/users/logoutAll', {
 				token: token
 			});
 			console.log(getLogoutUser);
 			localStorage.removeItem('token');
 			this.setState({
-				isLoggedIn: false
+				isLoggedIn: false,
+				selectedDate: new Date(),
+				selectedType : 0,
+				mealUnit: 0				
 			});
 			
 		}catch(e){
-			console.log("hello catch here");
+			localStorage.removeItem('token');
 			console.log(e);
 		}
 		console.log(this.state.isLoggingOut);
 	}
+	loggedIn(){
+		this.setState({
+			isLoggedIn:true	
+		})
+	}
+	loggedOut(){
+		this.setState({
+			isLoggedIn:false
+		});
+	}
 	
 	
 	componentDidMount() {
-		console.log('hello');
+		
 			// let getUsers = () => {
 			// axios.post('https://goondae-server.run.goorm.io/users/login', {
 			// 	email: 'johnjin5@email.com',
@@ -198,47 +212,26 @@ class MainPage extends React.Component{
 			// };
 
 			// getUsers();
+		const token = localStorage.getItem('token');
+		var defaultDate = new Date();
+		var mealUnit = 0;
+		// localStorage.setItem('startDate', defaultDate);
+		if(token){
+			//if there is token, get the selected date from local storage
+			var userData = this.getUserData();
+			console.log("this is user data:", userData);
+			defaultDate = new Date(localStorage.getItem('startDate'));
+			if(localStorage.getItem('mealUnit')){
+				mealUnit = localStorage.getItem('mealUnit');
+			}
+			if(defaultDate){
+				defaultDate = new Date();
+			}
+		}
+		
 		var self = this;
 		
-		logoutAxios.interceptors.request.use(function (config) {
-
-			// spinning start to show
-			// UPDATE: Add this code to show global loading indicator
-			// document.body.classList.add('loading-indicator');
-			self.setState({
-				isLoading: true
-			});
-			console.log('started');
-			return config;
-
-			}, function (error) {
-				console.log('error request');
-				self.setState({
-					isLoading: false,
-					isLoggedIn: false
-				});
-				return Promise.reject(error);
-		});
-		logoutAxios.interceptors.response.use(function (response) {
-
-			// spinning hide
-			// UPDATE: Add this code to hide global loading indicator
-			// document.body.classList.remove('loading-indicator');
-			console.log('finished');
-			self.setState({
-				isLoading: false,
-				isLoggedIn: false
-			});
-
-			return response;
-			}, function (error) {
-				console.log('error response');
-				self.setState({
-					isLoading: false,
-					isLoggedIn: false
-				});
-				return Promise.reject(error);
-		});
+		
 		
 		userDataAxios.interceptors.request.use(function (config) {
 			self.setState({
@@ -319,7 +312,16 @@ class MainPage extends React.Component{
 	}
 	
 	returnVacationOverview(){
-		return <VacationOverview/>
+		return <VacationOverview key ={this.state.isLoggedIn}
+				   isLoggedIn={this.state.isLoggedIn}
+				   isLoggingIn={this.state.isLoggingIn}				   
+			/>
+	}
+	returnNewVacationOverview(){
+		return <NewVacationOverview/>
+	}
+	returnSpecialtyPage(){
+		return <SpecialtyPage/>
 	}
 	
 	returnPageCodeBasedOnURL(){
@@ -346,12 +348,26 @@ class MainPage extends React.Component{
 			case "calculator":
 				return 5;
 				break;
+			case "specialty":
+				return 6;
+				break;
 			default:
 				return -1;
 				break;
 		}
 			
 				
+	}
+	
+	loggingIn(){
+		this.setState({
+			isLoggingIn: true
+		});
+	}
+	finishedLoggingIn(){
+		this.setState({
+			isLoggingIn: false
+		});
 	}
 	
 	updatePageNum = (ev) => {
@@ -388,6 +404,8 @@ class MainPage extends React.Component{
 		});
 	}
 	
+	
+	
 	render(){
 		
 		return(
@@ -410,6 +428,7 @@ class MainPage extends React.Component{
 						toggleMenuBar={this.toggleMenuBar}
 						isMenuBarOpen={this.state.isMenuBarOpen}
 						pageNum={this.state.pageNum}
+						isLoggedIn={this.state.isLoggedIn}
 					/>
 
 					<SignupModal
@@ -418,11 +437,15 @@ class MainPage extends React.Component{
 						contentLabel="Signup Modal"
 						subtitle={this.subtitle}
 						selectedDate={this.state.selectedDate}
+						onChangeDate={this.onClickDay}
 					/>
 					<LoginModal
 						loginModalIsOpen={this.state.loginModalIsOpen}
 						onAfterLoginOpen={this.afterOpenLoginModal}
 						closeLoginModal={this.closeLoginModal}
+						loggedIn={this.loggedIn}
+						loggingIn={this.loggingIn}
+						finishedLoggingIn={this.finishedLoggingIn}
 						contentLabel="Login Modal"
 						onChangeDay={this.onClickDay}
 						subtitle={this.subtitle}
@@ -433,6 +456,8 @@ class MainPage extends React.Component{
 					<Route exact path="/" component={this.returnMainPage}/>
 					<Route path="/vacation-overview" component={this.returnVacationOverview}/>
 					<Route path="/meal/" component={this.returnMealPlanPage}/>
+					<Route path="/specialty/" component={this.returnSpecialtyPage}/>
+					<Route path="/new-vacation-overview" component={this.returnNewVacationOverview}/>
 				</div>
 			</Router>
 		);

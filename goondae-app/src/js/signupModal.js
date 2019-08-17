@@ -44,6 +44,7 @@ class SignupBox extends React.Component{
 
 	
 	render() {
+		console.log(this.props.selectedDate);
 		console.log(this.props.isLoggingIn);
 		const signupBtnClass = "login-modal-login-button " + (this.props.isSigningUp ? "login-modal-loading" : "" );
 		
@@ -57,7 +58,7 @@ class SignupBox extends React.Component{
 		// const selectedDate = new Date(selectedDateArr[2], selectedDateArr[1]-1, selectedDateArr[0]);
 		// console.log(selectedDate);
 		const startDateObj = startDate.getFullYear() + '-' + ((startDate.getMonth()+1)>9 ? '' : '0') +(startDate.getMonth()+1) + '-' + (startDate.getDate()>9 ? '' : '0') + startDate.getDate();
-		console.log(startDateObj);
+		console.log("@@@@@@@@@" + startDateObj);
 		
 		return (
 			<div className="login-modal-box">
@@ -111,6 +112,7 @@ class SignupModal extends React.Component{
 		this.handleSignupSubmit = this.handleSignupSubmit.bind(this);
 		this.closeSignupModal = this.closeSignupModal.bind(this);
 		// this.handlePasswordChange = this.handlePasswordChange.bind(this);
+		console.log("!!!!Signup" + this.props.selectedDate);
 		this.state = {
 			email: '',
 			password: '',
@@ -121,6 +123,7 @@ class SignupModal extends React.Component{
 		
 	}
 	componentDidMount(){
+		console.log("@@@@@Signup" + this.props.selectedDate);
 		var self = this;
 		signupAxios.interceptors.request.use(function (config) {
 
@@ -172,13 +175,14 @@ class SignupModal extends React.Component{
 		});
 	}
 	handleDateChange(e){
+		this.props.onChangeDate(new Date(e.target.value));
 		console.log("hello" , e.target.value);
 		// const dateValue = e.target.value;
 		// console.log(dateValue.substr(5,2));
 		// const newDate = dateValue.substr(0,4) + "-" + dateValue.substr(5,2)  + "-" + dateValue.substr(8,2) ;
-		const newDate = new Date(e.target.value);
-		console.log(newDate);
-		this.setState({[e.target.name]: newDate});
+		// const newDate = new Date(e.target.value);
+		// console.log(newDate);
+		// this.setState({[e.target.name]: newDate});
 	}
 	
 	handleChange(e){
@@ -226,6 +230,7 @@ class SignupModal extends React.Component{
 	// 	this.setState({password: val});
 	// }
 	render() {
+		console.log("####Signup" + this.props.selectedDate);
 		return (
 			<div>
 				<Modal
@@ -243,7 +248,7 @@ class SignupModal extends React.Component{
 						handleSignupSubmit={this.handleSignupSubmit}
 						isSigningUp={this.state.isSigningUp}
 						closeSignupModal={this.closeSignupModal}
-						selectedDate={this.state.startDate}
+						selectedDate={this.props.selectedDate}
 					/>					
 				</Modal>
 			</div>

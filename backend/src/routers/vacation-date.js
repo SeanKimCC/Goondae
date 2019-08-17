@@ -4,7 +4,25 @@ const auth = require('../middleware/auth');
 const router = new express.Router();
 
 function checkIfTwoDateRangesCoincide(date1, numDays1, date2, numDays2){
-	return;
+	if(date1 == date2){
+		return true;
+	}
+	if(date1 > date2){
+		for(var i = 0; i < numDays2; i++){
+			const date2Range = new Date(date2.getFullYear(), date2.getMonth()+1, date2.getDate() + i);
+			if(date1 == date2Range){
+				return true;
+			}
+		}
+	} else{
+		for(var j = 0; j < numDays1; j++){
+			const date1Range = new Date(date1.getFullYear(), date1.getMonth()+1, date1.getDate() + j);
+			if(date2 == date1Range){
+				return true;
+			}
+		}
+	}
+	return false;
 }
 
 router.post('/vacationDate', auth, async(req, res) => {
@@ -21,7 +39,9 @@ router.post('/vacationDate', auth, async(req, res) => {
 			
 			owner: req.user._id 
 		});
+		
 		await vacationDate.save();
+		console.log("vac-date: ",vacationDate);
 		res.status(201).send(vacationDate);
 	}catch(e){
 		res.status(400).send(e);
@@ -32,7 +52,7 @@ router.post('/vacationDate', auth, async(req, res) => {
 // FILTERING DATA : GET /tasks?completed=true
 // PAGINATION : GET /tasks?limit=10&skip=0
 // SORTING DATA : GET /tasks?sortBy=createdAt:desc
-router.get('/vacationDates', auth, async(req, res) => {
+router.get('/vacationDates/:token', auth, async(req, res) => {
 	const match = {};
 	const sort = {};
 	
@@ -127,6 +147,19 @@ router.delete('/vacationDates/:id', auth, async(req, res) => {
 		}
 		res.send(vacationDate);
 	} catch(e){
+		res.status(500).send(e);
+	}
+});
+
+router.delete('/vacationDatesAll/:token', auth, async(req,res) => {
+	try{
+		const vacationDates = await VacationDate.deleteMany({owner: req.user._id});
+		//@!!!!! find and delete here
+		if(!vacationDates){
+			return res.status(404).send();
+		}
+		res.send(vacationDates);
+	} catch(e) {
 		res.status(500).send(e);
 	}
 });

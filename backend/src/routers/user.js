@@ -25,7 +25,7 @@ const avatar = multer({
 router.all('/*', function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "https://goondae-alfpy.run.goorm.io");
   // res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  res.header("Access-Control-Allow-Methods", "POST, GET, PATCH");
+  res.header("Access-Control-Allow-Methods", "POST, GET, PATCH, DELETE");
   res.header("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
   next();
 });
@@ -45,6 +45,11 @@ router.post('/users', async (req, res) => {
 	// });
 	console.log(user);
 	try{
+		const checkUser = await User.findOne({'email': req.body.email});
+		console.log("hello"+ checkUser);
+		if(checkUser){
+			return res.status(406).send({error: 'Existing email'});
+		}
 		await user.save();
 		const token = await user.generateAuthToken();
 		res.status(201).send({user, token});

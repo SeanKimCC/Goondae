@@ -29,11 +29,9 @@ class DaysWolgeupSwitcher extends React.Component{
 		
 		var switcherClass = "compensation-arrow-icon fa " + this.props.btnClass + (this.props.showSwitchCalcBtn ? "" : " hidden");
 		
-		var daysWolgeupClass = (this.props.showDaysWolgeupSwitcher ? "compensation-link compensation-link-text": " hidden");
-		var vacationClass= (!this.props.showDaysWolgeupSwitcher ? "compensation-link compensation-link-text": " hidden");
+		var daysWolgeupClass = (this.props.showSwitchCalcBtn ? "compensation-link compensation-link-text1": " hidden");
 		
-		var daysSwitcherClass = switcherClass + (this.props.showDaysWolgeupSwitcher ? "": " hidden");
-		var vacationSwitcherClass = switcherClass + (!this.props.showDaysWolgeupSwitcher ? "": " hidden");
+		var daysSwitcherClass = switcherClass + (this.props.showSwitchCalcBtn ? "": " hidden");
 		
 		return(
 			<div>
@@ -46,14 +44,6 @@ class DaysWolgeupSwitcher extends React.Component{
 				</a>
 				<a className="compensation-link compensation-link-icon" onClick={this.props.onCalcSwitcherClick}>
 					<span className={switcherClass}></span>
-				</a>
-				
-				<a className={vacationClass} onClick={this.props.onCalcSwitcherClick}>
-					<span> {this.props.btnText}	</span>
-					<span className="compensation-arrow-icon fa fa-arrow-right"></span>
-				</a>
-				<a className="compensation-link compensation-link-icon" onClick={this.props.onCalcSwitcherClick}>
-					<span className={vacationSwitcherClass}></span>
 				</a>
 				
 				
@@ -72,7 +62,7 @@ class VacationSwitcher extends React.Component {
 					{this.props.pageTitleText}
 				</span>
 				<a className="compensation-link compensation-link-text" onClick={this.props.onCalcSwitcherClick}>
-					<span> {this.props.btnText}	</span>
+					<span> {this.props.btnText}	11</span>
 					<span className="compensation-arrow-icon fa fa-arrow-right"></span>
 				</a>
 				<a className="compensation-link compensation-link-icon" onClick={this.props.onCalcSwitcherClick}>
@@ -105,9 +95,9 @@ class PageHeader extends React.Component{
 			case 5:
 				return "계산기";
 			case -1:
-				return "wrong";
+				return "군대닷컴";
 			default:
-				return "wrong";
+				return "군대닷컴";
 		}
 	}
 	
@@ -125,15 +115,16 @@ class PageHeader extends React.Component{
 		const switchPageBtnText = !isDaysNotWolgeup ? "군복무 계산기" : "군월급 계산기";
 		const headerId = isDaysNotWolgeup ? "pageHeader" : "wolgeupPageHeader";
 		const btnClass = !isDaysNotWolgeup ? "fa-hourglass-half" : "fa-won-sign";
-		const token = localStorage.getItem('token');
-		let isLoggedIn = false;
-		if(token){
-			isLoggedIn = true;
-			//TODO: When I deleted the account in the database after login, the token was saved in the local storage, but there wasn't an actual user to be logged into in the database. This resulted in the user not being able to logout of an unexisting user. This might be a case that can be ignored.
-		}
-		const loginBtnClass = "login-modal-open-btn modal-open-btn btn btn-default " + (isLoggedIn ? "hidden" : "");
-		const signupBtnClass = "signup-modal-open-btn modal-open-btn btn btn-default " + (isLoggedIn ? "hidden" : "");
-		const logoutBtnClass = "logout-modal-open-btn modal-open-btn btn btn-default " + (isLoggedIn ? "" : "hidden");
+		// const token = localStorage.getItem('token');
+		// let isLoggedIn = false;
+		// if(token){
+		// 	isLoggedIn = true;
+		// 	//TODO: When I deleted the account in the database after login, the token was saved in the local storage, but there wasn't an actual user to be logged into in the database. This resulted in the user not being able to logout of an unexisting user. This might be a case that can be ignored.
+		// }
+		
+		const loginBtnClass = "login-modal-open-btn modal-open-btn btn btn-default " + (this.props.isLoggedIn ? "hidden" : "") + (showSwitchCalcBtn ? "" : " login-btn-without-switcher");
+		const signupBtnClass = "signup-modal-open-btn modal-open-btn btn btn-default " + (this.props.isLoggedIn ? "hidden" : "") + (showSwitchCalcBtn ? "" : " signup-btn-without-switcher");
+		const logoutBtnClass = "logout-modal-open-btn modal-open-btn btn btn-default " + (this.props.isLoggedIn ? "" : "hidden") + (showSwitchCalcBtn ? "" : " logout-btn-without-switcher");
 		
 		let showDaysWolgeupSwitcher = false;
 		let showVacSwitcher = false;

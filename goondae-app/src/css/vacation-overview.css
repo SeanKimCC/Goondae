@@ -1,6 +1,6 @@
 .vacation-overview-container{
-	width: 80%;
-	height: 80%;
+	width: 100%;
+	height: 100%;
 	margin-top: 20px;
 	margin-left: 20px;
 }
@@ -23,6 +23,18 @@
 	background-color: black;
 	height: 100%;
 }
+.vacation-date-range-row{
+	display:inline-block;
+	width : calc(15*(100% - 75px)/16) ;
+	border: 1px solid white;
+	height:100%;
+	vertical-align: top;
+	background-color: grey;
+	padding-top: 10px;
+	font-size: 19px;
+	color:white;
+	padding-left: 5px;
+}
 
 
 .vacation-total-days-viewer{
@@ -30,9 +42,10 @@
 	/* margin-left:75px; */
 	/* background-color: black; */
 	/* display:table-cell; */
+	display:inline-block;
 	height:100%;
 	/* width: calc(100% - 75px); */
-	width: 100%;
+	width: 60%;
 }
 
 .vacation-days-row{
@@ -60,4 +73,13 @@
 	background-color: green;
 	border: 1px solid white;
 	border-radius: 3px;
+}
+
+.date-range-selector{
+	display:inline-block;
+	/* background-color: green;
+	border: 1px solid white;
+	border-radius: 3px; */
+	height:40%;
+	vertical-align:top;
 }

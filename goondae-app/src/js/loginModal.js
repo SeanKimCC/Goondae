@@ -120,6 +120,7 @@ class LoginModal extends React.Component{
 			self.setState({
 				isLoggingIn: true
 			});
+			self.props.loggingIn();
 			console.log('started logging in');
 			return config
 
@@ -131,6 +132,7 @@ class LoginModal extends React.Component{
 					// password: '',
 					showErrorMessage:true
 				});
+				self.props.finishedLoggingIn();
 				return Promise.reject(error);
 		});
 		loginAxios.interceptors.response.use(function (response) {
@@ -145,6 +147,7 @@ class LoginModal extends React.Component{
 				password: '',
 				showErrorMessage:false
 			});
+			self.props.finishedLoggingIn();
 
 			return response;
 			}, function (error) {
@@ -155,6 +158,7 @@ class LoginModal extends React.Component{
 					// password: '',
 					showErrorMessage:true
 				});
+				self.props.finishedLoggingIn();
 				return Promise.reject(error);
 		});
 	}
@@ -195,6 +199,7 @@ class LoginModal extends React.Component{
 			//saving in local storage vs cookie
 			console.log("token ", getUsers.data.token);
 			localStorage.setItem('token', getUsers.data.token);
+			this.props.loggedIn();
 			// document.cookie = 'token='+getUsers.data.token;
 			// console.log(document.cookie);
 			
