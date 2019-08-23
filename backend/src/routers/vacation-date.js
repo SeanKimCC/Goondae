@@ -42,7 +42,8 @@ router.post('/vacationDate', auth, async(req, res) => {
 		
 		await vacationDate.save();
 		console.log("vac-date: ",vacationDate);
-		res.status(201).send(vacationDate);
+		const vacationDates = await VacationDate.find({});
+		res.status(201).send(vacationDates);
 	}catch(e){
 		res.status(400).send(e);
 	}
@@ -137,7 +138,7 @@ router.patch('/vacationDates/:id', auth, async(req,res)=>{
 	
 });
 
-router.delete('/vacationDates/:id', auth, async(req, res) => {
+router.delete('/vacationDates/:token/:id', auth, async(req, res) => {
 	const _id = req.params.id;
 	
 	try{
