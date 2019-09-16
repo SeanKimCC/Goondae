@@ -377,14 +377,19 @@ class VacationOverview extends React.Component{
 	}
 	
 	
-	componentDidMount(){
+	async componentDidMount(){
 		this._isMounted = true;
 		console.log(this.props.isLoggedIn);
-		if(localStorage.getItem('token')){
-			console.log("HELLOOOO COMPONENTDIDMOUNT HERE")
-			if(this._isMounted){
-				this.getUserData();
-				this.getVacData();
+		const token = localStorage.getItem('token');
+		if(token){
+			let vac = await userDataAxios.get('https://goondae-server.run.goorm.io/vacationDates/'+token); //req.params.token
+			let user = await userDataAxios.get('https://goondae-server.run.goorm.io/users/me/'+token); //req.params.token
+			if(this._isMounted){				
+				this.setState({
+					vac: vac,
+					vacArray: vac.data,
+					user:user.data
+				});
 			}
 			console.log('hello');
 			

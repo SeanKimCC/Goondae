@@ -1,0 +1,43 @@
+.main-page-calendar{
+	display: block;
+	height: calc(50% - 25px);
+	margin-top: 0px;
+	width: calc(100% - 10px);
+	margin-bottom: 25px;
+}
+
+.vacation-dates-container{
+	height: 100%;
+	width: 50%;
+	padding-top:25px;
+	margin-right: 0px;
+	/* float:left; */
+	
+}
+.main-page-container{
+	height: calc(100% - 50px);
+	display: inline-block;
+	width: 100%;
+}
+.day-name-calendar{
+	font-size: 20px;
+	width:calc(100%/7);
+	height:100%;
+	display:inline-block;
+	text-align:center;
+}
+.dates-and-salary-container{
+	padding-top: 25px;
+	padding-left:20px;
+	padding-right:20px;
+	width: 50%;
+    float: right;
+    position: absolute;
+    right: 0;
+    top: 50px;
+    height: calc(100% - 50px);
+}
+.dates-percentage-bar, .progress-bar{
+	height: 20px !important;
+	font-size: 1.3rem;
+}

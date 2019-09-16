@@ -5,6 +5,7 @@ import '../../css/vacation-page.css';
 import CalendarInput from '../../js/calendarInput.js';
 import axios from 'axios';
 import Modal from 'react-modal';
+import moment from 'moment';
 
 // class DayInMonthCalendar extends React.Component{
 // 	render(){
@@ -14,20 +15,35 @@ import Modal from 'react-modal';
 // 		)
 // 	}
 // }
-
+const userDataAxios = axios.create(); 
 class MonthCalendar extends React.Component{
 	
-	renderDay(i){
-		const dayClass = (i == 0 ? "day-in-month-calendar white-color" : "day-in-month-calendar");
+	renderDay(i, ind){
+		
+		var dayClass = (i == 0 ? "day-in-month-calendar white-color" : "day-in-month-calendar");
+		if(ind == 0){
+			dayClass += " first-day-of-week";
+		} else if (ind == 6){
+			dayClass += " last-day-of-week";
+		}
+		// console.log(this.props.vacationDates, this.props.yearNum*10000+this.props.monthNum*100+i, this.props.vacationDates.has(this.props.yearNum*10000+this.props.monthNum*100+i));
+		if(this.props.vacationDates.has(this.props.yearNum*10000+this.props.monthNum*100+i)){
+			// console.log("Hello");
+			dayClass += " vacation-day";
+		}
+		
 		return(
 			<div className={dayClass}>{i}</div>
 		)
 		
 	}
 	
-	render(){
+	render(){ // TODO: check this part of code. There's an extra line when the month ends on Saturday.
+		//TODO: you can add color depending on users' choice of color for the date
+		
 		const startDayNum = this.props.startDayNum; //monday = 0, sunday = 6
-		const numDaysInMonth = 31;
+		const currDate = new Date(this.props.yearNum, this.props.monthNum, 0); // last day of the month
+		const numDaysInMonth = currDate.getDate(); 
 		let daysInMonth = [];
 		let dayNumOfDay = startDayNum;
 		let weekInMonth = [];
@@ -35,45 +51,45 @@ class MonthCalendar extends React.Component{
 			weekInMonth.push(0);
 		}
 		for(var i = 0; i < numDaysInMonth; i++){
-			console.log(daysInMonth);
+			// console.log(daysInMonth);
 			weekInMonth.push(i+1);
 			dayNumOfDay++;
 			if(dayNumOfDay == 7){
 				dayNumOfDay = 0;
 				daysInMonth.push(weekInMonth);
 				weekInMonth = [];
+			} else if(i == numDaysInMonth -1){
+				while(weekInMonth.length < 7){
+					weekInMonth.push(0);
+				}
+				daysInMonth.push(weekInMonth);
 			}
 		}
-		daysInMonth.push(weekInMonth);
-		console.log(daysInMonth);
+		
+		
+		
+		// console.log(daysInMonth);
 		const numRows = daysInMonth.length;
 		let hello = [];
 		
 		for(i = 0; i < numRows; i++){
-			hello[i] = daysInMonth[i].map((k) => {
-				return this.renderDay(k);
+			hello[i] = daysInMonth[i].map((k, ind) => {
+				return this.renderDay(k, ind);
 			});
 		}
 		
 		const byee = hello.map((k) => {
-			
-			return (<div className="month-calendar-row">{k}</div>);
+			var rowClass = ""
+			if(numRows == 5){
+				rowClass = "five-row-calendar month-calendar-row";
+			} else if(numRows == 6){
+				rowClass = "six-row-calendar month-calendar-row";
+			}
+			return (<div className={rowClass}>{k}</div>);
 		});
 		
-		console.log(hello);
-		// const moves = history.map((step, move) => {
-		// 	const desc = move ?
-		// 		'Go to move #' + move :
-		// 		'Go to game start';
-		// 	return (
-		// 		<li>
-		// 			<button onClick={() => this.jumpTo(move)}>{desc}</button>
-		// 		</li>
-		// 	);
-		// });
-		
 		return(
-			<div>{byee}</div>
+			<div className="vac-calendar-dates-container">{byee}</div>
 		)
 	}
 }
@@ -88,106 +104,170 @@ class YearCalendar extends React.Component{
 
 const vacationPageAxios = axios.create();
 
-class VacationCalendarView extends React.Component{
-	render(){
-		return(
-			<div className="month-calendar">
-				<div className="day-name-row">
-					<div className="day-in-month-calendar">월</div>
-					<div className="day-in-month-calendar">화</div>
-					<div className="day-in-month-calendar">수</div>
-					<div className="day-in-month-calendar">목</div>
-					<div className="day-in-month-calendar">금</div>
-					<div className="day-in-month-calendar">토</div>
-					<div className="day-in-month-calendar">일</div>
-				</div>
-				<MonthCalendar
-					startDayNum={2}	
-				/>
-
-				<button onClick={this.props.getUserData}>here</button>
-			</div>
-		);
-	}
-}
 
 class VacationPage extends React.Component{
 	constructor(props){
 		super(props);
 		
-		// this.typeBtnClickHandler = this.typeBtnClickHandler.bind(this);
-		this.getUserData=this.getUserData.bind(this);
 		this.state={
-			isGettingUserData:true
+			isGettingUserData:true,
+			isLoading:true,
+			vac: null,
+			vacArray: null,
+			user:null
 		}
 		
 	}
 	
-	async getUserData(){
+	_isMounted = false;
+	async componentDidMount(){
+		this._isMounted = true;
 		const token = localStorage.getItem('token');
 		console.log(token);
-		
-		try{
-			let getUsers = await
-			vacationPageAxios.get('https://goondae-server.run.goorm.io/users/me/'+token); //req.params.token
-			console.log(getUsers);
+		if(token){
+			let vac = await userDataAxios.get('https://goondae-server.run.goorm.io/vacationDates/'+token); //req.params.token
+			let user = await userDataAxios.get('https://goondae-server.run.goorm.io/users/me/'+token); //req.params.token
+			if(this._isMounted){
+				this.setState({
+					vac: vac,
+					vacArray: vac.data,
+					user:user.data
+				});
+			}
+			console.log('hello');
 			
-			// this.props.closeModal();
-		}catch(e){
-			console.log(e);
 		}
-	}
-	
-	componentDidMount(){
+		
 		var self = this;
-		vacationPageAxios.interceptors.request.use(function (config) {
-			self.setState({
-				isGettingUserData: true
-			});
+		
+		userDataAxios.interceptors.request.use(function (config) {
+
+			// spinning start to show
+			// UPDATE: Add this code to show global loading indicator
+			// document.body.classList.add('loading-indicator');
+			if(self._isMounted){
+				self.setState({
+					isLoading: true
+				});
+			}
+			console.log('started');
 			return config;
 
 			}, function (error) {
 				console.log('error request');
-				self.setState({
-					isGettingUserData: false
-				});
+				if(self._isMounted){
+					self.setState({
+						isLoading: false
+					});
+				}
 				return Promise.reject(error);
 		});
-		vacationPageAxios.interceptors.response.use(function (response) {
-			self.setState({
-				isGettingUserData: false
-			});
+		userDataAxios.interceptors.response.use(function (response) {
+
+			// spinning hide
+			// UPDATE: Add this code to hide global loading indicator
+			// document.body.classList.remove('loading-indicator');
+			console.log('finished');
+			if(self._isMounted){
+					self.setState({
+						isLoading: false
+					});
+				}
 
 			return response;
 			}, function (error) {
-				self.setState({
-					isGettingUserData: false
-				});
+				console.log('error response');
+				if(self._isMounted){
+					self.setState({
+						isLoading: false
+					});
+				}
 				return Promise.reject(error);
 		});
+		this.setState({isLoading:false});
 	}
+	componentWillUnmount() {
+		this._isMounted = false;
+	}	
 	
-	
-	render(){
-		return(
+	renderSingleMonthlyCalendar(yearNum, monthNum, startDayNum, vacationDates){
+		//startDayNum = 0 = sunday
+		//korean calendar starts from monday, monday = 1, 
+		//to get korStartDayNum from startDayNum, k = (s + 6) % 7
+		// const koreanStartDayNum = (startDayNum + 6) % 7
+		// console.log(vacationDates);
+		return (
 			<div className="month-calendar">
+				<div className="month-name-row">{yearNum}년 {monthNum}월</div>
 				<div className="day-name-row">
+					<div className="day-in-month-calendar first-day-of-week">일</div>
 					<div className="day-in-month-calendar">월</div>
 					<div className="day-in-month-calendar">화</div>
 					<div className="day-in-month-calendar">수</div>
 					<div className="day-in-month-calendar">목</div>
 					<div className="day-in-month-calendar">금</div>
-					<div className="day-in-month-calendar">토</div>
-					<div className="day-in-month-calendar">일</div>
+					<div className="day-in-month-calendar last-day-of-week">토</div>					
 				</div>
 				<MonthCalendar
-					startDayNum={2}
+					startDayNum={startDayNum}
+					yearNum={yearNum}
+					monthNum={monthNum}
+					vacationDates={vacationDates}
 				/>
-
-				<button onClick={this.getUserData}>here</button>
 			</div>
 		);
 	}
+	
+	render(){
+		console.log(this.state.vacArray, this.state.user);
+		const vacationPageContent = []; //array of month calendars
+		if(this.state.user && this.state.vacArray){
+			const userData = this.state.user;
+			const vacArray = this.state.vacArray;
+			var vacDateSet = new Set();
+			for(var i = 0; i < vacArray.length; i++){
+				var currDate = moment(vacArray[i].startDate); 
+				var endDate = moment(vacArray[i].endDate);
+				console.log(moment(vacArray[i].startDate));
+				var count = 0;
+				while(!currDate.isSame(endDate, 'day') && count <= 50){
+					vacDateSet.add(currDate.year()*10000 + (currDate.month()+1)*100 + currDate.date());
+					currDate.add(1, 'd');
+					count += 1;
+				}
+				vacDateSet.add(currDate.year()*10000 + (currDate.month()+1)*100 + currDate.date());
+			}
+			// console.log(vacDateSet);
+			console.log(userData.startDate, userData.endDate);
+			const startMonth = moment(userData.startDate).month();
+			const startYear = moment(userData.startDate).year();
+			const endMonth = moment(userData.endDate).month();
+			const endYear = moment(userData.endDate).year();
+			console.log(startMonth, endMonth);
+			
+			console.log(startYear, startMonth);
+			var newTime = moment([startYear, startMonth, 1]);
+			var count = 0;
+			var vacArrCount = 0;
+			while(count < 30 &&( moment(newTime).year() < endYear || (moment(newTime).month() <= endMonth && moment(newTime).year() === endYear))){
+				const newMonth = moment(newTime).month();
+				const newYear = moment(newTime).year()
+				const momentStartDate = moment(vacArray[vacArrCount].startDate);
+				const momentEndDate = moment(vacArray[vacArrCount].endDate);
+				// console.log(newMonth, moment(vacArray[vacArrCount].startDate).month());
+				vacationPageContent.push(this.renderSingleMonthlyCalendar(newYear, newMonth+1, moment(newTime).day(), vacDateSet));
+				
+				newTime = moment(newTime).add(1, 'M');
+				// console.log(newTime, vacArray[vacArrCount]);
+				count += 1;
+				
+			}
+			console.log(vacationPageContent);
+		}
+		const monthNum = 2;
+		return(
+			<div className="vacation-calendars-container">{vacationPageContent}</div>
+		);
+	}
 }
-
-export default VacationPage;
+export {VacationPage, MonthCalendar};

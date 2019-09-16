@@ -1,7 +1,21 @@
 import React from 'react';
 
-const payMonths = [4,11,18];
+const payMonthsType1= [4,11,18]; // TODO:순차적으로 업데이트해야 되는데 귀찮네 
+const payMonthsType2 = [4,11,17];
+const payMonthsType3 = [4,10,16];
+const payMonthsType4 = [3,9,15];
+//2018년 03월 입대자 해당사항 없음
+//2018년 04월~10월 병장 1개월 조기진급 [4,11,17]
+//2018년 11월~2019년 5월 상병 1개월 조기진급 [4,10,16]
+//2019년 6월~ 일병 1개월 조기진급 [3,9,15]
+
 const oneDay = 24*60*60*1000;
+const serviceTypesProp = ["육군", "해군", "공군", "해병대", "의경", "해경", "소방원", "공익"];
+const numMonthsProp = [21, 23, 24, 21, 21, 23, 23, 24];
+const shortenedNumMonthsProp = [18, 20, 22, 18, 18, 20, 20, 21]; 
+const perRankMonthlyPay2017Prop = [163000, 176400, 195000, 216000];
+const perRankMonthlyPay2018Prop = [306100, 331300, 366200, 405700];
+const perRankMonthlyPay2020Prop = [408100, 441700, 488200, 504900];
 
 class ResultBox extends React.Component{
 	getDaysInThisMonth(date) {
@@ -38,7 +52,7 @@ class ResultBox extends React.Component{
 	}
 	
 	calculateOriginalDaysLeft(){
-		const numMonths = this.props.numMonths[this.props.selectedType];
+		const numMonths = numMonthsProp[this.props.selectedType];
 		const selectedDate = this.props.selectedDate;
 		// const date = new Date(selectedDate[2],selectedDate[1]-1,selectedDate[0]);
 		const date = new Date(selectedDate.getTime());
@@ -47,13 +61,12 @@ class ResultBox extends React.Component{
 		
 		newDate.setMonth(newDate.getMonth() + numMonths);
 		newDate.setDate(newDate.getDate()-1);
-			
-
+		
 		return newDate;
 	}
 	
 	calculateEarliestDate(){
-		const shortenedNumMonths = this.props.shortenedNumMonths[this.props.selectedType];
+		const shortenedNumMonths = shortenedNumMonthsProp[this.props.selectedType];
 		const selectedDate = this.props.selectedDate;
 		// const date = new Date(selectedDate[2],selectedDate[1]-1,selectedDate[0]);
 		const date = new Date(selectedDate.getTime());
@@ -117,6 +130,27 @@ class ResultBox extends React.Component{
 	newCalculateSalaryLeft(){
 		//Get start date, today, and end date
 		const startDate = this.props.selectedDate;
+		const startYear = startDate.getFullYear();
+		const startMonth = startDate.getMonth() + 1;
+		var payMonths;
+		if(startYear <= 2018){
+			if(startMonth <= 3){
+				payMonths = payMonthsType1;
+			}else if(startMonth <= 10){
+				payMonths = payMonthsType2;
+			}else{
+				payMonths = payMonthsType3;
+			}
+		} else if(startYear <= 2019){
+			if(startMonth <= 5){
+				payMonths = payMonthsType3;
+			}else {
+				payMonths = payMonthsType4;
+			}
+		} else {
+			payMonths = payMonthsType4;
+		}
+		
 		const todayDateWithHours = new Date();
 		const todayDate = new Date(todayDateWithHours.getFullYear(), todayDateWithHours.getMonth(), todayDateWithHours.getDate());
 		const endDate = this.calculateUpdatedDaysLeft()[0];
@@ -125,9 +159,9 @@ class ResultBox extends React.Component{
 		// var currentDate = new Date(startDate[2],startDate[1]-1,startDate[0]);
 		var currentDate = new Date(startDate.getTime());
 		
-		const perRankMonthlyPay2017 = this.props.perRankMonthlyPay2017;
-		const perRankMonthlyPay2018 = this.props.perRankMonthlyPay2018;
-		const perRankMonthlyPay2020 = this.props.perRankMonthlyPay2020;
+		const perRankMonthlyPay2017 = perRankMonthlyPay2017Prop;
+		const perRankMonthlyPay2018 = perRankMonthlyPay2018Prop;
+		const perRankMonthlyPay2020 = perRankMonthlyPay2020Prop;
 		
 		const perRankMonthlyPay = [perRankMonthlyPay2017, perRankMonthlyPay2018, perRankMonthlyPay2020];
 		
@@ -300,9 +334,9 @@ class ResultBox extends React.Component{
 	
 	calculateSalaryLeft(){
 		//calculate first month 
-		const perRankMonthlyPay2017 = this.props.perRankMonthlyPay2017;
-		const perRankMonthlyPay2018 = this.props.perRankMonthlyPay2018;
-		const perRankMonthlyPay2020 = this.props.perRankMonthlyPay2020;
+		const perRankMonthlyPay2017 = perRankMonthlyPay2017Prop;
+		const perRankMonthlyPay2018 = perRankMonthlyPay2018Prop;
+		const perRankMonthlyPay2020 = perRankMonthlyPay2020Prop;
 		
 		const perRankMonthlyPay = [perRankMonthlyPay2017, perRankMonthlyPay2018, perRankMonthlyPay2020];
 		

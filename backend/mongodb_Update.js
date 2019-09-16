@@ -6,7 +6,8 @@
 
 const { MongoClient, ObjectID } = require('mongodb');
 
-const dbRoute = "mongodb://okus9058:153486z@ds221435.mlab.com:21435/goondae";
+// const dbRoute = "mongodb://okus9058:153486z@ds221435.mlab.com:21435/goondae";
+const dbRoute = "mongodb+srv://okus9058:1DqgQg5Or9mZbyaC@goondae-okhw9.gcp.mongodb.net/test?retryWrites=true&w=majority";
 const databaseName = "task-manager";
 
 MongoClient.connect(dbRoute, { useNewUrlParser: true },(error,client) => {

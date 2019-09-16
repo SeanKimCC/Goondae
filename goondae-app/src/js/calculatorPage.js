@@ -55,13 +55,6 @@ class CalculatorPage extends React.Component{
 		
 		
 		this.state = {
-			// numTypes : 8,
-			// serviceTypes : ["육군", "해군", "공군", "해병", "의경", "해경", "소방원", "사회복무요원"],	
-			// numMonths : [21, 23, 24, 21, 21, 23, 23, 24],
-			// selectedType : 0,
-			// selectedDate : [dd, mm, yyyy],
-			// selectedDate : today,
-			// isDaysNotWolgeup: true,
 			loginModalIsOpen: false,
 			signupModalIsOpen: false,
 			isLoggedIn: false,
@@ -91,23 +84,6 @@ class CalculatorPage extends React.Component{
 		this.setState({loginModalIsOpen: false});
 	}
 	
-	// typeBtnClickHandler(typeNum) {
-	// 	console.log(typeNum);
-	// 	this.setState({
-	// 		selectedType : typeNum
-	// 	});
-	// 	console.log(this.state.selectedType);
-		
-	// }
-	
-	// onSwitcherClick(){
-	// 	const isDaysNotWolgeup = this.state.isDaysNotWolgeup;
-		
-	// 	this.setState({
-	// 		isDaysNotWolgeup : !isDaysNotWolgeup
-	// 	});
-	// }
-	
 	async logoutCurrentUser(){
 		console.log('logging out');
 		console.log(localStorage.getItem('token'));
@@ -128,61 +104,6 @@ class CalculatorPage extends React.Component{
 		}
 		console.log(this.state.isLoggingOut);
 	}
-	
-	
-	// componentDidMount() {
-	// 	console.log('hello');
-	// 		// let getUsers = () => {
-	// 		// axios.post('https://goondae-server.run.goorm.io/users/login', {
-	// 		// 	email: 'johnjin5@email.com',
-	// 		// 	password: '123z123z'
-				
-	// 		// }).then(response => {
-	// 		// console.log(response);
-	// 		// });
-	// 		// };
-
-	// 		// getUsers();
-	// 	var self = this;
-	// 	logoutAxios.interceptors.request.use(function (config) {
-
-	// 		// spinning start to show
-	// 		// UPDATE: Add this code to show global loading indicator
-	// 		// document.body.classList.add('loading-indicator');
-	// 		self.setState({
-	// 			isLoading: true
-	// 		});
-	// 		console.log('started');
-	// 		return config;
-
-	// 		}, function (error) {
-	// 			console.log('error request');
-	// 			self.setState({
-	// 				isLoading: false
-	// 			});
-	// 			return Promise.reject(error);
-	// 	});
-	// 	logoutAxios.interceptors.response.use(function (response) {
-
-	// 		// spinning hide
-	// 		// UPDATE: Add this code to hide global loading indicator
-	// 		// document.body.classList.remove('loading-indicator');
-	// 		console.log('finished');
-	// 		self.setState({
-	// 			isLoading: false,
-	// 			isLoggedIn: false
-	// 		});
-
-	// 		return response;
-	// 		}, function (error) {
-	// 			console.log('error response');
-	// 			self.setState({
-	// 				isLoading: false
-	// 			});
-	// 			return Promise.reject(error);
-	// 	});
-
-	// }
 	
 	render(){
 		return(

@@ -43,7 +43,12 @@ class LoginHeader extends React.Component{
 
 class LoginBox extends React.Component{
 
-	
+	keyPressed = (event) => {
+		// console.log(event);
+		if(event.key == "Enter"){
+			this.props.handleSubmit();
+		}
+	}
 	render() {
 		console.log(this.props.isLoggingIn);
 		const loginBtnClass = "login-modal-login-button " + (this.props.isLoggingIn ? "login-modal-loading" : "" );
@@ -59,13 +64,19 @@ class LoginBox extends React.Component{
 					<div className="login-field">
 
 						<span className="fas fa-envelope login-modal-field-icon"></span>
-						<input className="login-modal-input-box" type="text" name="email" onChange={(e) => this.props.handleChange(e)} placeholder="아이디"/>
+						<input className="login-modal-input-box" type="text" name="email" 
+							onChange={(e) => this.props.handleChange(e)} 
+							onKeyPress={this.keyPressed}
+							placeholder="아이디"/>
 
 					</div>
 					<div className="login-field">
 						<div>
 							<span className="fas fa-key login-modal-field-icon"></span>
-							<input className="login-modal-input-box" type="text" name="password" onChange={(e) => this.props.handleChange(e)} placeholder="비밀번호"/>
+							<input className="login-modal-input-box" type="text" name="password" 
+								onChange={(e) => this.props.handleChange(e)} 
+								onKeyPress={this.keyPressed}
+								placeholder="비밀번호"/>
 						</div>
 						
 					</div>
@@ -192,14 +203,15 @@ class LoginModal extends React.Component{
 			loginAxios.post('https://goondae-server.run.goorm.io/users/login', {
 				email: this.state.email,
 				password: this.state.password
-				
 			});
 			console.log(getUsers);
 			
 			//saving in local storage vs cookie
 			console.log("token ", getUsers.data.token);
 			localStorage.setItem('token', getUsers.data.token);
+			this.props.tokenPlaced();
 			this.props.loggedIn();
+			this.props.finishedLoggingIn();
 			// document.cookie = 'token='+getUsers.data.token;
 			// console.log(document.cookie);
 			

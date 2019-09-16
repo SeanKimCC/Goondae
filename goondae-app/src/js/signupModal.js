@@ -2,7 +2,17 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Modal from 'react-modal';
 import axios from 'axios';
+import Dropdown from 'react-dropdown';
 import '../css/modal-style.css';
+
+const payMonths = [4,11,18];
+const oneDay = 24*60*60*1000;
+const serviceTypesProp = ["육군", "해군", "공군", "해병대", "의경", "해경", "소방원", "공익"];
+const numMonthsProp = [21, 23, 24, 21, 21, 23, 23, 24];
+const shortenedNumMonthsProp = [18, 20, 22, 18, 18, 20, 20, 21]; 
+const perRankMonthlyPay2017Prop = [163000, 176400, 195000, 216000];
+const perRankMonthlyPay2018Prop = [306100, 331300, 366200, 405700];
+const perRankMonthlyPay2020Prop = [408100, 441700, 488200, 504900];
 
 
 
@@ -42,6 +52,12 @@ class SignupHeader extends React.Component{
 
 class SignupBox extends React.Component{
 
+	keyPressed = (event) => {
+		console.log(event);
+		if(event.key == "Enter"){
+			this.props.handleSignupSubmit();
+		}
+	}
 	
 	render() {
 		console.log(this.props.selectedDate);
@@ -58,35 +74,70 @@ class SignupBox extends React.Component{
 		// const selectedDate = new Date(selectedDateArr[2], selectedDateArr[1]-1, selectedDateArr[0]);
 		// console.log(selectedDate);
 		const startDateObj = startDate.getFullYear() + '-' + ((startDate.getMonth()+1)>9 ? '' : '0') +(startDate.getMonth()+1) + '-' + (startDate.getDate()>9 ? '' : '0') + startDate.getDate();
+		
+		const selectedTypeObj = this.props.selectedType;
+		console.log(selectedTypeObj);
+		const typeOptions = [
+			{ value: 0, label: '육군' },
+			{ value: 1, label: '해군' },
+			{ value: 2, label: '공군' },
+			{ value: 3, label: '해병대' },
+			{ value: 4, label: '의경' },
+			{ value: 5, label: '해경' },
+			{ value: 6, label: '소방원' },
+			{ value: 7, label: '공익' }];
+		
 		console.log("@@@@@@@@@" + startDateObj);
 		
 		return (
 			<div className="login-modal-box">
 				<div>
 				</div>
-				<div className={signupErrorMessage}>아이디와 비밀번호를 확인하고<br/> 다시 입력해 주십시오.</div>
+				<div className={signupErrorMessage}>모든 항목을 확인하고<br/> 입력해 주십시오.</div>
 				<div className={signupSuccessMessage}>가입이 완료되었습니다!</div>
 				<form>
 					<div className="login-field">
 						<span className="fas fa-calendar-day login-modal-field-icon"></span>
-						<input className="login-modal-input-box" type="date" name="startDate" onChange={(e) => this.props.handleDateChange(e)} placeholder="입대일자" value={startDateObj}/>
+						<input className="login-modal-input-box" type="date" name="startDate"  
+							onKeyPress={this.keyPressed}
+							onChange={(e) => this.props.handleDateChange(e)} placeholder="입대일자" value={startDateObj}/>
+
+					</div>
+					<div className="login-field">
+						<span className="fas fa-calendar-day login-modal-field-icon"></span>
+						<select className="login-modal-input-box" id="mySelect" name="serviceType" onChange={(e) => this.props.handleChange(e)}>
+						 	<option value="0">육군</option>
+						 	<option value="1">해군</option>
+						 	<option value="2">공군</option>
+						 	<option value="3">해병대</option>
+							<option value="4">의무경찰</option>
+						 	<option value="5">해양경찰</option>
+						 	<option value="6">의무소방원</option>
+						 	<option value="7">사회복무요원</option>
+						</select>
 
 					</div>
 					<div className="login-field">
 						<span className="fas fa-signature login-modal-field-icon"></span>
-						<input className="login-modal-input-box" type="text" name="name" onChange={(e) => this.props.handleChange(e)} placeholder="성명"/>
+						<input className="login-modal-input-box" type="text" name="name"  
+							onKeyPress={this.keyPressed}
+							onChange={(e) => this.props.handleChange(e)} placeholder="성명"/>
 
 					</div>
 					<div className="login-field">
 
 						<span className="fas fa-envelope login-modal-field-icon"></span>
-						<input className="login-modal-input-box" type="text" name="email" onChange={(e) => this.props.handleChange(e)} placeholder="아이디"/>
+						<input className="login-modal-input-box" type="text" name="email"  
+							onKeyPress={this.keyPressed}
+							onChange={(e) => this.props.handleChange(e)} placeholder="아이디"/>
 
 					</div>
 					<div className="login-field">
 						<div>
 							<span className="fas fa-key login-modal-field-icon"></span>
-							<input className="login-modal-input-box" type="text" name="password" onChange={(e) => this.props.handleChange(e)} placeholder="비밀번호"/>
+							<input className="login-modal-input-box" type="text" name="password"  
+							onKeyPress={this.keyPressed}
+								onChange={(e) => this.props.handleChange(e)} placeholder="비밀번호"/>
 						</div>
 					</div>
 					
@@ -108,6 +159,7 @@ class SignupModal extends React.Component{
 	constructor(props){
 		super(props);
 		this.handleChange = this.handleChange.bind(this);
+		this.handleDropdownChange = this.handleDropdownChange.bind(this);
 		this.handleDateChange = this.handleDateChange.bind(this);
 		this.handleSignupSubmit = this.handleSignupSubmit.bind(this);
 		this.closeSignupModal = this.closeSignupModal.bind(this);
@@ -118,7 +170,8 @@ class SignupModal extends React.Component{
 			password: '',
 			startDate: this.props.selectedDate,
 			showErrorMessage: false,
-			showSuccessMessage: false
+			showSuccessMessage: false,
+			serviceType: this.props.selectedType
 		};
 		
 	}
@@ -176,7 +229,9 @@ class SignupModal extends React.Component{
 	}
 	handleDateChange(e){
 		this.props.onChangeDate(new Date(e.target.value));
+		this.setState({[e.target.name]: new Date(e.target.value)});
 		console.log("hello" , e.target.value);
+		console.log(this.state.startDate);
 		// const dateValue = e.target.value;
 		// console.log(dateValue.substr(5,2));
 		// const newDate = dateValue.substr(0,4) + "-" + dateValue.substr(5,2)  + "-" + dateValue.substr(8,2) ;
@@ -185,6 +240,10 @@ class SignupModal extends React.Component{
 		// this.setState({[e.target.name]: newDate});
 	}
 	
+	handleDropdownChange(e){
+		console.log(e.label, e.value);
+		this.setState({serviceType : e.value});
+	}
 	handleChange(e){
 		console.log(e.target.value);
 		this.setState({[e.target.name]: e.target.value});
@@ -196,6 +255,85 @@ class SignupModal extends React.Component{
 		console.log('closing modal');
 		
 	}
+	
+	
+	calculateOriginalDaysLeft(){
+		const numMonths = numMonthsProp[this.state.serviceType];
+		const selectedDate = this.state.startDate;
+		// const date = new Date(selectedDate[2],selectedDate[1]-1,selectedDate[0]);
+		const date = new Date(selectedDate.getTime());
+		
+		var newDate = date;
+		
+		newDate.setMonth(newDate.getMonth() + numMonths);
+		newDate.setDate(newDate.getDate()-1);
+		
+		return newDate;
+	}
+	
+	calculateEarliestDate(){
+		const shortenedNumMonths = shortenedNumMonthsProp[this.state.serviceType];
+		const selectedDate = this.state.startDate;
+		// const date = new Date(selectedDate[2],selectedDate[1]-1,selectedDate[0]);
+		const date = new Date(selectedDate.getTime());
+		
+		var newDate = date;
+		
+		newDate.setMonth(newDate.getMonth() + shortenedNumMonths);
+		newDate.setDate(newDate.getDate()-1);
+
+		return newDate;
+	}
+	
+	calculateUpdatedDaysLeft(){ // numShortenedDays
+		
+		const selectedDate = this.state.startDate;
+		// const date = new Date(selectedDate[2],selectedDate[1]-1,selectedDate[0]);
+		console.log(selectedDate);
+		const date = new Date(selectedDate.getTime());
+		
+		var subtractStartDay;
+		switch (this.state.serviceType){
+			case 0:
+			case 3:
+			case 4:
+				subtractStartDay = new Date(2017, 0, 2);
+				break;
+			case 1:
+			case 5:
+			case 6:
+				subtractStartDay = new Date(2016, 10, 2);
+				break;
+			case 2:
+				subtractStartDay = new Date(2016, 9, 2);
+				break;
+			case 7:
+				subtractStartDay = new Date(2016, 9, 2);
+				break;
+			default:
+				subtractStartDay = new Date(2017, 0, 2);
+				break;
+		}
+
+
+		var diffDays = Math.round(Math.abs((subtractStartDay.getTime() - date.getTime())/(oneDay)));
+
+		var daysToSubtract = Math.ceil(diffDays/14);
+		
+		const originalDate = this.calculateOriginalDaysLeft();
+		var newDate = new Date(originalDate.getFullYear(), originalDate.getMonth(), originalDate.getDate()-daysToSubtract);
+		
+		var earliestDate = this.calculateEarliestDate();
+		if(newDate < earliestDate){
+			
+			daysToSubtract = Math.round(Math.abs((earliestDate.getTime() - originalDate.getTime())/(oneDay)));
+			
+			return [earliestDate, daysToSubtract];
+		}
+		
+		return [newDate, daysToSubtract];
+	}
+	
 	async handleSignupSubmit(){
 		
 		console.log('hello');
@@ -204,14 +342,18 @@ class SignupModal extends React.Component{
 		console.log(this.state.isSigningUp);
 		try{
 			console.log(this.state.startDate);
-			const startDate = new Date(this.state.startDate);
+			const startDate = new Date(this.props.selectedDate);
 			console.log(startDate);
+			const endDate = this.calculateUpdatedDaysLeft()[0];
+			console.log(endDate);
 			let getUsers = await
 			signupAxios.post('https://goondae-server.run.goorm.io/users', {
 				name: this.state.name,
 				email: this.state.email,
 				password: this.state.password,
 				startDate: startDate,
+				serviceType: this.state.serviceType,
+				endDate: endDate,
 				mealUnit: 0
 			});
 			console.log(getUsers);
@@ -231,6 +373,10 @@ class SignupModal extends React.Component{
 	// }
 	render() {
 		console.log("####Signup" + this.props.selectedDate);
+		const startDate = new Date(this.state.startDate);
+		console.log(startDate);
+		const endDate = this.calculateUpdatedDaysLeft()[0];
+		console.log(endDate);
 		return (
 			<div>
 				<Modal
@@ -244,11 +390,13 @@ class SignupModal extends React.Component{
 						showErrorMessage={this.state.showErrorMessage}
 						showSuccessMessage={this.state.showSuccessMessage}
 						handleChange={this.handleChange}
+						handleDropdownChange={this.handleDropdownChange}
 						handleDateChange={this.handleDateChange}
 						handleSignupSubmit={this.handleSignupSubmit}
 						isSigningUp={this.state.isSigningUp}
 						closeSignupModal={this.closeSignupModal}
 						selectedDate={this.props.selectedDate}
+						selectedType={this.state.serviceType}
 					/>					
 				</Modal>
 			</div>

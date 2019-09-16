@@ -68,6 +68,12 @@ const userSchema = new mongoose.Schema({
 		
 		
 	},
+	endDate:{
+		type: Date,
+	},
+	serviceType:{
+		type: Number,
+	},
 	mealUnit: {
 		type: Number,
 		default: 0

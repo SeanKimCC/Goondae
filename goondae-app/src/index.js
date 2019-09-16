@@ -17,12 +17,13 @@ import LoginModal from './js/loginModal.js';
 import SignupModal from './js/signupModal.js';
 import LoadingScreen from './js/loading.js';
 import CalculatorPage from './js/calculatorPage.js';
-import VacationPage from './js/vacationPage/vacationPage.js';
+import {VacationPage} from './js/vacationPage/vacationPage.js';
 import SpecialtyPage from './js/specialtyPage.js';
 import VacationOverview from './js/vacationPage/vacationOverview.js';
 import NewVacationOverview from './js/vacationPage/newVacationOverview.js';
 import MealPlanPage from './js/mealPlanPage.js';
 import MenuBar from './js/menuSideBar.js';
+import MainPage from './js/mainPage.js';
 import axios from 'axios';
 import Modal from 'react-modal';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
@@ -33,7 +34,7 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 Modal.setAppElement('#root');
 const logoutAxios = axios.create();
 const userDataAxios = axios.create();
-class MainPage extends React.Component{
+class Index extends React.Component{
 	constructor(props){
 		super(props);
 		this.openLoginModal = this.openLoginModal.bind(this);
@@ -56,6 +57,8 @@ class MainPage extends React.Component{
 		this.loggedIn = this.loggedIn.bind(this);
 		this.loggingIn = this.loggingIn.bind(this);
 		this.finishedLoggingIn = this.finishedLoggingIn.bind(this);
+		this.returnVacationPage = this.returnVacationPage.bind(this);
+		this.tokenPlaced = this.tokenPlaced.bind(this);
 		
 		// const token = localStorage.getItem('token');
 		// var defaultDate = new Date();
@@ -82,7 +85,7 @@ class MainPage extends React.Component{
 			loginModalIsOpen: false,
 			signupModalIsOpen: false,
 			isLoggedIn: false,
-			isLoading: false,
+			isLoading: true,
 			isLoggingIn: false,
 			isMenuBarOpen: false,
 			pageNum: this.returnPageCodeBasedOnURL(),
@@ -127,7 +130,8 @@ class MainPage extends React.Component{
 	
 	openSignupModal() {
 		this.setState({signupModalIsOpen: true,
-					  loginModalIsOpen:false});
+					  loginModalIsOpen:false,
+					  isMenuBarOpen:false});
 	}
 	closeSignupModal(){
 		this.setState({signupModalIsOpen: false});
@@ -135,7 +139,8 @@ class MainPage extends React.Component{
 	
 	openLoginModal() {
 		this.setState({loginModalIsOpen: true,
-					  signupModalIsOpen: false});
+					  signupModalIsOpen: false,
+					  isMenuBarOpen:false});
 	}
 	closeLoginModal() {
 		this.setState({loginModalIsOpen: false});
@@ -260,6 +265,7 @@ class MainPage extends React.Component{
 				});
 				return Promise.reject(error);
 		});
+		this.setState({isLoading:false});
 											   
 
     }
@@ -279,7 +285,8 @@ class MainPage extends React.Component{
 					/> 
 	}
 	returnVacationPage(){
-		return <VacationPage/>
+		return <VacationPage key={this.state.isLoggingIn}
+				   />
 	}
 	returnMealPlanPage(){
 		console.log(this.state.mealUnit)
@@ -308,11 +315,15 @@ class MainPage extends React.Component{
 		// this.setState({
 		// 	pageNum:0
 		// });
-		return <h2> Main Page </h2>
+		//TODO: fix the component update stuff
+		return <MainPage
+				   key ={this.state.isLoggedIn}
+				   isLoggedIn={this.state.isLoggedIn}
+				   ></MainPage>
 	}
 	
 	returnVacationOverview(){
-		return <VacationOverview key ={this.state.isLoggedIn}
+		return <VacationOverview key ={this.state.isLoggedIn} // for loginModal to update vacation component
 				   isLoggedIn={this.state.isLoggedIn}
 				   isLoggingIn={this.state.isLoggingIn}				   
 			/>
@@ -348,7 +359,7 @@ class MainPage extends React.Component{
 			case "calculator":
 				return 5;
 				break;
-			case "specialty":
+			case "vacation-overview":
 				return 6;
 				break;
 			default:
@@ -369,8 +380,14 @@ class MainPage extends React.Component{
 			isLoggingIn: false
 		});
 	}
+	tokenPlaced(){
+		this.setState({
+			isLoggingIn: !this.state.isLoggedIn
+		});
+	}
 	
 	updatePageNum = (ev) => {
+		console.log(ev.target);
 		let pathString = ev.target.getAttribute('value');
 		console.log(ev.target.getAttribute('value'));
 		let pageNum = -1;
@@ -393,13 +410,17 @@ class MainPage extends React.Component{
 			case "calculator":
 				pageNum = 5;
 				break;
+			case "vacation-overview":
+				pageNum = 6;
+				break;
 			default:
 				pageNum = -1;
 				break;
 		}
+		console.log(pageNum);
 		this.setState({
 			pageNum:pageNum,
-			isMenuBarOpen: !this.state.isMenuBarOpen
+			isMenuBarOpen: false
 			
 		});
 	}
@@ -415,6 +436,12 @@ class MainPage extends React.Component{
 						isMenuBarOpen={this.state.isMenuBarOpen}
 						toggleMenuBar={this.toggleMenuBar}
 						updatePageNum={this.updatePageNum}
+						openLoginModal={this.openLoginModal}
+						closeLoginModal={this.closeLoginModal}
+						openSignupModal={this.openSignupModal}
+						closeSignupModal={this.closeSignupModal}
+						isLoggedIn={this.state.isLoggedIn}
+						onClickLogout={this.logoutCurrentUser}
 					/>
 					<LoadingScreen
 						isLoading={this.state.isLoading}
@@ -425,6 +452,7 @@ class MainPage extends React.Component{
 						onClickOpenLoginModal={this.openLoginModal}
 						onClickOpenSignupModal={this.openSignupModal}
 						onClickLogout={this.logoutCurrentUser}
+						updatePageNum={this.updatePageNum}
 						toggleMenuBar={this.toggleMenuBar}
 						isMenuBarOpen={this.state.isMenuBarOpen}
 						pageNum={this.state.pageNum}
@@ -438,6 +466,7 @@ class MainPage extends React.Component{
 						subtitle={this.subtitle}
 						selectedDate={this.state.selectedDate}
 						onChangeDate={this.onClickDay}
+						selectedType={this.state.selectedType}
 					/>
 					<LoginModal
 						loginModalIsOpen={this.state.loginModalIsOpen}
@@ -446,6 +475,7 @@ class MainPage extends React.Component{
 						loggedIn={this.loggedIn}
 						loggingIn={this.loggingIn}
 						finishedLoggingIn={this.finishedLoggingIn}
+						tokenPlaced={this.tokenPlaced}
 						contentLabel="Login Modal"
 						onChangeDay={this.onClickDay}
 						subtitle={this.subtitle}
@@ -466,6 +496,6 @@ class MainPage extends React.Component{
 }
 
 ReactDOM.render(
-  <MainPage />,
+  <Index />,
   document.getElementById('root')
 );

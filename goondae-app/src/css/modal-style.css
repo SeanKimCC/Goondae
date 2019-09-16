@@ -101,7 +101,7 @@
 	display: none;
 }
 
-@media only screen and (max-width: 450px){
+@media only screen and (max-width: 800px){
 	.modal-open-btn{
 		/* left: 10px; */
 		display: none;
