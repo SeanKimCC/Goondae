@@ -58,7 +58,7 @@ class DateRangeSelector extends React.Component{
 		this.addVacation = this.addVacation.bind(this);
 	}
 	handleSelect(date){
-        console.log(date); // Momentjs object
+        // console.log(date); // Momentjs object
 		this.setState({endDate: date.endDate,
 					  startDate: date.startDate});
     }
@@ -73,7 +73,7 @@ class DateRangeSelector extends React.Component{
 				token: token
 			});
 			
-			console.log(user);
+			// console.log(user);
 			//TODO: react state update error
 			
 			
@@ -131,7 +131,7 @@ class VacationDateRow extends React.Component{
 		this.state={};
 	}
 	handleSelect(range){
-        console.log(range);
+        // console.log(range);
         // An object with two keys,
         // 'startDate' and 'endDate' which are Momentjs objects.
     }
@@ -139,7 +139,7 @@ class VacationDateRow extends React.Component{
 	dateToKorean(startDate, endDate){
 		const startMomentDate = moment(startDate).format('YYYY년 MM월 DD일');
 		const endMomentDate = moment(endDate).format('YYYY년 MM월 DD일');
-		console.log(startMomentDate);
+		// console.log(startMomentDate);
 		return startMomentDate + ' ~ ' + endMomentDate;
 	}
 	
@@ -154,7 +154,7 @@ class VacationDateRow extends React.Component{
 		var vacId = null;
 		var delBtn = <span></span>;
 		if(this.props.vac){
-			console.log(this.props.vac);
+			// console.log(this.props.vac);
 			text = this.dateToKorean(this.props.vac[0], this.props.vac[1]);
 			vacId = this.props.vac[2];
 			delBtn = <button onClick={() => this.handleOnClickDelBtn()}>delete</button>;
@@ -288,7 +288,7 @@ class VacationOverview extends React.Component{
 		const token = localStorage.getItem('token');
 		try{
 			let vac = await userDataAxios.delete('https://goondae-server.run.goorm.io/vacationDatesAll/'+ token);
-			console.log(vac);
+			// console.log(vac);
 			if(vac.status == 200){
 				this.setState({
 					vacArray: null
@@ -329,7 +329,7 @@ class VacationOverview extends React.Component{
 		
 		try{
 			let vac = await userDataAxios.get('https://goondae-server.run.goorm.io/vacationDates/'+token); //req.params.token
-			console.log(vac);
+			// console.log(vac);
 			
 			this.setState({
 				vac: vac,
@@ -358,7 +358,7 @@ class VacationOverview extends React.Component{
 
 	//TODO: react state update error
 	saveVac(vacData){
-		console.log(this.state.vac, vacData);
+		// console.log(this.state.vac, vacData);
 		if(this._isMounted){
 			this.setState({
 				vacArray: vacData
@@ -379,7 +379,7 @@ class VacationOverview extends React.Component{
 	
 	async componentDidMount(){
 		this._isMounted = true;
-		console.log(this.props.isLoggedIn);
+		// console.log(this.props.isLoggedIn);
 		const token = localStorage.getItem('token');
 		if(token){
 			let vac = await userDataAxios.get('https://goondae-server.run.goorm.io/vacationDates/'+token); //req.params.token
@@ -391,7 +391,7 @@ class VacationOverview extends React.Component{
 					user:user.data
 				});
 			}
-			console.log('hello');
+			// console.log('hello');
 			
 		}
 		
@@ -407,7 +407,7 @@ class VacationOverview extends React.Component{
 					isLoading: true
 				});
 			}
-			console.log('started');
+			// console.log('started');
 			return config;
 
 			}, function (error) {
@@ -424,7 +424,7 @@ class VacationOverview extends React.Component{
 			// spinning hide
 			// UPDATE: Add this code to hide global loading indicator
 			// document.body.classList.remove('loading-indicator');
-			console.log('finished');
+			// console.log('finished');
 			if(self._isMounted){
 					self.setState({
 						isLoading: false
@@ -469,7 +469,7 @@ class VacationOverview extends React.Component{
 		sortable.sort(function(a, b) {
 			return ('' + a[0]).localeCompare(b[0]);
 		});
-		console.log(sortable, vacArray);
+		// console.log(sortable, vacArray);
 		
 		return(
 			

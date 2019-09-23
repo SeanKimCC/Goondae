@@ -290,7 +290,11 @@ class Index extends React.Component{
 	}
 	returnMealPlanPage(){
 		console.log(this.state.mealUnit)
-		return <MealPlanPage handleMealUnitChange={this.handleMealUnitChange} mealUnit={this.state.mealUnit} saveMealUnitChange={this.saveMealUnitChange}/>
+		return <MealPlanPage 
+				   handleMealUnitChange={this.handleMealUnitChange} 
+				   mealUnit={this.state.mealUnit} 
+				   saveMealUnitChange={this.saveMealUnitChange}
+				   isOnMainPage={false}/>
 	}
 	handleMealUnitChange(mealUnit){
 		console.log(mealUnit.value);
@@ -319,7 +323,10 @@ class Index extends React.Component{
 		return <MainPage
 				   key ={this.state.isLoggedIn}
 				   isLoggedIn={this.state.isLoggedIn}
-				   ></MainPage>
+				   handleMealUnitChange={this.handleMealUnitChange} 
+				   mealUnit={this.state.mealUnit} 
+				   saveMealUnitChange={this.saveMealUnitChange}>
+		</MainPage>
 	}
 	
 	returnVacationOverview(){
@@ -428,7 +435,6 @@ class Index extends React.Component{
 	
 	
 	render(){
-		
 		return(
 			<Router>
 				<div id="mainPageContainer">

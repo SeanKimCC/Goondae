@@ -18,9 +18,7 @@ module.exports={
 	},
 
 	formatMoney : function(money){
-		console.log(money);
 		var lenMoney = money.length;
-		console.log(lenMoney);
 		var formattedMoney = "";
 		var commaPos = lenMoney % 3;
 		if (commaPos === 0){
@@ -32,13 +30,11 @@ module.exports={
 				commaPos += 3;
 			}
 			formattedMoney = formattedMoney.concat(money[i]);
-			console.log(formattedMoney);
 		}
 		return formattedMoney;
 	},
 
 	calculateOriginalDaysLeft : function(pnumMonths, pselectedType, pselectedDate){
-		console.log(pselectedDate);
 		const numMonths = pnumMonths[pselectedType];
 		const selectedDate = pselectedDate;
 		// const date = new Date(selectedDate[2],selectedDate[1]-1,selectedDate[0]);
@@ -164,7 +160,6 @@ module.exports={
 		var firstDate = currentDate.getDate();
 		var firstDay = currentDate.getDay();
 
-		console.log("firstDay: ", firstDay);
 		var carryOverFlag = 0;
 
 		if(firstDate > 10 || (firstDate > 8 && firstDay > 4)){
@@ -174,9 +169,7 @@ module.exports={
 			currentDate.setDate(8);
 		} 
 
-		console.log(currentDate);
 		const endYear = endDate.getFullYear();
-		console.log(endYear);
 		const endMonth = endDate.getMonth();
 
 		//dates at which you'll be paid
@@ -288,7 +281,6 @@ module.exports={
 
 
 
-		console.log(listOfPayAmounts); 
 
 		var payTotal = 0;
 		var payTillNow = 0;

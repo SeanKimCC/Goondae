@@ -30,6 +30,7 @@
 	padding-top: 25px;
 	padding-left:20px;
 	padding-right:20px;
+	padding-bottom:25px;
 	width: 50%;
     float: right;
     position: absolute;
@@ -37,7 +38,49 @@
     top: 50px;
     height: calc(100% - 50px);
 }
+.dates-display-container{
+	height: calc(35% - 16px);
+	width: calc(50% - 8px);
+	float: left;
+	margin: 8px 8px 13px 0;
+	border: 2px solid;
+	border-radius:5px;
+	
+}
+.salary-display-container{
+	height: calc(35% - 16px);
+	width: calc(50% - 8px);
+	float: right;
+	margin: 8px 0 13px 8px;
+	border: 2px solid;
+	border-radius:5px;
+}
+.number-display-row{
+	height:25%;
+	text-align:center;
+	font-size:15px;
+	/* padding: 5px 0; */
+	padding-top : calc(12.5% - 25px);
+}
 .dates-percentage-bar, .progress-bar{
 	height: 20px !important;
 	font-size: 1.3rem;
+}
+.start-and-end-dates{
+	height:20px;
+}
+.start-date-container{
+	float:left;
+	height:20px;
+}
+.end-date-container{
+	float:right;
+}
+
+.meal-display-container{
+	border : 2px solid;
+	border-radius:5px;
+	display:inline-block;
+	height: calc(65% - 45px);
+	width: 100%;
 }

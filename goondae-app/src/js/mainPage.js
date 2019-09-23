@@ -16,6 +16,7 @@ import ResultBox from '../js/resultBox.js';
 import LoginModal from '../js/loginModal.js';
 import SignupModal from '../js/signupModal.js';
 import LoadingScreen from '../js/loading.js';
+import MealPlanPage from '../js/mealPlanPage.js';
 import {MonthCalendar} from '../js/vacationPage/vacationPage.js';
 import axios from 'axios';
 import Modal from 'react-modal';
@@ -273,9 +274,12 @@ class MainPage extends React.Component{
 		
 		payRemainder = payTotal - payTillNow;
 		
-		return [payTillNow.toString(), payRemainder.toString(), payTotal.toString()];
+		return [payTillNow, payRemainder, payTotal];
 	}
 	
+	salaryFormatter(num){
+		return Math.round(num/10000);
+	}
 	
 	calculateDates(){ 
 		//TODO: List of things to calculate
@@ -313,18 +317,14 @@ class MainPage extends React.Component{
 		// To calculate the no. of days between two dates 
 		const totalDays = totalTime / oneDay;
 		
-		var leftoverDays = leftoverTime / oneDay;
-		if (leftoverDays < 0) {
-			leftoverDays = 0;
+		var daysLeft = leftoverTime / oneDay;
+		if (daysLeft < 0) {
+			daysLeft = 0;
 		}
 		
-		const daysFinished = totalDays - leftoverDays; 
+		const daysFinished = totalDays - daysLeft; 
 		
-		console.log(totalDays, leftoverDays, daysFinished);
-		
-		console.log(this.state.user);
-		
-		return [totalDays, leftoverDays, daysFinished];
+		return [totalDays, daysLeft, daysFinished];
 	}
 	
 	renderSingleMonthlyCalendar(yearNum, monthNum, startDayNum, vacationDates){
@@ -361,7 +361,6 @@ class MainPage extends React.Component{
 	async componentDidMount(){
 		this._isMounted = true;
 		const token = localStorage.getItem('token');
-		console.log(token);
 		if(token){
 			let vac = await userDataAxios.get('https://goondae-server.run.goorm.io/vacationDates/'+token); //req.params.token
 			let user = await userDataAxios.get('https://goondae-server.run.goorm.io/users/me/'+token); //req.params.token
@@ -372,7 +371,6 @@ class MainPage extends React.Component{
 					user:user.data
 				});
 			}
-			console.log('hello');
 			
 		}
 		
@@ -440,22 +438,42 @@ class MainPage extends React.Component{
 		var variantName = "danger";
 		var startDateString = "?";
 		var endDateString = "?";
+		var daysLeft, daysFinished, totalDays, promotionDay, payDay, amountEarned, totalAmount, amountLeft;
+		daysLeft = daysFinished = totalDays = promotionDay = payDay = amountEarned = totalAmount = amountLeft = -1;
+		var strDaysLeft, strDaysFinished, strTotalDays, strPromotionDay, strPayDay, strAmountEarned, strTotalAmount, strAmountLeft;
+		strDaysLeft = strDaysFinished = strTotalDays = strPromotionDay = strPayDay = strAmountEarned = strTotalAmount = strAmountLeft = "?";
+		
 		if(this.state.user){
-			console.log(this.state.user);
-			startDateString = this.state.user.startDate.toString();
-			endDateString = this.state.user.endDate.toString();
+			startDateString = moment(this.state.user.startDate).format('YYYY년 MM월 DD일');
+			endDateString = moment(this.state.user.endDate).format('YYYY년 MM월 DD일');
 			datesArr = this.calculateDates();
 			salaryArr = this.calculateSalary();
+			
+			totalDays = datesArr[0];
+			daysLeft = datesArr[1];
+			daysFinished = datesArr[2];
+			
+			strTotalDays = totalDays.toString();
+			strDaysLeft = daysLeft.toString();
+			strDaysFinished = daysFinished.toString();
+			
+			amountEarned = this.salaryFormatter(salaryArr[0]);
+			amountLeft = this.salaryFormatter(salaryArr[1]);
+			totalAmount = this.salaryFormatter(salaryArr[2]);
+			
+			strAmountEarned = amountEarned.toString();
+			strAmountLeft = amountLeft.toString();
+			strTotalAmount = totalAmount.toString();
+			
 			var todayDate = new Date();
 			
-			var newTime = moment([todayDate.getFullYear(), todayDate.getMonth() + 1, 1]);
+			var newTime = moment([todayDate.getFullYear(), todayDate.getMonth(), 1]);
 			// this.renderSingleMonthlyCalendar(yearNum, monthNum, startDayNum, this.state.)
 			const vacArray = this.state.vacArray;
 			var vacDateSet = new Set();
 			for(var i = 0; i < vacArray.length; i++){
 				var currDate = moment(vacArray[i].startDate); 
 				var endDate = moment(vacArray[i].endDate);
-				console.log(moment(vacArray[i].startDate));
 				var count = 0;
 				while(!currDate.isSame(endDate, 'day') && count <= 50){
 					vacDateSet.add(currDate.year()*10000 + (currDate.month()+1)*100 + currDate.date());
@@ -467,7 +485,7 @@ class MainPage extends React.Component{
 			
 			vacCalContainer = this.renderSingleMonthlyCalendar(todayDate.getFullYear(), todayDate.getMonth() + 1, newTime.day(), vacDateSet);
 			
-			newTime = moment([todayDate.getFullYear(), todayDate.getMonth() + 2, 1]);
+			newTime = moment([todayDate.getFullYear(), todayDate.getMonth() + 1, 1]);
 			vacCalContainer2 = this.renderSingleMonthlyCalendar(todayDate.getFullYear(), todayDate.getMonth() + 2, newTime.day(), vacDateSet);
 			
 			percentageDone = Math.round(datesArr[2] / datesArr[0] * 10000); //round to nearest hundredth
@@ -486,7 +504,6 @@ class MainPage extends React.Component{
 		}
 		
 		
-		console.log(this.state);
 		return(
 			<div className="main-page-container">
 				<div className="vacation-dates-container">
@@ -494,7 +511,7 @@ class MainPage extends React.Component{
 					{vacCalContainer2}
 				</div>
 				<div className="dates-and-salary-container">
-					<div className="dates-container">
+					<div>
 						<ProgressBar className="dates-percentage-bar"
 							now={percentageDone} label={`${percentageDone}%`} 
 							striped variant={variantName}/>
@@ -503,10 +520,28 @@ class MainPage extends React.Component{
 							<div className="end-date-container">{endDateString}</div>
 						</div>
 					</div>
-					<div className="salary-container"></div>
-					{datesArr}
-					{salaryArr}
 					
+					<div className="dates-display-container">
+						<div className="number-display-row">전역일 : D-{strDaysLeft}</div>
+						<div className="number-display-row">진급일 : D-{}</div>
+						<div className="number-display-row">복무 일수 : {strDaysFinished}일</div>
+						<div className="number-display-row">총 일수 : {strTotalDays}일</div>
+						
+					</div>
+					<div className="salary-display-container">
+						<div className="number-display-row">월급일 : D-{}</div>
+						<div className="number-display-row">번 액수 : {strAmountEarned}만원</div>
+						<div className="number-display-row">남은 액수 : {strAmountLeft}만원</div>
+						<div className="number-display-row">총 봉급 : {strTotalAmount}만원</div>
+					</div>
+					<div className="meal-display-container">
+						<MealPlanPage 
+							handleMealUnitChange={this.props.handleMealUnitChange} 
+							mealUnit={this.props.mealUnit} 
+							saveMealUnitChange={this.props.saveMealUnitChange}
+							isOnMainPage={true}>
+						</MealPlanPage>
+					</div>
 				</div>
 				
 				

@@ -25,8 +25,6 @@ class MealPlanPage extends React.Component{
 		setDate.setMonth(parseInt(date.substring(0,2))-1);
 		setDate.setDate(parseInt(date.substring(3,5)));
 		const dayOfDate = setDate.getDay();
-		console.log(setDate);
-		console.log(dayOfDate);
 		
 		if(dayOfDate == 0){ // #FFC0C0 #FFE5E5
 			return "sunday-meal-row";
@@ -44,6 +42,7 @@ class MealPlanPage extends React.Component{
 		return (<div className="type-meal-item" key={keyName}>{mealItem}</div> );
 		
 	}
+
 	
 	renderDayMealRow(mealData, i){
 		
@@ -53,6 +52,8 @@ class MealPlanPage extends React.Component{
 		newMealsArray.push(mealData.중식.split(" "));
 		newMealsArray.push(mealData.석식.split(" "));
 		newMealsArray.push(mealData.후식.split(" "));
+		
+		console.log(newMealsArray);
 		
 		const keyStringArray = ['dateItem:', 'breakfastItem:', 'lunchItem:', 'dinnerItem:', 'dessertItem:'];
 		
@@ -65,7 +66,6 @@ class MealPlanPage extends React.Component{
 			}
 			newDayMealStringArray.push(newDayMealString);
 		}
-		console.log(newMealsArray[0]);
 		const rowClass = "type-meal-row " + this.getColorWithDate(newMealsArray[0][0]);
 		return (<div className={rowClass} key={"row"+i}>
 					<div className="meal-cell date-meal-cell" key={"date:"+i}>{newDayMealStringArray[0]}</div>
@@ -77,17 +77,61 @@ class MealPlanPage extends React.Component{
 		
 	}
 	
+	renderDayMealColumn(mealData, i){
+		let newMealsArray = [];
+		newMealsArray.push(mealData.날짜.split(" "));
+		newMealsArray.push(mealData.조식.split(" "));
+		newMealsArray.push(mealData.중식.split(" "));
+		newMealsArray.push(mealData.석식.split(" "));
+		newMealsArray.push(mealData.후식.split(" "));
+		
+		console.log(newMealsArray);
+		
+		const keyStringArray = ['dateItem:', 'breakfastItem:', 'lunchItem:', 'dinnerItem:', 'dessertItem:'];
+		
+		
+		let newDayMealStringArray = [];
+		for(var k = 0; k < 5; k++){
+			let newDayMealString = [];
+			for(var j = 0; j < newMealsArray[k].length; j++){
+				newDayMealString.push(this.renderSingleItemOfMeal(newMealsArray[k][j], keyStringArray[k] + j));
+			}
+			newDayMealStringArray.push(newDayMealString);
+		}
+		const rowClass = "type-meal-row " + this.getColorWithDate(newMealsArray[0][0]);
+		return (<div className={rowClass} >
+					<div className="meal-cell date-meal-cell" >{newDayMealStringArray[0]}</div>
+					<div className="meal-cell breakfast-meal-cell" >{newDayMealStringArray[1]}</div>
+					<div className="meal-cell lunch-meal-cell" >{newDayMealStringArray[2]}</div>
+					<div className="meal-cell dinner-meal-cell" >{newDayMealStringArray[3]}</div>
+					<div className="meal-cell dessert-meal-cell" >{newDayMealStringArray[4]}</div>					
+				</div>);
+	}
 	
 	render() {
 		var mealDataJson = require('../json/2019-june-meal.json');
-		console.log(mealDataJson);
+		// const options = [
+		// 	{value: 0, label: '육군훈련소'},
+		// 	{value: 1, label: '제2급양대'},
+		// 	{value: 2, label: '제3급양대'},
+		// 	{value: 3, label: '제8급양대'},
+		// 	{value: 4, label: '제11급양대'},
+		// 	{value: 5, label: '제5급양대'},
+		// 	{value: 6, label: '제6176부대'},
+		// 	{value: 7, label: '제1691부대'},
+		// 	{value: 8, label: '제5322부대'},
+		// 	{value: 9, label: '제10급양대'},
+		// 	{value: 10, label: '제6335부대'},
+		// 	{value: 11, label: '제8623부대'},
+		// 	{value: 12, label: '제2171부대'},
+		// 	{value: 13, label: '제9030부대'}];
 		const options = [
 			{value: 0, label: '육군훈련소'},
-			{value: 1, label: '제2급양대'},
-			{value: 2, label: '제3급양대'},
-			{value: 3, label: '제8급양대'},
-			{value: 4, label: '제11급양대'},
-			{value: 5, label: '제5급양대'},
+			{value: 1, label: '제8902부대'},
+			{value: 2, label: '제5021부대'},
+			{value: 3, label: '제6282부대'},
+			{value: 4, label: '제3296부대'},
+			{value: 5, label: '제7369부대'},
 			{value: 6, label: '제6176부대'},
 			{value: 7, label: '제1691부대'},
 			{value: 8, label: '제5322부대'},
@@ -97,30 +141,54 @@ class MealPlanPage extends React.Component{
 			{value: 12, label: '제2171부대'},
 			{value: 13, label: '제9030부대'}];
 		
-		
 		const defaultOption = options[this.props.mealUnit];
 		const unitName = defaultOption.label;
 		const currentUnitMealData = mealDataJson[unitName];
+		console.log(mealDataJson, unitName, currentUnitMealData)
+		const lastMonthMealData = currentUnitMealData;
+		const nextMonthMealData = currentUnitMealData;
 		
-		console.log(currentUnitMealData);
-		console.log(currentUnitMealData.length);
 		
 		const dateCell = [];
 		const breakfastCell = [];
 		const lunchCell = [];
 		const dinnerCell = [];
 		const dessertCell = [];
-		const mealRow = []
+		const mealRows = []
 		
 		
-		for(var i = 0; i < currentUnitMealData.length; i++){
-			mealRow.push(this.renderDayMealRow(currentUnitMealData[i],i));
-			// dateCell.push(this.renderMealOfTheDay(currentUnitMealData[i].날짜,"date",i));
-			// breakfastCell.push(this.renderMealOfTheDay(currentUnitMealData[i].조식,"breakfast",i));
-			// lunchCell.push(this.renderMealOfTheDay(currentUnitMealData[i].중식,"lunch",i));
-			// dinnerCell.push(this.renderMealOfTheDay(currentUnitMealData[i].석식,"dinner",i));
-			// dessertCell.push(this.renderMealOfTheDay(currentUnitMealData[i].후식,"dessert",i));
+		if(this.props.isOnMainPage){
+			const today = new Date();
+			var lastDayOfNextMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+			lastDayOfNextMonth.setDate(lastDayOfNextMonth.getDate() - 1);
+			console.log(today.getDate());
+			if(today.getDate() == 1) {
+				mealRows.push(this.renderDayMealColumn(lastMonthMealData[-1]));
+				mealRows.push(this.renderDayMealColumn(currentUnitMealData[0]));
+				mealRows.push(this.renderDayMealColumn(currentUnitMealData[1]));
+			} else if(today.getDate() == lastDayOfNextMonth.getDate()){
+				mealRows.push(this.renderDayMealColumn(currentUnitMealData[today.getDate()-2]));
+				mealRows.push(this.renderDayMealColumn(currentUnitMealData[today.getDate()-1]));
+				mealRows.push(this.renderDayMealColumn(nextMonthMealData[0]));
+				
+			} else {
+				mealRows.push(this.renderDayMealColumn(currentUnitMealData[today.getDate()-2]));
+				mealRows.push(this.renderDayMealColumn(currentUnitMealData[today.getDate()-1]));
+				mealRows.push(this.renderDayMealColumn(currentUnitMealData[today.getDate()]));
+			}
+		} else {
+			console.log(currentUnitMealData);
+			for(var i = 0; i < currentUnitMealData.length; i++){
+				mealRows.push(this.renderDayMealRow(currentUnitMealData[i],i));
+				// dateCell.push(this.renderMealOfTheDay(currentUnitMealData[i].날짜,"date",i));
+				// breakfastCell.push(this.renderMealOfTheDay(currentUnitMealData[i].조식,"breakfast",i));
+				// lunchCell.push(this.renderMealOfTheDay(currentUnitMealData[i].중식,"lunch",i));
+				// dinnerCell.push(this.renderMealOfTheDay(currentUnitMealData[i].석식,"dinner",i));
+				// dessertCell.push(this.renderMealOfTheDay(currentUnitMealData[i].후식,"dessert",i));
+			}
 		}
+		
+		
 		
 		let saveBtnClass = "submit-btn btn ";
 		let mealSelectClass = "meal-unit-select";
@@ -156,7 +224,7 @@ class MealPlanPage extends React.Component{
 						<div className="meal-cell dessert-meal-cell"><div className="type-meal-title">후식</div></div>
 					
 					</div>
-					{mealRow}
+					{mealRows}
 				</div>
 			</div>
 		);

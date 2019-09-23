@@ -1,0 +1,10 @@
+Things to fix :
+	- Design of the calendars in vacation page
+		- date range should look more natural
+	
+	- Design of vacation-overview page
+		- date range selector and the delete button 
+		
+	- Design of main page
+	
+	

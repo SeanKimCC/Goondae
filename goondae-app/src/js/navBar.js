@@ -55,7 +55,6 @@ class DaysWolgeupSwitcher extends React.Component{
 
 class VacationSwitcher extends React.Component {
 	render() {
-		console.log(this.props.showSwitchVacBtn);
 		var switcherClass = "compensation-arrow-icon fa " + this.props.btnClass + (this.props.showSwitchVacBtn ? "" : " hidden");
 		return(
 			<div>
@@ -80,6 +79,12 @@ class DNSChanger extends React.Component{
 }
 
 class PageHeader extends React.Component{
+	constructor(props){
+		super(props);
+		this.state={
+			pageTitle : this.pageTitle()
+		};
+	}
 	
 	pageNum(){
 		const pageString = window.location.pathname;
@@ -145,7 +150,51 @@ class PageHeader extends React.Component{
 				break;
 		}
 	}
-	
+	onBackButtonEvent(event){
+		console.log(event);
+	}
+	componentDidMount(){
+		const self = this;
+		window.onpopstate = function(event){ // triggers when browser back button is clicked.
+			const pageString = window.location.pathname;
+			let resultString = String(pageString.match(/^\/[a-z?-A-Z]+/g));
+			resultString = resultString.substring(1,);
+			console.log(resultString);
+			switch (resultString){
+				case "":
+					resultString = "군대닷컴";
+					break;
+				case "vacation":
+					resultString = "휴가 계획표";
+					break;
+				case "vacation-overview":
+					resultString = "휴가 수정";
+					break;	
+				case "futureMe":
+					resultString = "미래의 나에게";
+					break;
+				case "meal":
+					resultString = "식단표";
+					break;
+				case "openBoard":
+					resultString = "자유게시판";
+					break;
+				case "calculator":
+					resultString = "계산기";
+					break;
+				default:
+					resultString = "군대닷컴";
+					break;
+			}
+			self.setState({
+				pageTitle: resultString
+			});
+		}
+		
+		
+
+		
+	}
 	render(){
 		let pageTitleText = this.pageTitle();
 		console.log(pageTitleText);
