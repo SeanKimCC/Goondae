@@ -10,12 +10,16 @@ class MenuBar extends React.Component{
 		const arrowIconClass = "menu-bar-right-arrow-icon fa fa-chevron-right";
 		const topBarContent = this.props.isLoggedIn ? <div className="menu-bar-login-signup"><div className="menu-bar-logout-btn" onClick={this.props.onClickLogout} > 로그아웃</div></div> : <div className="menu-bar-login-signup"><div className="menu-bar-login-btn menu-bar-login-signup-btn" onClick={this.props.openLoginModal} > 로그인</div><div className="menu-bar-signup-btn menu-bar-login-signup-btn" onClick={this.props.openSignupModal} >회원가입</div></div>  
 		
-		
+		if(this.props.isLoggedIn){
+			
+		} else {
+			
+		}
 		return( 
 			<div className={menuScreenClass}>
 				<div className={menuBarClass}>
 					{topBarContent}
-					<div id="menuBarTitle" className={menuBarItemClass}><Link className="menu-bar-link" to="/" onClick={this.props.updatePageNum} value="">타이틀 모집병과</Link></div>
+					<div id="menuBarTitle" className={menuBarItemClass}><Link className="menu-bar-link" to="/" onClick={this.props.updatePageNum} value="">군대닷컴</Link></div>
 					
 					<div className={menuBarItemClass}><Link className="menu-bar-link" to="/vacation/" onClick={this.props.updatePageNum} value="vacation">휴가표<span className={arrowIconClass}></span></Link></div>
 					<div className={menuBarItemClass}><Link className="menu-bar-link" to="/meal/" onClick={this.props.updatePageNum} value="meal">식단표<span className={arrowIconClass}></span></Link></div>

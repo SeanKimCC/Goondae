@@ -25,7 +25,6 @@
 	background-color: #eee;
 	color: grey;
 	font-size: 15px;
-	margin-top: -12px;
 }
 
 .submit-btn:focus{
@@ -143,5 +142,26 @@
 }
 .dessert-meal-cell{
 	width:16%;
+	/* margin-left: 84%; */
+}
+/*On Main Page*/
+.date-meal-cell-mainp{
+	width: 16%;
+	border-left:none;
+}
+.breakfast-meal-cell-mainp{
+	width:28%;
+	/* margin-left: 15%; */
+}
+.lunch-meal-cell-mainp{
+	width:28%;
+	/* margin-left: 38%; */
+}
+.dinner-meal-cell-mainp{
+	width:28%;
+	/* margin-left: 61%; */
+}
+.dessert-meal-cell-mainp{
+	display:none;
 	/* margin-left: 84%; */
 }

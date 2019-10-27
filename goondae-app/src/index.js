@@ -286,6 +286,8 @@ class Index extends React.Component{
 	}
 	returnVacationPage(){
 		return <VacationPage key={this.state.isLoggingIn}
+				   isLoggedIn = {this.state.isLoggedIn}
+				   openLoginModal = {this.openLoginModal}
 				   />
 	}
 	returnMealPlanPage(){
@@ -325,14 +327,16 @@ class Index extends React.Component{
 				   isLoggedIn={this.state.isLoggedIn}
 				   handleMealUnitChange={this.handleMealUnitChange} 
 				   mealUnit={this.state.mealUnit} 
-				   saveMealUnitChange={this.saveMealUnitChange}>
+				   saveMealUnitChange={this.saveMealUnitChange}
+				   openLoginModal={this.openLoginModal}>
 		</MainPage>
 	}
 	
 	returnVacationOverview(){
 		return <VacationOverview key ={this.state.isLoggedIn} // for loginModal to update vacation component
 				   isLoggedIn={this.state.isLoggedIn}
-				   isLoggingIn={this.state.isLoggingIn}				   
+				   isLoggingIn={this.state.isLoggingIn}
+				   openLoginModal={this.openLoginModal}
 			/>
 	}
 	returnNewVacationOverview(){

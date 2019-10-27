@@ -5,6 +5,8 @@ import '../../css/vacation-page.css';
 import '../../css/vacation-overview.css';
 import CalendarInput from '../../js/calendarInput.js';
 import LoadingScreen from '../loading.js';
+import LockedPage from '../lockedPage.js';
+
 import axios from 'axios';
 import { DateRange } from 'react-date-range';
 import Modal from 'react-modal';
@@ -93,6 +95,8 @@ class DateRangeSelector extends React.Component{
                     onChange={this.handleSelect}
 					lang="ko"
                 />
+				<button onClick={this.props.getUserData}>here</button>
+				<button onClick={this.props.deleteAllVacs}>delete all</button>
 				<button className="add-vac-btn" onClick={this.addVacation}>저장</button>
 			</div>)
 	}
@@ -236,6 +240,9 @@ class OverviewTotalDaysViewer extends React.Component{
 				vacationRows.push(this.renderSingleRow(i, numRows, null));
 			}
 			
+		}
+		if(this.props.isLoggedIn == false){
+			vacationRows = (<div></div>);
 		}
 		
 		
@@ -470,8 +477,8 @@ class VacationOverview extends React.Component{
 			return ('' + a[0]).localeCompare(b[0]);
 		});
 		// console.log(sortable, vacArray);
-		
-		return(
+		if(this.props.isLoggedIn){
+			return(
 			
 			<div className="vacation-overview-container">
 					<LoadingScreen
@@ -485,10 +492,19 @@ class VacationOverview extends React.Component{
 					/>
 					<DateRangeSelector
 						onSaveVac={this.onSaveVac}
-						saveVac = {this.saveVac}/>
-
-					<button onClick={this.getUserData}>here</button>
-					<button onClick={this.deleteAllVacs}>delete all</button>
+						saveVac = {this.saveVac}
+						getUserData = {this.getUserData}
+						deleteAllVacs = {this.deleteAllVacs}
+					/>
+				
+				
+			</div>
+			);
+		}
+		return(
+			
+			<div className="vacation-overview-container">
+					<LockedPage openLoginModal = {this.props.openLoginModal}></LockedPage>
 				
 				
 			</div>

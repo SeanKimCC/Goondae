@@ -77,13 +77,20 @@ class MealPlanPage extends React.Component{
 		
 	}
 	
-	renderDayMealColumn(mealData, i){
+	renderDayMealColumn(mealData, i, isOnMainPage){
 		let newMealsArray = [];
 		newMealsArray.push(mealData.날짜.split(" "));
 		newMealsArray.push(mealData.조식.split(" "));
 		newMealsArray.push(mealData.중식.split(" "));
 		newMealsArray.push(mealData.석식.split(" "));
 		newMealsArray.push(mealData.후식.split(" "));
+		
+		console.log(isOnMainPage);
+		const dateClass = isOnMainPage ? "meal-cell date-meal-cell-mainp" : "meal-cell date-meal-cell";
+		const breakfastClass = isOnMainPage ? "meal-cell breakfast-meal-cell-mainp" : "meal-cell breakfast-meal-cell";
+		const lunchClass = isOnMainPage ? "meal-cell lunch-meal-cell-mainp" : "meal-cell lunch-meal-cell";
+		const dinnerClass = isOnMainPage ? "meal-cell dinner-meal-cell-mainp" : "meal-cell dinner-meal-cell";
+		const dessertClass = isOnMainPage ? "meal-cell dessert-meal-cell-mainp" : "meal-cell dessert-meal-cell";
 		
 		console.log(newMealsArray);
 		
@@ -100,11 +107,11 @@ class MealPlanPage extends React.Component{
 		}
 		const rowClass = "type-meal-row " + this.getColorWithDate(newMealsArray[0][0]);
 		return (<div className={rowClass} >
-					<div className="meal-cell date-meal-cell" >{newDayMealStringArray[0]}</div>
-					<div className="meal-cell breakfast-meal-cell" >{newDayMealStringArray[1]}</div>
-					<div className="meal-cell lunch-meal-cell" >{newDayMealStringArray[2]}</div>
-					<div className="meal-cell dinner-meal-cell" >{newDayMealStringArray[3]}</div>
-					<div className="meal-cell dessert-meal-cell" >{newDayMealStringArray[4]}</div>					
+					<div className={dateClass} >{newDayMealStringArray[0]}</div>
+					<div className={breakfastClass} >{newDayMealStringArray[1]}</div>
+					<div className={lunchClass} >{newDayMealStringArray[2]}</div>
+					<div className={dinnerClass} >{newDayMealStringArray[3]}</div>
+					<div className={dessertClass} >{newDayMealStringArray[4]}</div>					
 				</div>);
 	}
 	
@@ -154,8 +161,12 @@ class MealPlanPage extends React.Component{
 		const lunchCell = [];
 		const dinnerCell = [];
 		const dessertCell = [];
-		const mealRows = []
-		
+		const mealRows = [];
+		var dateClass = "meal-cell date-meal-cell";
+		var breakfastClass = "meal-cell breakfast-meal-cell";
+		var lunchClass = "meal-cell lunch-meal-cell";
+		var dinnerClass = "meal-cell dinner-meal-cell";
+		var dessertClass="meal-cell dessert-meal-cell";
 		
 		if(this.props.isOnMainPage){
 			const today = new Date();
@@ -163,23 +174,28 @@ class MealPlanPage extends React.Component{
 			lastDayOfNextMonth.setDate(lastDayOfNextMonth.getDate() - 1);
 			console.log(today.getDate());
 			if(today.getDate() == 1) {
-				mealRows.push(this.renderDayMealColumn(lastMonthMealData[-1]));
-				mealRows.push(this.renderDayMealColumn(currentUnitMealData[0]));
-				mealRows.push(this.renderDayMealColumn(currentUnitMealData[1]));
+				mealRows.push(this.renderDayMealColumn(lastMonthMealData[-1], -1, true));
+				mealRows.push(this.renderDayMealColumn(currentUnitMealData[0], 0, true));
+				mealRows.push(this.renderDayMealColumn(currentUnitMealData[1], 1, true));
 			} else if(today.getDate() == lastDayOfNextMonth.getDate()){
-				mealRows.push(this.renderDayMealColumn(currentUnitMealData[today.getDate()-2]));
-				mealRows.push(this.renderDayMealColumn(currentUnitMealData[today.getDate()-1]));
-				mealRows.push(this.renderDayMealColumn(nextMonthMealData[0]));
+				mealRows.push(this.renderDayMealColumn(currentUnitMealData[today.getDate()-2], -2, true));
+				mealRows.push(this.renderDayMealColumn(currentUnitMealData[today.getDate()-1], -1, true));
+				mealRows.push(this.renderDayMealColumn(nextMonthMealData[0], 0, true));
 				
 			} else {
-				mealRows.push(this.renderDayMealColumn(currentUnitMealData[today.getDate()-2]));
-				mealRows.push(this.renderDayMealColumn(currentUnitMealData[today.getDate()-1]));
-				mealRows.push(this.renderDayMealColumn(currentUnitMealData[today.getDate()]));
+				mealRows.push(this.renderDayMealColumn(currentUnitMealData[today.getDate()-2], -2, true));
+				mealRows.push(this.renderDayMealColumn(currentUnitMealData[today.getDate()-1], -1, true));
+				mealRows.push(this.renderDayMealColumn(currentUnitMealData[today.getDate()], 0, true));
 			}
+			dateClass += "-mainp";
+			breakfastClass += "-mainp";
+			lunchClass += "-mainp";
+			dinnerClass += "-mainp";
+			dessertClass += "-mainp";
 		} else {
 			console.log(currentUnitMealData);
 			for(var i = 0; i < currentUnitMealData.length; i++){
-				mealRows.push(this.renderDayMealRow(currentUnitMealData[i],i));
+				mealRows.push(this.renderDayMealRow(currentUnitMealData[i], i, false));
 				// dateCell.push(this.renderMealOfTheDay(currentUnitMealData[i].날짜,"date",i));
 				// breakfastCell.push(this.renderMealOfTheDay(currentUnitMealData[i].조식,"breakfast",i));
 				// lunchCell.push(this.renderMealOfTheDay(currentUnitMealData[i].중식,"lunch",i));
@@ -217,11 +233,11 @@ class MealPlanPage extends React.Component{
 				</div>
 				<div id="mealPlan">
 					<div className="type-meal-row type-meal-title-row">
-						<div className="meal-cell date-meal-cell"><div className="type-meal-title">날짜</div></div>
-						<div className="meal-cell breakfast-meal-cell"><div className="type-meal-title">조식</div></div>
-						<div className="meal-cell lunch-meal-cell"><div className="type-meal-title">중식</div></div>
-						<div className="meal-cell dinner-meal-cell"><div className="type-meal-title">석식</div></div>
-						<div className="meal-cell dessert-meal-cell"><div className="type-meal-title">후식</div></div>
+						<div className={dateClass}><div className="type-meal-title">날짜</div></div>
+						<div className={breakfastClass}><div className="type-meal-title">조식</div></div>
+						<div className={lunchClass}><div className="type-meal-title">중식</div></div>
+						<div className={dinnerClass}><div className="type-meal-title">석식</div></div>
+						<div className={dessertClass}><div className="type-meal-title">후식</div></div>
 					
 					</div>
 					{mealRows}

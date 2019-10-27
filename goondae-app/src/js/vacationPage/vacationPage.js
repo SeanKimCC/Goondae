@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import '../../css/index.css';
 import '../../css/vacation-page.css';
 import CalendarInput from '../../js/calendarInput.js';
+import LockedPage from '../lockedPage.js';
 import axios from 'axios';
 import Modal from 'react-modal';
 import moment from 'moment';
@@ -258,9 +259,19 @@ class VacationPage extends React.Component{
 			}
 		}
 		const monthNum = 2;
+		if(this.props.isLoggedIn){
+			return(
+				<div className="vacation-calendars-container">{vacationPageContent}</div>
+			);
+		}	
 		return(
-			<div className="vacation-calendars-container">{vacationPageContent}</div>
+			<div className="vacation-calendars-container">
+				<LockedPage openLoginModal = {this.props.openLoginModal}></LockedPage>
+			</div>
 		);
+			
+		
+		
 	}
 }
 export {VacationPage, MonthCalendar};

@@ -501,6 +501,14 @@ class MainPage extends React.Component{
 				variantName = "success";
 			}
 
+		}else {
+			var todayDate = new Date();
+			
+			var newTime = moment([todayDate.getFullYear(), todayDate.getMonth(), 1]);
+			vacCalContainer = this.renderSingleMonthlyCalendar(todayDate.getFullYear(), todayDate.getMonth() + 1, newTime.day(), new Set());
+			
+			newTime = moment([todayDate.getFullYear(), todayDate.getMonth() + 1, 1]);
+			vacCalContainer2 = this.renderSingleMonthlyCalendar(todayDate.getFullYear(), todayDate.getMonth() + 2, newTime.day(), new Set());
 		}
 		
 		

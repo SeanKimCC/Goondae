@@ -1,0 +1,23 @@
+.locked-page{
+	width:100%;
+	height: calc(50% + 100px);
+	top: calc(50% - 100px);
+	left:0;
+	text-align:center;
+	position:absolute;
+}
+.lock-icon{
+	font-size:100px;
+}
+.locked-page-container{
+	height:calc(100% - 50px);
+	width: 100%;
+	background-color: #eee;
+	position:absolute;
+	top: 50px;
+	left:0;
+}
+.locked-page-container:hover{
+	cursor: pointer;
+	background-color: #ddd;
+}
