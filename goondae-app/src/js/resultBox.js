@@ -10,7 +10,6 @@ const payMonthsType4 = [3,9,15];
 //2019년 6월~ 일병 1개월 조기진급 [3,9,15]
 
 const oneDay = 24*60*60*1000;
-const serviceTypesProp = ["육군", "해군", "공군", "해병대", "의경", "해경", "소방원", "공익"];
 const numMonthsProp = [21, 23, 24, 21, 21, 23, 23, 24];
 const shortenedNumMonthsProp = [18, 20, 22, 18, 18, 20, 20, 21]; 
 const perRankMonthlyPay2017Prop = [163000, 176400, 195000, 216000];
@@ -191,11 +190,9 @@ class ResultBox extends React.Component{
 		var firstDate = currentDate.getDate();
 		var firstDay = currentDate.getDay();
 		
-		var carryOverFlag = 0;
 		
 		if(firstDate > 10 || (firstDate > 8 && firstDay > 4)){
 			listOfPayDays.push(0);
-			carryOverFlag = 1;
 			currentDate.setMonth(currentDate.getMonth() + 1);
 			currentDate.setDate(8);
 		} 
@@ -224,7 +221,6 @@ class ResultBox extends React.Component{
 		
 		var numMonthsOfService = listOfPayDays.length;
 		var listOfPayAmounts = [];
-		var firstMonthNoPayFlag = 0;
 		var monthlySal;
 		var yearIndex;
 		var rankIndex;
@@ -243,7 +239,6 @@ class ResultBox extends React.Component{
 				yearIndex = 2;
 			}
 			monthlySal = perRankMonthlyPay[yearIndex][0];
-			firstMonthNoPayFlag = 1;
 
 			listOfPayAmounts[1] += Math.round((ratioFirstMonth * monthlySal)/100) *100;
 		} else {

@@ -10,15 +10,13 @@ import './css/bootstrap-4.0.0/bootstrap.css';
 import './css/nav-icon-animation.css';
 import './css/menu-side-bar.css';
 import PageHeader from './js/navBar.js';
-import ServiceTypeBtnsGroup from './js/serviceTypeBtns.js';
-import CalendarInput from './js/calendarInput.js';
-import ResultBox from './js/resultBox.js';
 import LoginModal from './js/loginModal.js';
 import SignupModal from './js/signupModal.js';
 import LoadingScreen from './js/loading.js';
 import CalculatorPage from './js/calculatorPage.js';
 import {VacationPage} from './js/vacationPage/vacationPage.js';
 import SpecialtyPage from './js/specialtyPage.js';
+import CelebrityPage from './js/celebPage.js';
 import VacationOverview from './js/vacationPage/vacationOverview.js';
 import NewVacationOverview from './js/vacationPage/newVacationOverview.js';
 import MealPlanPage from './js/mealPlanPage.js';
@@ -26,7 +24,7 @@ import MenuBar from './js/menuSideBar.js';
 import MainPage from './js/mainPage.js';
 import axios from 'axios';
 import Modal from 'react-modal';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 
 //Think about whether all the states needed in different pages (that is shared with nav bar) should be in the main page
 //Maybe there's another method. Right now, since the main page only passes today to nav bar, things aren't calculated properly
@@ -151,7 +149,7 @@ class Index extends React.Component{
 		console.log(token);
 		
 		try{
-			let getUsers = await userDataAxios.get('https://goondae-server.run.goorm.io/users/me/'+token); //req.params.token
+			let getUsers = await userDataAxios.get('http://localhost:5000/users/me/'+token); //req.params.token
 			console.log(localStorage.getItem('token'));
 			console.log(getUsers.data.startDate);
 			// return getUsers;
@@ -174,7 +172,7 @@ class Index extends React.Component{
 		const token = localStorage.getItem('token');
 		try{
 			let getLogoutUser = await
-			userDataAxios.post('https://goondae-server.run.goorm.io/users/logoutAll', {
+			userDataAxios.post('http://localhost:5000/users/logoutAll', {
 				token: token
 			});
 			console.log(getLogoutUser);
@@ -207,7 +205,7 @@ class Index extends React.Component{
 	componentDidMount() {
 		
 			// let getUsers = () => {
-			// axios.post('https://goondae-server.run.goorm.io/users/login', {
+			// axios.post('http://localhost:5000/users/login', {
 			// 	email: 'johnjin5@email.com',
 			// 	password: '123z123z'
 				
@@ -306,7 +304,7 @@ class Index extends React.Component{
 		const token = localStorage.getItem('token');
 		try{
 			let getLogoutUser = await
-			userDataAxios.patch('https://goondae-server.run.goorm.io/users/me', {
+			userDataAxios.patch('http://localhost:5000/users/me', {
 				token: token,
 				mealUnit: this.state.mealUnit
 			});
@@ -344,6 +342,9 @@ class Index extends React.Component{
 	}
 	returnSpecialtyPage(){
 		return <SpecialtyPage/>
+	}
+	returnCelebDates(){
+		return <CelebrityPage/>
 	}
 	
 	returnPageCodeBasedOnURL(){
@@ -497,7 +498,8 @@ class Index extends React.Component{
 					<Route path="/vacation-overview" component={this.returnVacationOverview}/>
 					<Route path="/meal/" component={this.returnMealPlanPage}/>
 					<Route path="/specialty/" component={this.returnSpecialtyPage}/>
-					<Route path="/new-vacation-overview" component={this.returnNewVacationOverview}/>
+					<Route path="/new-vacation-overview/" component={this.returnNewVacationOverview}/>
+					<Route path="/celebrity/" component={this.returnCelebDates}/>
 				</div>
 			</Router>
 		);

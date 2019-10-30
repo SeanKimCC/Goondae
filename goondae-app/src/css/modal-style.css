@@ -23,6 +23,9 @@
 	font-size: 18px;
 	border: 1px solid #cacbcc;
 	width: 100%;
+	-webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
 	border-radius: 5px;
 	padding: 12px 40px;
 	transition: border-color ease-in-out .08s,box-shadow ease-in-out .08s, border-radius ease-in-out .08s

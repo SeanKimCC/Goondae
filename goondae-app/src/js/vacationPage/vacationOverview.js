@@ -20,7 +20,7 @@ class SaveButton extends React.Component{
 		const token = localStorage.getItem('token');
 		try{
 			let user = await
-			userDataAxios.patch('https://goondae-server.run.goorm.io/users/me', {
+			userDataAxios.patch('http://localhost:5000/users/me', {
 				vacation: this.props.vacations
 			});
 			//https://www.npmjs.com/package/react-date-range
@@ -32,7 +32,7 @@ class SaveButton extends React.Component{
 		const token = localStorage.getItem('token');
 		try{
 			let getLogoutUser = await
-			userDataAxios.patch('https://goondae-server.run.goorm.io/users/me', {
+			userDataAxios.patch('http://localhost:5000/users/me', {
 				token: token,
 				mealUnit: this.state.mealUnit
 			});
@@ -69,7 +69,7 @@ class DateRangeSelector extends React.Component{
 		// console.log(this.state.startDate, this.state.endDate);
 		try{
 			let user = await
-			userDataAxios.post('https://goondae-server.run.goorm.io/vacationDate', {
+			userDataAxios.post('http://localhost:5000/vacationDate', {
 				startDate: this.state.startDate,
 				endDate: this.state.endDate,
 				token: token
@@ -191,8 +191,8 @@ class SingleVacationRow extends React.Component{
 		vacationSlots.push(this.renderDateRange());
 		vacationSlots.push(<div className="vacation-add-btn" key="15"></div>);
 		
-		const rowStyle = {height: 'calc(100% / '+ this.props.numRows +')'};
-		return(<div className="vacation-days-row" style={rowStyle}><div className="vacation-rank-slot" > </div>
+		// const rowStyle = {height: 'calc(100% / '+ this.props.numRows +')'};
+		return(<div className="vacation-days-row"><div className="vacation-rank-slot" > </div>
 				{vacationSlots} </div>)
 	}
 }
@@ -230,6 +230,7 @@ class OverviewTotalDaysViewer extends React.Component{
 	
 	render(){
 		let vacationRows = [];
+		console.log(this.props.vacs);
 		const numRows = this.props.numMonths;
 		for(var i = 0; i < numRows; i++){
 			
@@ -294,7 +295,7 @@ class VacationOverview extends React.Component{
 	async deleteAllVacs(){
 		const token = localStorage.getItem('token');
 		try{
-			let vac = await userDataAxios.delete('https://goondae-server.run.goorm.io/vacationDatesAll/'+ token);
+			let vac = await userDataAxios.delete('http://localhost:5000/vacationDatesAll/'+ token);
 			// console.log(vac);
 			if(vac.status == 200){
 				this.setState({
@@ -316,7 +317,7 @@ class VacationOverview extends React.Component{
 		// console.log(token);
 		
 		try{
-			let user = await userDataAxios.get('https://goondae-server.run.goorm.io/users/me/'+token); //req.params.token
+			let user = await userDataAxios.get('http://localhost:5000/users/me/'+token); //req.params.token
 			// console.log(localStorage.getItem('token'));
 			// console.log(user.data.startDate);
 			// return getUsers;
@@ -335,7 +336,7 @@ class VacationOverview extends React.Component{
 		// console.log(token);
 		
 		try{
-			let vac = await userDataAxios.get('https://goondae-server.run.goorm.io/vacationDates/'+token); //req.params.token
+			let vac = await userDataAxios.get('http://localhost:5000/vacationDates/'+token); //req.params.token
 			// console.log(vac);
 			
 			this.setState({
@@ -353,7 +354,7 @@ class VacationOverview extends React.Component{
 	async deleteVacItem(id){
 		const token = localStorage.getItem('token');
 		try{
-			let vac = await userDataAxios.delete('https://goondae-server.run.goorm.io/vacationDates/'+ token + '/' + id);
+			let vac = await userDataAxios.delete('http://localhost:5000/vacationDates/'+ token + '/' + id);
 			// TODO: i can setState here without calling getVacData
 			this.getVacData();
 			
@@ -389,8 +390,8 @@ class VacationOverview extends React.Component{
 		// console.log(this.props.isLoggedIn);
 		const token = localStorage.getItem('token');
 		if(token){
-			let vac = await userDataAxios.get('https://goondae-server.run.goorm.io/vacationDates/'+token); //req.params.token
-			let user = await userDataAxios.get('https://goondae-server.run.goorm.io/users/me/'+token); //req.params.token
+			let vac = await userDataAxios.get('http://localhost:5000/vacationDates/'+token); //req.params.token
+			let user = await userDataAxios.get('http://localhost:5000/users/me/'+token); //req.params.token
 			if(this._isMounted){				
 				this.setState({
 					vac: vac,

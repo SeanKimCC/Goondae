@@ -1,20 +1,12 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react'
 import Modal from 'react-modal';
-import axios from 'axios';
-import Dropdown from 'react-dropdown';
+import axios from 'axios'
+import moment from 'moment';
 import '../css/modal-style.css';
 
-const payMonths = [4,11,18];
 const oneDay = 24*60*60*1000;
-const serviceTypesProp = ["육군", "해군", "공군", "해병대", "의경", "해경", "소방원", "공익"];
 const numMonthsProp = [21, 23, 24, 21, 21, 23, 23, 24];
 const shortenedNumMonthsProp = [18, 20, 22, 18, 18, 20, 20, 21]; 
-const perRankMonthlyPay2017Prop = [163000, 176400, 195000, 216000];
-const perRankMonthlyPay2018Prop = [306100, 331300, 366200, 405700];
-const perRankMonthlyPay2020Prop = [408100, 441700, 488200, 504900];
-
-
 
 const customStyles = {
   content : {
@@ -54,7 +46,7 @@ class SignupBox extends React.Component{
 
 	keyPressed = (event) => {
 		console.log(event);
-		if(event.key == "Enter"){
+		if(event.key === "Enter"){
 			this.props.handleSignupSubmit();
 		}
 	}
@@ -69,36 +61,42 @@ class SignupBox extends React.Component{
 		console.log(signupSuccessMessage, this.props.showSuccessMessage);
 		
 		
-		const startDate = this.props.selectedDate;
+		const startDate = moment.utc(this.props.selectedDate);
+		// console.log(startDate);
+		// if(startDate.hour() != 0){
+		// 	startDate.hour(24,0,0,0);
+		// }
 		console.log(startDate);
-		// const selectedDate = new Date(selectedDateArr[2], selectedDateArr[1]-1, selectedDateArr[0]);
+		// const selectedDate = moment.utc(new Date(selectedDateArr[2], selectedDateArr[1]-1, selectedDateArr[0]);
 		// console.log(selectedDate);
-		const startDateObj = startDate.getFullYear() + '-' + ((startDate.getMonth()+1)>9 ? '' : '0') +(startDate.getMonth()+1) + '-' + (startDate.getDate()>9 ? '' : '0') + startDate.getDate();
+		const startDateObj = startDate.year() + '-' + ((startDate.month()+1)>9 ? '' : '0') +(startDate.month()+1) + '-' + (startDate.date()>9 ? '' : '0') + startDate.date();
 		
 		const selectedTypeObj = this.props.selectedType;
 		console.log(selectedTypeObj);
-		const typeOptions = [
-			{ value: 0, label: '육군' },
-			{ value: 1, label: '해군' },
-			{ value: 2, label: '공군' },
-			{ value: 3, label: '해병대' },
-			{ value: 4, label: '의경' },
-			{ value: 5, label: '해경' },
-			{ value: 6, label: '소방원' },
-			{ value: 7, label: '공익' }];
 		
 		console.log("@@@@@@@@@" + startDateObj);
+
+		var errorMessage1 = "모든 항목을 확인하고";
+		var errorMessage2 = "입력해 주십시오.";
+		switch (this.props.errorStatusCode){
+			case 406:
+				errorMessage1 = "등록 되어있는";
+				errorMessage2 = "이메일 주소입니다.";
+
+		}
 		
 		return (
 			<div className="login-modal-box">
 				<div>
 				</div>
-				<div className={signupErrorMessage}>모든 항목을 확인하고<br/> 입력해 주십시오.</div>
+				<div className={signupErrorMessage}>{errorMessage1}<br/> {errorMessage2}</div>
 				<div className={signupSuccessMessage}>가입이 완료되었습니다!</div>
 				<form>
 					<div className="login-field">
 						<span className="fas fa-calendar-day login-modal-field-icon"></span>
-						<input className="login-modal-input-box" type="date" name="startDate"  
+						<input className="login-modal-input-box" type="date" name="startDate" 
+							min="2010-01-01"
+							max="2030-01-01" 
 							onKeyPress={this.keyPressed}
 							onChange={(e) => this.props.handleDateChange(e)} placeholder="입대일자" value={startDateObj}/>
 
@@ -171,7 +169,8 @@ class SignupModal extends React.Component{
 			startDate: this.props.selectedDate,
 			showErrorMessage: false,
 			showSuccessMessage: false,
-			serviceType: this.props.selectedType
+			serviceType: this.props.selectedType,
+			errorStatusCode: null
 		};
 		
 	}
@@ -211,16 +210,20 @@ class SignupModal extends React.Component{
 				// email: '',
 				// password: '',
 				showSuccessMessage: true,
-				showErrorMessage: false
+				showErrorMessage: false,
+
 			});
+			self.closeSignupModal();
 
 			return response;
 			}, function (error) {
+				console.log(error.response.status);
 				console.log('error response');
 				self.setState({
 					isSigningUp: false,
 					// email: '',
 					// password: '',
+					errorStatusCode:error.response.status,
 					showErrorMessage:true,
 					showSuccessMessage:false
 				});
@@ -228,14 +231,14 @@ class SignupModal extends React.Component{
 		});
 	}
 	handleDateChange(e){
-		this.props.onChangeDate(new Date(e.target.value));
-		this.setState({[e.target.name]: new Date(e.target.value)});
+		this.props.onChangeDate(moment.utc(new Date(e.target.value)));
+		this.setState({[e.target.name]: moment.utc(new Date(e.target.value))});
 		console.log("hello" , e.target.value);
 		console.log(this.state.startDate);
 		// const dateValue = e.target.value;
 		// console.log(dateValue.substr(5,2));
 		// const newDate = dateValue.substr(0,4) + "-" + dateValue.substr(5,2)  + "-" + dateValue.substr(8,2) ;
-		// const newDate = new Date(e.target.value);
+		// const newDate = moment.utc(new Date(e.target.value);
 		// console.log(newDate);
 		// this.setState({[e.target.name]: newDate});
 	}
@@ -260,13 +263,13 @@ class SignupModal extends React.Component{
 	calculateOriginalDaysLeft(){
 		const numMonths = numMonthsProp[this.state.serviceType];
 		const selectedDate = this.state.startDate;
-		// const date = new Date(selectedDate[2],selectedDate[1]-1,selectedDate[0]);
-		const date = new Date(selectedDate.getTime());
+		// const date = moment.utc(new Date(selectedDate[2],selectedDate[1]-1,selectedDate[0]);
+		const date = moment.utc(new Date(selectedDate.valueOf()));
 		
 		var newDate = date;
 		
-		newDate.setMonth(newDate.getMonth() + numMonths);
-		newDate.setDate(newDate.getDate()-1);
+		newDate.month(newDate.month() + numMonths);
+		newDate.date(newDate.date()-1);
 		
 		return newDate;
 	}
@@ -274,13 +277,13 @@ class SignupModal extends React.Component{
 	calculateEarliestDate(){
 		const shortenedNumMonths = shortenedNumMonthsProp[this.state.serviceType];
 		const selectedDate = this.state.startDate;
-		// const date = new Date(selectedDate[2],selectedDate[1]-1,selectedDate[0]);
-		const date = new Date(selectedDate.getTime());
+		// const date = moment.utc(new Date(selectedDate[2],selectedDate[1]-1,selectedDate[0]);
+		const date = moment.utc(new Date(selectedDate.valueOf()));
 		
 		var newDate = date;
 		
-		newDate.setMonth(newDate.getMonth() + shortenedNumMonths);
-		newDate.setDate(newDate.getDate()-1);
+		newDate.month(newDate.month() + shortenedNumMonths);
+		newDate.date(newDate.date()-1);
 
 		return newDate;
 	}
@@ -288,48 +291,54 @@ class SignupModal extends React.Component{
 	calculateUpdatedDaysLeft(){ // numShortenedDays
 		
 		const selectedDate = this.state.startDate;
-		// const date = new Date(selectedDate[2],selectedDate[1]-1,selectedDate[0]);
+		// const date = moment.utc(new Date(selectedDate[2],selectedDate[1]-1,selectedDate[0]);
 		console.log(selectedDate);
-		const date = new Date(selectedDate.getTime());
+		const date = moment.utc(new Date(selectedDate.valueOf()));
 		
 		var subtractStartDay;
 		switch (this.state.serviceType){
 			case 0:
 			case 3:
 			case 4:
-				subtractStartDay = new Date(2017, 0, 2);
+				subtractStartDay = moment.utc(new Date(2017, 0, 2));
 				break;
 			case 1:
 			case 5:
 			case 6:
-				subtractStartDay = new Date(2016, 10, 2);
+				subtractStartDay = moment.utc(new Date(2016, 10, 2));
 				break;
 			case 2:
-				subtractStartDay = new Date(2016, 9, 2);
+				subtractStartDay = moment.utc(new Date(2016, 9, 2));
 				break;
 			case 7:
-				subtractStartDay = new Date(2016, 9, 2);
+				subtractStartDay = moment.utc(new Date(2016, 9, 2));
 				break;
 			default:
-				subtractStartDay = new Date(2017, 0, 2);
+				subtractStartDay = moment.utc(new Date(2017, 0, 2));
 				break;
 		}
 
 
-		var diffDays = Math.round(Math.abs((subtractStartDay.getTime() - date.getTime())/(oneDay)));
+		var diffDays = Math.round(Math.abs((subtractStartDay.valueOf() - date.valueOf())/(oneDay)));
 
 		var daysToSubtract = Math.ceil(diffDays/14);
 		
 		const originalDate = this.calculateOriginalDaysLeft();
-		var newDate = new Date(originalDate.getFullYear(), originalDate.getMonth(), originalDate.getDate()-daysToSubtract);
+		var newDate = moment.utc(new Date(originalDate.year(), originalDate.month(), originalDate.date()-daysToSubtract));
 		
 		var earliestDate = this.calculateEarliestDate();
+		// if(earliestDate.hour() != 0){
+		// 	earliestDate.hour(24,0,0,0);
+		// }
 		if(newDate < earliestDate){
 			
-			daysToSubtract = Math.round(Math.abs((earliestDate.getTime() - originalDate.getTime())/(oneDay)));
+			daysToSubtract = Math.round(Math.abs((earliestDate.valueOf() - originalDate.valueOf())/(oneDay)));
 			
 			return [earliestDate, daysToSubtract];
 		}
+		// if(newDate.hour() != 0){
+		// 	newDate.hour(24,0,0,0);
+		// }
 		
 		return [newDate, daysToSubtract];
 	}
@@ -342,12 +351,13 @@ class SignupModal extends React.Component{
 		console.log(this.state.isSigningUp);
 		try{
 			console.log(this.state.startDate);
-			const startDate = new Date(this.props.selectedDate);
+			const startDate = moment.utc(new Date(this.props.selectedDate));
 			console.log(startDate);
 			const endDate = this.calculateUpdatedDaysLeft()[0];
 			console.log(endDate);
 			let getUsers = await
-			signupAxios.post('https://goondae-server.run.goorm.io/users', {
+			// signupAxios.post('http://localhost:5000/users', {
+			signupAxios.post('http://localhost:5000/users', {
 				name: this.state.name,
 				email: this.state.email,
 				password: this.state.password,
@@ -373,7 +383,7 @@ class SignupModal extends React.Component{
 	// }
 	render() {
 		console.log("####Signup" + this.props.selectedDate);
-		const startDate = new Date(this.state.startDate);
+		const startDate = moment.utc(new Date(this.state.startDate));
 		console.log(startDate);
 		const endDate = this.calculateUpdatedDaysLeft()[0];
 		console.log(endDate);
@@ -397,6 +407,7 @@ class SignupModal extends React.Component{
 						closeSignupModal={this.closeSignupModal}
 						selectedDate={this.props.selectedDate}
 						selectedType={this.state.serviceType}
+						errorStatusCode = {this.state.errorStatusCode}
 					/>					
 				</Modal>
 			</div>

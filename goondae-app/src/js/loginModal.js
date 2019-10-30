@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import Modal from 'react-modal';
 import axios from 'axios';
 import '../css/modal-style.css';
@@ -45,7 +44,7 @@ class LoginBox extends React.Component{
 
 	keyPressed = (event) => {
 		// console.log(event);
-		if(event.key == "Enter"){
+		if(event.key === "Enter"){
 			this.props.handleSubmit();
 		}
 	}
@@ -200,7 +199,7 @@ class LoginModal extends React.Component{
 		console.log(this.state.isLoggingIn);
 		try{
 			let getUsers = await
-			loginAxios.post('https://goondae-server.run.goorm.io/users/login', {
+			loginAxios.post('http://localhost:5000/users/login', {
 				email: this.state.email,
 				password: this.state.password
 			});

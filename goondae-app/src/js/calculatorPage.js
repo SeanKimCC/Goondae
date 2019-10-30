@@ -88,7 +88,7 @@ class CalculatorPage extends React.Component{
 		const token = localStorage.getItem('token');
 		try{
 			let getLogoutUser = await
-			logoutAxios.post('https://goondae-server.run.goorm.io/users/logout', {
+			logoutAxios.post('http://localhost:5000/users/logout', {
 				token: token
 			});
 			localStorage.removeItem('token');

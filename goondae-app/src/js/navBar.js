@@ -1,5 +1,7 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import '../css/menu-side-bar.css';
 
 class MenuButton extends React.Component{
 	
@@ -19,9 +21,6 @@ class MenuButton extends React.Component{
 	
 }
 
-class MenuBar extends React.Component{
-
-}
 
 class DaysWolgeupSwitcher extends React.Component{
 	

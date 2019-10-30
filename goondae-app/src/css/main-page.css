@@ -2,7 +2,7 @@
 	display: block;
 	height: calc(50% - 25px);
 	margin-top: 0px;
-	width: calc(100% - 10px);
+	width: calc(100% - 20px);
 	margin-bottom: 25px;
 }
 
@@ -83,4 +83,5 @@
 	display:inline-block;
 	height: calc(65% - 45px);
 	width: 100%;
+	overflow: auto;
 }

@@ -102,7 +102,7 @@ class MainPage extends React.Component{
 		
 		
 		
-		var currentDate = new Date(startDate.getTime());
+		var currentDate = new Date(startDate.valueOf());
 		
 		const perRankMonthlyPay2017 = perRankMonthlyPay2017Prop;
 		const perRankMonthlyPay2018 = perRankMonthlyPay2018Prop;
@@ -117,16 +117,16 @@ class MainPage extends React.Component{
 		const firstDayOfFirstMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
 		const firstDayOfSecondMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
 		
-		const daysInFirstMonth = Math.ceil(Math.abs(firstDayOfSecondMonth.getTime() - firstDayOfFirstMonth.getTime())/oneDay);
-		const numDaysFirstMonth = Math.ceil(Math.abs(currentDate.getTime() - firstDayOfSecondMonth.getTime())/oneDay);
+		const daysInFirstMonth = Math.ceil(Math.abs(firstDayOfSecondMonth.valueOf() - firstDayOfFirstMonth.valueOf())/oneDay);
+		const numDaysFirstMonth = Math.ceil(Math.abs(currentDate.valueOf() - firstDayOfSecondMonth.valueOf())/oneDay);
 		const ratioFirstMonth = numDaysFirstMonth / daysInFirstMonth;
 		
 		const firstDayOfLastMonth = new Date(endDate.getFullYear(), endDate.getMonth(), 1);
 		const firstDayOfMonthAfterLastMonth = new Date(endDate.getFullYear(), endDate.getMonth() + 1, 1);
 		
-		const daysInLastMonth = Math.ceil(Math.abs(firstDayOfMonthAfterLastMonth.getTime() - firstDayOfLastMonth.getTime())/oneDay);
+		const daysInLastMonth = Math.ceil(Math.abs(firstDayOfMonthAfterLastMonth.valueOf() - firstDayOfLastMonth.valueOf())/oneDay);
 		
-		const numDaysLastMonth = Math.ceil(Math.abs(endDate.getTime() - firstDayOfLastMonth.getTime())/oneDay) + 1;
+		const numDaysLastMonth = Math.ceil(Math.abs(endDate.valueOf() - firstDayOfLastMonth.valueOf())/oneDay) + 1;
 		const ratioLastMonth = numDaysLastMonth / daysInLastMonth;
 		
 		
@@ -292,37 +292,34 @@ class MainPage extends React.Component{
 		//적금?
 		
 		
-		const startDate = new Date(this.state.user.startDate);
-		const endDate = new Date(this.state.user.endDate);
-		const today = new Date();
-		startDate.setHours(0);
-		startDate.setMinutes(0);
-		startDate.setSeconds(0);
-		startDate.setMilliseconds(0);
+		const startDate = moment.utc(new Date(this.state.user.startDate));
+		const endDate = moment.utc(new Date(this.state.user.endDate));
+		const today = moment.utc(new Date());
+
+
+		// startDate.setHours(0);
+		// startDate.setMinutes(0);
+		// startDate.setSeconds(0);
+		// startDate.setMilliseconds(0);
 		
-		endDate.setHours(0);
-		endDate.setMinutes(0);
-		endDate.setSeconds(0);
-		endDate.setMilliseconds(0);
+		// endDate.setHours(0);
+		// endDate.setMinutes(0);
+		// endDate.setSeconds(0);
+		// endDate.setMilliseconds(0);
 		
-		today.setHours(0);
-		today.setMinutes(0);
-		today.setSeconds(0);
-		today.setMilliseconds(0);
+		// today.setHours(0);
+		// today.setMinutes(0);
+		// today.setSeconds(0);
+		// today.setMilliseconds(0);
 		
 		// To calculate the time difference of two dates 
-		const totalTime = endDate.getTime() - startDate.getTime(); 
-		const leftoverTime = endDate.getTime() - today;
+		const totalTime = endDate.valueOf() - startDate.valueOf(); 
+		const daysFinished = today.diff(startDate, 'days');
 
 		// To calculate the no. of days between two dates 
-		const totalDays = totalTime / oneDay;
+		const totalDays = endDate.diff(startDate, 'days');
+		const daysLeft = totalDays - daysFinished;
 		
-		var daysLeft = leftoverTime / oneDay;
-		if (daysLeft < 0) {
-			daysLeft = 0;
-		}
-		
-		const daysFinished = totalDays - daysLeft; 
 		
 		return [totalDays, daysLeft, daysFinished];
 	}
@@ -362,8 +359,8 @@ class MainPage extends React.Component{
 		this._isMounted = true;
 		const token = localStorage.getItem('token');
 		if(token){
-			let vac = await userDataAxios.get('https://goondae-server.run.goorm.io/vacationDates/'+token); //req.params.token
-			let user = await userDataAxios.get('https://goondae-server.run.goorm.io/users/me/'+token); //req.params.token
+			let vac = await userDataAxios.get('http://localhost:5000/vacationDates/'+token); //req.params.token
+			let user = await userDataAxios.get('http://localhost:5000/users/me/'+token); //req.params.token
 			if(this._isMounted){
 				this.setState({
 					vac: vac,
@@ -444,15 +441,18 @@ class MainPage extends React.Component{
 		strDaysLeft = strDaysFinished = strTotalDays = strPromotionDay = strPayDay = strAmountEarned = strTotalAmount = strAmountLeft = "?";
 		
 		if(this.state.user){
-			startDateString = moment(this.state.user.startDate).format('YYYY년 MM월 DD일');
-			endDateString = moment(this.state.user.endDate).format('YYYY년 MM월 DD일');
+			console.log(datesArr);
+			startDateString = moment.utc(this.state.user.startDate).format('YYYY년 MM월 DD일');
+			endDateString = moment.utc(this.state.user.endDate).format('YYYY년 MM월 DD일');
 			datesArr = this.calculateDates();
 			salaryArr = this.calculateSalary();
 			
 			totalDays = datesArr[0];
-			daysLeft = datesArr[1];
+			daysLeft =datesArr[1];
 			daysFinished = datesArr[2];
 			
+
+
 			strTotalDays = totalDays.toString();
 			strDaysLeft = daysLeft.toString();
 			strDaysFinished = daysFinished.toString();

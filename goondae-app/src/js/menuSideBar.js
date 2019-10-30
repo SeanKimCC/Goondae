@@ -26,6 +26,7 @@ class MenuBar extends React.Component{
 					<div className={menuBarItemClass}><Link className="menu-bar-link" to="/futureMe/" onClick={this.props.updatePageNum} value="futureMe">미래의 나에게<span className={arrowIconClass}></span></Link></div>					
 					<div className={menuBarItemClass}><Link className="menu-bar-link" to="/calculator/" onClick={this.props.updatePageNum} value="calculator">복무/월급 계산기<span className={arrowIconClass}></span></Link> </div>
 					<div className={menuBarItemClass}><Link className="menu-bar-link" to="/openBoard/" onClick={this.props.updatePageNum} value="openBoard">자유게시판 <span className={arrowIconClass}></span></Link> </div>
+					<div className={menuBarItemClass}><Link className="menu-bar-link" to="/celebrity/" onClick={this.props.updatePageNum} value="celebrity">유명인 전역일자<span className={arrowIconClass}></span></Link> </div>
 				</div>
 				<div className={menuOverlayScreenClass} onClick={this.props.toggleMenuBar}></div>
 			</div>

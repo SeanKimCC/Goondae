@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import Select from 'react-select';
 import '../css/index.css';
 import '../css/font-addition.css';
@@ -26,9 +25,9 @@ class MealPlanPage extends React.Component{
 		setDate.setDate(parseInt(date.substring(3,5)));
 		const dayOfDate = setDate.getDay();
 		
-		if(dayOfDate == 0){ // #FFC0C0 #FFE5E5
+		if(dayOfDate === 0){ // #FFC0C0 #FFE5E5
 			return "sunday-meal-row";
-		}else if(dayOfDate == 6){ // #DADAFF
+		}else if(dayOfDate === 6){ // #DADAFF
 			return "saturday-meal-row";
 		} else { // #ECECEC
 			return "weekday-meal-row";
@@ -156,11 +155,6 @@ class MealPlanPage extends React.Component{
 		const nextMonthMealData = currentUnitMealData;
 		
 		
-		const dateCell = [];
-		const breakfastCell = [];
-		const lunchCell = [];
-		const dinnerCell = [];
-		const dessertCell = [];
 		const mealRows = [];
 		var dateClass = "meal-cell date-meal-cell";
 		var breakfastClass = "meal-cell breakfast-meal-cell";
@@ -173,11 +167,11 @@ class MealPlanPage extends React.Component{
 			var lastDayOfNextMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
 			lastDayOfNextMonth.setDate(lastDayOfNextMonth.getDate() - 1);
 			console.log(today.getDate());
-			if(today.getDate() == 1) {
+			if(today.getDate() === 1) {
 				mealRows.push(this.renderDayMealColumn(lastMonthMealData[-1], -1, true));
 				mealRows.push(this.renderDayMealColumn(currentUnitMealData[0], 0, true));
 				mealRows.push(this.renderDayMealColumn(currentUnitMealData[1], 1, true));
-			} else if(today.getDate() == lastDayOfNextMonth.getDate()){
+			} else if(today.getDate() === lastDayOfNextMonth.getDate()){
 				mealRows.push(this.renderDayMealColumn(currentUnitMealData[today.getDate()-2], -2, true));
 				mealRows.push(this.renderDayMealColumn(currentUnitMealData[today.getDate()-1], -1, true));
 				mealRows.push(this.renderDayMealColumn(nextMonthMealData[0], 0, true));
@@ -213,7 +207,6 @@ class MealPlanPage extends React.Component{
 			mealSelectClass += "full-length";
 		}
 		
-		const cellClass = "meal-type-column";
 		
 		
 		

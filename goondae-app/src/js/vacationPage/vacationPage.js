@@ -125,8 +125,8 @@ class VacationPage extends React.Component{
 		this._isMounted = true;
 		const token = localStorage.getItem('token');
 		if(token){
-			let vac = await userDataAxios.get('https://goondae-server.run.goorm.io/vacationDates/'+token); //req.params.token
-			let user = await userDataAxios.get('https://goondae-server.run.goorm.io/users/me/'+token); //req.params.token
+			let vac = await userDataAxios.get('http://localhost:5000/vacationDates/'+token); //req.params.token
+			let user = await userDataAxios.get('http://localhost:5000/users/me/'+token); //req.params.token
 			if(this._isMounted){
 				this.setState({
 					vac: vac,
@@ -220,9 +220,11 @@ class VacationPage extends React.Component{
 	
 	render(){
 		const vacationPageContent = []; //array of month calendars
+		console.log(this.state.vacArray);
 		if(this.state.user && this.state.vacArray){
 			const userData = this.state.user;
 			const vacArray = this.state.vacArray;
+			console.log(this.state.vacArray);
 			var vacDateSet = new Set();
 			for(var i = 0; i < vacArray.length; i++){
 				var currDate = moment(vacArray[i].startDate); 
@@ -246,7 +248,7 @@ class VacationPage extends React.Component{
 			var vacArrCount = 0;
 			while(count < 30 &&( moment(newTime).year() < endYear || (moment(newTime).month() <= endMonth && moment(newTime).year() === endYear))){
 				const newMonth = moment(newTime).month();
-				const newYear = moment(newTime).year()
+				const newYear = moment(newTime).year();
 				const momentStartDate = moment(vacArray[vacArrCount].startDate);
 				const momentEndDate = moment(vacArray[vacArrCount].endDate);
 				// console.log(newMonth, moment(vacArray[vacArrCount].startDate).month());

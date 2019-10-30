@@ -3,6 +3,7 @@ const User = require('../models/user');
 const router = new express.Router();
 const bcrypt = require('bcryptjs');
 const auth = require('../middleware/auth');
+const VacationDate = require('../models/vacation-date');
 const multer = require('multer');
 const cookieParser = require('cookie-parser');
 router.use(cookieParser());
@@ -23,7 +24,8 @@ const avatar = multer({
 
 //ALLOWING ACCESS ORIGIN
 router.all('/*', function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "https://goondae-alfpy.run.goorm.io");
+  // res.header("Access-Control-Allow-Origin", "https://goondae-alfpy.run.goorm.io");
+  res.header("Access-Control-Allow-Origin", "*");
   // res.header("Access-Control-Allow-Headers", "X-Requested-With");
   res.header("Access-Control-Allow-Methods", "POST, GET, PATCH, DELETE");
   res.header("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
@@ -35,6 +37,7 @@ router.all('/*', function(req, res, next) {
 // });
 
 router.post('/users', async (req, res) => {
+	// console.log(req.body);
 	
 	const user = new User(req.body);
 	
@@ -176,7 +179,7 @@ router.delete('/users/me', auth, async(req,res)=>{
 		// if(!user){
 		// 	return res.status(404).send();
 		// }
-		
+		await VacationDate.deleteMany({owner: req.user._id});
 		await req.user.remove(); //equivalent
 		res.send(req.user);
 		
