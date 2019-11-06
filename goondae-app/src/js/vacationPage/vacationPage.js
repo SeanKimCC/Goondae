@@ -249,8 +249,8 @@ class VacationPage extends React.Component{
 			while(count < 30 &&( moment(newTime).year() < endYear || (moment(newTime).month() <= endMonth && moment(newTime).year() === endYear))){
 				const newMonth = moment(newTime).month();
 				const newYear = moment(newTime).year();
-				const momentStartDate = moment(vacArray[vacArrCount].startDate);
-				const momentEndDate = moment(vacArray[vacArrCount].endDate);
+				// const momentStartDate = moment(vacArray[vacArrCount].startDate);
+				// const momentEndDate = moment(vacArray[vacArrCount].endDate);
 				// console.log(newMonth, moment(vacArray[vacArrCount].startDate).month());
 				vacationPageContent.push(this.renderSingleMonthlyCalendar(newYear, newMonth+1, moment(newTime).day(), vacDateSet));
 				
