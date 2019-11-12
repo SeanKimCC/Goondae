@@ -179,7 +179,6 @@ router.delete('/users/me', auth, async(req,res)=>{
 		// if(!user){
 		// 	return res.status(404).send();
 		// }
-		await VacationDate.deleteMany({owner: req.user._id});
 		await req.user.remove(); //equivalent
 		res.send(req.user);
 		

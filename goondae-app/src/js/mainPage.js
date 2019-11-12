@@ -427,6 +427,7 @@ class MainPage extends React.Component{
 	
 	
 	render(){
+		var isDischarged = false;
 		var vacCalContainer = <div></div>;
 		var vacCalContainer2 = <div></div>;
 		var datesArr = [];
@@ -450,6 +451,12 @@ class MainPage extends React.Component{
 			totalDays = datesArr[0];
 			daysLeft =datesArr[1];
 			daysFinished = datesArr[2];
+			if(daysLeft < 0) {
+				daysLeft = 0;
+			}
+			if(daysFinished > totalDays){
+				daysFinished = totalDays;
+			}
 			
 
 
@@ -490,6 +497,10 @@ class MainPage extends React.Component{
 			
 			percentageDone = Math.round(datesArr[2] / datesArr[0] * 10000); //round to nearest hundredth
 			percentageDone /= 100;
+			if(percentageDone >= 100){
+				percentageDone = 100;
+				isDischarged = true;
+			}
 			
 			if(percentageDone < 25){
 				variantName = "danger";

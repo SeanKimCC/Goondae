@@ -7,4 +7,6 @@ Things to fix :
 		
 	- Design of main page
 	
+
+	- When a user is deleted, all vacation dates associtated with it should be deleted
 	

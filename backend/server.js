@@ -11,8 +11,8 @@ const app = express();
 const router = express.Router();
 
 // this is our MongoDB database
-// const dbRoute = "mongodb://okus9058:153486z@ds221435.mlab.com:21435/goondae";
-const dbRoute = "mongodb+srv://okus9058:1DqgQg5Or9mZbyaC@goondae-okhw9.gcp.mongodb.net/test?retryWrites=true&w=majority";
+const dbRoute = "mongodb://okus9058:153486z@ds221435.mlab.com:21435/goondae";
+// const dbRoute = "mongodb+srv://okus9058:1DqgQg5Or9mZbyaC@goondae-okhw9.gcp.mongodb.net/test?retryWrites=true&w=majority";
 console.log("Server.js Running!");
 // connects our back end code with the database
 mongoose.connect(

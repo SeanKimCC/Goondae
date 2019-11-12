@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
 
-// mongoose.connect('mongodb://okus9058:153486z@ds221435.mlab.com:21435/goondae', {
-mongoose.connect('mongodb+srv://okus9058:1DqgQg5Or9mZbyaC@goondae-okhw9.gcp.mongodb.net/test?retryWrites=true&w=majority', {
+mongoose.connect('mongodb://okus9058:153486z@ds221435.mlab.com:21435/goondae', {
+// mongoose.connect('mongodb+srv://okus9058:1DqgQg5Or9mZbyaC@goondae-okhw9.gcp.mongodb.net/test?retryWrites=true&w=majority', {
 	useNewUrlParser: true,
 	useCreateIndex: true,
 	useFindAndModify: false
