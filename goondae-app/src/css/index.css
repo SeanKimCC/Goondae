@@ -18,7 +18,7 @@ html, body{
 
 .loading-screen{
 	position:absolute;
-	height: 100%;
+	height: calc(100% - 50px);
 	width: 100%;
 	opacity: 0.6;
 	background-color: #aaa;

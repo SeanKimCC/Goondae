@@ -60,13 +60,10 @@ class VacationSwitcher extends React.Component {
 				<span className="goonbokmu-title-text">
 					{this.props.pageTitleText}
 				</span>
-				<Link className="compensation-link compensation-link-text" to={this.props.vacSwitchLink} onClick={this.props.updatePageNum} value="vacation-overview">
+				<Link className="compensation-link" to={this.props.vacSwitchLink} onClick={this.props.updatePageNum} value="vacation-overview">
 					<span> {this.props.btnText} </span>
 					<span className="compensation-arrow-icon fa fa-arrow-right"></span>
 				</Link>
-				<a className="compensation-link compensation-link-icon" onClick={this.props.onCalcSwitcherClick}>
-					<span className={switcherClass}></span>
-				</a>
 			</div>
 			
 		);

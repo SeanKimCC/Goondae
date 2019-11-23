@@ -63,13 +63,14 @@ const userSchema = new mongoose.Schema({
 		type: Buffer
 	},
 	startDate: {
-		type: Date
-		// required: true
+		type: Date,
+		required: true
 		
 		
 	},
 	endDate:{
 		type: Date,
+		required: true
 	},
 	serviceType:{
 		type: Number,

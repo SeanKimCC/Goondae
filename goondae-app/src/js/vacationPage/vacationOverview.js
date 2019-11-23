@@ -7,11 +7,15 @@ import CalendarInput from '../../js/calendarInput.js';
 import LoadingScreen from '../loading.js';
 import LockedPage from '../lockedPage.js';
 
+
 import axios from 'axios';
 import { DateRange } from 'react-date-range';
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import Modal from 'react-modal';
-import moment from 'moment'
+import moment from 'moment';
 
+axios.defaults.baseURL = '';
 const saveButtonAxios = axios.create();
 const userDataAxios = axios.create(); 
 moment.locale('kr');
@@ -20,7 +24,7 @@ class SaveButton extends React.Component{
 		const token = localStorage.getItem('token');
 		try{
 			let user = await
-			userDataAxios.patch('http://localhost:5000/users/me', {
+			userDataAxios.patch('/users/me', {
 				vacation: this.props.vacations
 			});
 			//https://www.npmjs.com/package/react-date-range
@@ -32,7 +36,7 @@ class SaveButton extends React.Component{
 		const token = localStorage.getItem('token');
 		try{
 			let getLogoutUser = await
-			userDataAxios.patch('http://localhost:5000/users/me', {
+			userDataAxios.patch('/users/me', {
 				token: token,
 				mealUnit: this.state.mealUnit
 			});
@@ -69,7 +73,7 @@ class DateRangeSelector extends React.Component{
 		// console.log(this.state.startDate, this.state.endDate);
 		try{
 			let user = await
-			userDataAxios.post('http://localhost:5000/vacationDate', {
+			userDataAxios.post('/api/vacationDate', {
 				startDate: this.state.startDate,
 				endDate: this.state.endDate,
 				token: token
@@ -88,16 +92,35 @@ class DateRangeSelector extends React.Component{
 			console.log(e);
 		}
 	}
+	submit = () => {
+	    confirmAlert({
+	      title: '휴가일자를 모두 지우시겠습니까?',
+	      buttons: [
+	        {
+	          label: 'Yes',
+	          onClick: () => this.props.deleteAllVacs()
+	        },
+	        {
+	          label: 'No',
+	        }
+	      ]
+	    });
+	  };
+
 	render(){
+		//<button onClick={this.props.getUserData}>here</button>
+		//<button onClick={this.props.deleteAllVacs}>delete all</button>
 		return(<div className="date-range-selector">
 				<DateRange
                     onInit={this.handleSelect}
                     onChange={this.handleSelect}
 					lang="ko"
                 />
-				<button onClick={this.props.getUserData}>here</button>
-				<button onClick={this.props.deleteAllVacs}>delete all</button>
-				<button className="add-vac-btn" onClick={this.addVacation}>저장</button>
+                <div className="date-btn-box">
+               		<button className="date-btn add-vac-btn" onClick={this.addVacation}>저장</button>
+	                <button className="date-btn delete-all-vac-btn" onClick={this.submit}>모두 삭제</button>					
+				</div>
+				
 			</div>)
 	}
 }
@@ -157,15 +180,17 @@ class VacationDateRow extends React.Component{
 		var text = "";
 		var vacId = null;
 		var delBtn = <span></span>;
+
 		if(this.props.vac){
 			// console.log(this.props.vac);
 			text = this.dateToKorean(this.props.vac[0], this.props.vac[1]);
 			vacId = this.props.vac[2];
-			delBtn = <button onClick={() => this.handleOnClickDelBtn()}>delete</button>;
+			delBtn = <span className="vacation-delete-btn fa fa-times" onClick={() => this.handleOnClickDelBtn()}></span>
+			// delBtn = <button onClick={() => this.handleOnClickDelBtn()}>delete</button>;
 		}
 		
 		
-		return(<div className="vacation-date-range-row" >{text} {delBtn}</div>);
+		return(<div className="vacation-center-div"><div className="vacation-date-range-row" >{text} </div>{delBtn}</div>);
 	}
 }
 
@@ -189,11 +214,14 @@ class SingleVacationRow extends React.Component{
 		// 	vacationSlots.push(this.renderSingleSlot(i));
 		// }
 		vacationSlots.push(this.renderDateRange());
-		vacationSlots.push(<div className="vacation-add-btn" key="15"></div>);
+		// vacationSlots.push(<span className="vacation-delete-btn fa fa-times" onClick={this.props.deleteVacItem} key={this.props.key}></span>);
 		
 		// const rowStyle = {height: 'calc(100% / '+ this.props.numRows +')'};
-		return(<div className="vacation-days-row"><div className="vacation-rank-slot" > </div>
-				{vacationSlots} </div>)
+		// return(<div className="vacation-days-row"><div className="vacation-rank-slot" > </div>
+		// 		{vacationSlots} </div>)
+		return(<div className="vacation-days-row">
+					{vacationSlots} 
+				</div>)
 	}
 }
 
@@ -232,7 +260,8 @@ class OverviewTotalDaysViewer extends React.Component{
 		let vacationRows = [];
 		console.log(this.props.vacs);
 		const numRows = this.props.numMonths;
-		for(var i = 0; i < numRows; i++){
+		console.log(numRows, this.props.vacs);
+		for(var i = 0; i < this.props.vacs.length; i++){
 			
 			if(this.props.vacs){
 				vacationRows.push(this.renderSingleRow(i, numRows, this.props.vacs[i]));
@@ -249,6 +278,9 @@ class OverviewTotalDaysViewer extends React.Component{
 		
 		return(
 			<div className="vacation-total-days-viewer">
+				<div className="vacation-days-viewer-title">
+					나의 휴가일자
+				</div>
 				{vacationRows}
 			</div>
 		);
@@ -295,7 +327,7 @@ class VacationOverview extends React.Component{
 	async deleteAllVacs(){
 		const token = localStorage.getItem('token');
 		try{
-			let vac = await userDataAxios.delete('http://localhost:5000/vacationDatesAll/'+ token);
+			let vac = await userDataAxios.delete('/vacationDatesAll/'+ token);
 			// console.log(vac);
 			if(vac.status == 200){
 				this.setState({
@@ -317,7 +349,7 @@ class VacationOverview extends React.Component{
 		// console.log(token);
 		
 		try{
-			let user = await userDataAxios.get('http://localhost:5000/users/me/'+token); //req.params.token
+			let user = await userDataAxios.get('/users/me/'+token); //req.params.token
 			// console.log(localStorage.getItem('token'));
 			// console.log(user.data.startDate);
 			// return getUsers;
@@ -336,7 +368,7 @@ class VacationOverview extends React.Component{
 		// console.log(token);
 		
 		try{
-			let vac = await userDataAxios.get('http://localhost:5000/vacationDates/'+token); //req.params.token
+			let vac = await userDataAxios.get('/vacationDates/'+token); //req.params.token
 			// console.log(vac);
 			
 			this.setState({
@@ -354,7 +386,7 @@ class VacationOverview extends React.Component{
 	async deleteVacItem(id){
 		const token = localStorage.getItem('token');
 		try{
-			let vac = await userDataAxios.delete('http://localhost:5000/vacationDates/'+ token + '/' + id);
+			let vac = await userDataAxios.delete('/vacationDates/'+ token + '/' + id);
 			// TODO: i can setState here without calling getVacData
 			this.getVacData();
 			
@@ -390,8 +422,8 @@ class VacationOverview extends React.Component{
 		// console.log(this.props.isLoggedIn);
 		const token = localStorage.getItem('token');
 		if(token){
-			let vac = await userDataAxios.get('http://localhost:5000/vacationDates/'+token); //req.params.token
-			let user = await userDataAxios.get('http://localhost:5000/users/me/'+token); //req.params.token
+			let vac = await userDataAxios.get('/vacationDates/'+token); //req.params.token
+			let user = await userDataAxios.get('/users/me/'+token); //req.params.token
 			if(this._isMounted){				
 				this.setState({
 					vac: vac,
@@ -453,7 +485,9 @@ class VacationOverview extends React.Component{
 	componentWillUnmount() {
 		this._isMounted = false;
 	}	
-	
+	deleteAllConfirmAlert(){
+
+	}
 	render(){
 		// console.log(this.state.user);
 		// console.log(this.state.vac);
