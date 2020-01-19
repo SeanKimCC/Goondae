@@ -12,17 +12,17 @@ import ProgressBar from 'react-bootstrap/ProgressBar';
 import PageHeader from '../js/navBar.js';
 import ServiceTypeBtnsGroup from '../js/serviceTypeBtns.js';
 import CalendarInput from '../js/calendarInput.js';
-import ResultBox from '../js/resultBox.js';
 import LoginModal from '../js/loginModal.js';
 import SignupModal from '../js/signupModal.js';
 import LoadingScreen from '../js/loading.js';
 import MealPlanPage from '../js/mealPlanPage.js';
 import {MonthCalendar} from '../js/vacationPage/vacationPage.js';
+import * as myConstClass from '../js/utils/languageConstants.js';
 import axios from 'axios';
 import Modal from 'react-modal';
 import moment from 'moment';
 
-
+axios.defaults.baseURL = 'https://goondae-server.herokuapp.com';
 const userDataAxios = axios.create();
 
 const perRankMonthlyPay2017Prop = [163000, 176400, 195000, 216000];
@@ -333,15 +333,15 @@ class MainPage extends React.Component{
 		
 		return (
 			<div className="month-calendar main-page-calendar">
-				<div className="month-name-row">{yearNum}년 {monthNum}월</div>
+				<div className="month-name-row">{yearNum}{myConstClass.YEAR[this.props.userLanguage]} {myConstClass.MONTHOFYEAR[this.props.userLanguage][monthNum-1]}</div>
 				<div className="day-name-row">
-					<div className="day-name-calendar">일</div>
-					<div className="day-name-calendar">월</div>
-					<div className="day-name-calendar">화</div>
-					<div className="day-name-calendar">수</div>
-					<div className="day-name-calendar">목</div>
-					<div className="day-name-calendar">금</div>
-					<div className="day-name-calendar">토</div>					
+					<div className="day-name-calendar">{myConstClass.DAYSOFWEEK[this.props.userLanguage][0]}</div>
+					<div className="day-name-calendar">{myConstClass.DAYSOFWEEK[this.props.userLanguage][1]}</div>
+					<div className="day-name-calendar">{myConstClass.DAYSOFWEEK[this.props.userLanguage][2]}</div>
+					<div className="day-name-calendar">{myConstClass.DAYSOFWEEK[this.props.userLanguage][3]}</div>
+					<div className="day-name-calendar">{myConstClass.DAYSOFWEEK[this.props.userLanguage][4]}</div>
+					<div className="day-name-calendar">{myConstClass.DAYSOFWEEK[this.props.userLanguage][5]}</div>
+					<div className="day-name-calendar">{myConstClass.DAYSOFWEEK[this.props.userLanguage][6]}</div>					
 				</div>
 				<MonthCalendar
 					startDayNum={startDayNum}
@@ -359,8 +359,8 @@ class MainPage extends React.Component{
 		this._isMounted = true;
 		const token = localStorage.getItem('token');
 		if(token){
-			let vac = await userDataAxios.get('http://localhost:5000/vacationDates/'+token); //req.params.token
-			let user = await userDataAxios.get('http://localhost:5000/users/me/'+token); //req.params.token
+			let vac = await userDataAxios.get('/vacationDates/'+token); //req.params.token
+			let user = await userDataAxios.get('/users/me/'+token); //req.params.token
 			if(this._isMounted){
 				this.setState({
 					vac: vac,
@@ -383,7 +383,6 @@ class MainPage extends React.Component{
 					isLoading: true
 				});
 			}
-			console.log('started');
 			return config;
 
 			}, function (error) {
@@ -400,7 +399,6 @@ class MainPage extends React.Component{
 			// spinning hide
 			// UPDATE: Add this code to hide global loading indicator
 			// document.body.classList.remove('loading-indicator');
-			console.log('finished');
 			if(self._isMounted){
 					self.setState({
 						isLoading: false
@@ -442,9 +440,8 @@ class MainPage extends React.Component{
 		strDaysLeft = strDaysFinished = strTotalDays = strPromotionDay = strPayDay = strAmountEarned = strTotalAmount = strAmountLeft = "?";
 		
 		if(this.state.user){
-			console.log(datesArr);
-			startDateString = moment.utc(this.state.user.startDate).format('YYYY년 MM월 DD일');
-			endDateString = moment.utc(this.state.user.endDate).format('YYYY년 MM월 DD일');
+			startDateString = (this.props.userLanguage == 0) ? moment.utc(this.state.user.startDate).format('YYYY년 MM월 DD일') : moment.utc(this.state.user.startDate).format('MM-DD-YYYY');
+			endDateString = (this.props.userLanguage == 0) ? moment.utc(this.state.user.endDate).format('YYYY년 MM월 DD일') : moment.utc(this.state.user.endDate).format('MM-DD-YYYY');
 			datesArr = this.calculateDates();
 			salaryArr = this.calculateSalary();
 			
@@ -521,6 +518,10 @@ class MainPage extends React.Component{
 			newTime = moment([todayDate.getFullYear(), todayDate.getMonth() + 1, 1]);
 			vacCalContainer2 = this.renderSingleMonthlyCalendar(todayDate.getFullYear(), todayDate.getMonth() + 2, newTime.day(), new Set());
 		}
+		const currencyString = myConstClass.MANWON[this.props.userLanguage];
+		if(strAmountEarned=="0") strAmountEarned = "";
+		if(strAmountLeft=="0") strAmountLeft = "";
+		if(strTotalAmount=="0") strTotalAmount = "";
 		
 		
 		return(
@@ -541,17 +542,17 @@ class MainPage extends React.Component{
 					</div>
 					
 					<div className="dates-display-container">
-						<div className="number-display-row">전역일 : D-{strDaysLeft}</div>
-						<div className="number-display-row">진급일 : D-{}</div>
-						<div className="number-display-row">복무 일수 : {strDaysFinished}일</div>
-						<div className="number-display-row">총 일수 : {strTotalDays}일</div>
+						<div className="number-display-row">{myConstClass.DDAY[this.props.userLanguage]} : D-{strDaysLeft}</div>
+						<div className="number-display-row">{myConstClass.PROMOTIONDATEMAIN[this.props.userLanguage]} : D-{}</div>
+						<div className="number-display-row">{myConstClass.DAYSSERVEDMAIN[this.props.userLanguage]} : {strDaysFinished}{myConstClass.DAYS[this.props.userLanguage]}</div>
+						<div className="number-display-row">{myConstClass.TOTALDAYSMAIN[this.props.userLanguage]} : {strTotalDays}{myConstClass.DAYS[this.props.userLanguage]}</div>
 						
 					</div>
 					<div className="salary-display-container">
-						<div className="number-display-row">월급일 : D-{}</div>
-						<div className="number-display-row">번 액수 : {strAmountEarned}만원</div>
-						<div className="number-display-row">남은 액수 : {strAmountLeft}만원</div>
-						<div className="number-display-row">총 봉급 : {strTotalAmount}만원</div>
+						<div className="number-display-row">{myConstClass.SALARYDATE[this.props.userLanguage]} : D-{}</div>
+						<div className="number-display-row">{myConstClass.MONEYEARNEDSHORT[this.props.userLanguage]} : {strAmountEarned}{currencyString}</div>
+						<div className="number-display-row">{myConstClass.MONEYLEFTSHORT[this.props.userLanguage]} : {strAmountLeft}{currencyString}</div>
+						<div className="number-display-row">{myConstClass.TOTALPAYSHORT[this.props.userLanguage]} : {strTotalAmount}{currencyString}</div>
 					</div>
 					<div className="meal-display-container">
 						<MealPlanPage 

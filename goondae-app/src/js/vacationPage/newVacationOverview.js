@@ -7,6 +7,7 @@ import CalendarInput from '../../js/calendarInput.js';
 import axios from 'axios';
 import Modal from 'react-modal';
 
+axios.defaults.baseURL = 'https://goondae-server.herokuapp.com';
 const saveButtonAxios = axios.create();
 class SaveButton extends React.Component{
 	OnClick(){

@@ -13,27 +13,9 @@ class CalendarInput extends React.Component {
 			maxDate: maxDate,
 		};
 		
-		// this.onChange = this.onChange.bind(this);
 	}
 	
-	// onChange (date){
-	// 	this.setState({ date });
-	// }
 	
-	// onChange = date => this.setState({ date });\
-	
-// 	onChange(date){
-// 		console.log(date);
-// 		this.setState({date:date});
-// 	}
-
-	// // onClickDay = day => this.setState({day});
-	// onClickDay(date) {
-	// 	console.log(date);
-	// 	this.setState({day:date});
-	// }
-
-
 	render() {
 		return (
 			<div className="cal goondae-cal">

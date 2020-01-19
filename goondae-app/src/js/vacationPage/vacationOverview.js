@@ -7,11 +7,17 @@ import CalendarInput from '../../js/calendarInput.js';
 import LoadingScreen from '../loading.js';
 import LockedPage from '../lockedPage.js';
 
+import * as myConstClass from '../utils/languageConstants.js';
+
+
 import axios from 'axios';
 import { DateRange } from 'react-date-range';
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import Modal from 'react-modal';
-import moment from 'moment'
+import moment from 'moment';
 
+axios.defaults.baseURL = 'https://goondae-server.herokuapp.com';
 const saveButtonAxios = axios.create();
 const userDataAxios = axios.create(); 
 moment.locale('kr');
@@ -20,25 +26,25 @@ class SaveButton extends React.Component{
 		const token = localStorage.getItem('token');
 		try{
 			let user = await
-			userDataAxios.patch('http://localhost:5000/users/me', {
+			userDataAxios.patch('/users/me', {
 				vacation: this.props.vacations
 			});
 			//https://www.npmjs.com/package/react-date-range
 		}catch(e){
-			console.log(e);
+			
 		}
 	}
 	async saveMealUnitChange(){
 		const token = localStorage.getItem('token');
 		try{
 			let getLogoutUser = await
-			userDataAxios.patch('http://localhost:5000/users/me', {
+			userDataAxios.patch('/users/me', {
 				token: token,
 				mealUnit: this.state.mealUnit
 			});
 			
 		}catch(e){
-			console.log(e);
+			
 		}
 	}
 	OnClick(){
@@ -60,22 +66,22 @@ class DateRangeSelector extends React.Component{
 		this.addVacation = this.addVacation.bind(this);
 	}
 	handleSelect(date){
-        // console.log(date); // Momentjs object
+        //  // Momentjs object
 		this.setState({endDate: date.endDate,
 					  startDate: date.startDate});
     }
 	async addVacation(){
 		const token = localStorage.getItem('token');
-		// console.log(this.state.startDate, this.state.endDate);
+		// 
 		try{
 			let user = await
-			userDataAxios.post('http://localhost:5000/vacationDate', {
+			userDataAxios.post('/vacationDate', {
 				startDate: this.state.startDate,
 				endDate: this.state.endDate,
 				token: token
 			});
 			
-			// console.log(user);
+			// 
 			//TODO: react state update error
 			
 			
@@ -85,19 +91,38 @@ class DateRangeSelector extends React.Component{
 			//!!can't perform react state update on unmounted component !!!!!!
 			//https://www.npmjs.com/package/react-date-range
 		}catch(e){
-			console.log(e);
+			
 		}
 	}
+	submit = () => {
+	    confirmAlert({
+	      title: '휴가일자를 모두 지우시겠습니까?',
+	      buttons: [
+	        {
+	          label: 'Yes',
+	          onClick: () => this.props.deleteAllVacs()
+	        },
+	        {
+	          label: 'No',
+	        }
+	      ]
+	    });
+	  };
+
 	render(){
+		//<button onClick={this.props.getUserData}>here</button>
+		//<button onClick={this.props.deleteAllVacs}>delete all</button>
 		return(<div className="date-range-selector">
 				<DateRange
                     onInit={this.handleSelect}
                     onChange={this.handleSelect}
-					lang="ko"
+					lang="jp"
                 />
-				<button onClick={this.props.getUserData}>here</button>
-				<button onClick={this.props.deleteAllVacs}>delete all</button>
-				<button className="add-vac-btn" onClick={this.addVacation}>저장</button>
+                <div className="date-btn-box">
+               		<button className="date-btn add-vac-btn" onClick={this.addVacation}>저장</button>
+	                <button className="date-btn delete-all-vac-btn" onClick={this.submit}>모두 삭제</button>					
+				</div>
+				
 			</div>)
 	}
 }
@@ -135,15 +160,15 @@ class VacationDateRow extends React.Component{
 		this.state={};
 	}
 	handleSelect(range){
-        // console.log(range);
+        // 
         // An object with two keys,
         // 'startDate' and 'endDate' which are Momentjs objects.
     }
 	
 	dateToKorean(startDate, endDate){
-		const startMomentDate = moment(startDate).format('YYYY년 MM월 DD일');
-		const endMomentDate = moment(endDate).format('YYYY년 MM월 DD일');
-		// console.log(startMomentDate);
+		const startMomentDate = (this.props.userLanguage == 0) ? moment(startDate).format('YYYY년 MM월 DD일') : moment(startDate).format('MM-DD-YYYY');
+		const endMomentDate = (this.props.userLanguage == 0) ? moment(endDate).format('YYYY년 MM월 DD일') : moment(startDate).format('MM-DD-YYYY');
+		// 
 		return startMomentDate + ' ~ ' + endMomentDate;
 	}
 	
@@ -157,15 +182,17 @@ class VacationDateRow extends React.Component{
 		var text = "";
 		var vacId = null;
 		var delBtn = <span></span>;
+
 		if(this.props.vac){
-			// console.log(this.props.vac);
+			// 
 			text = this.dateToKorean(this.props.vac[0], this.props.vac[1]);
 			vacId = this.props.vac[2];
-			delBtn = <button onClick={() => this.handleOnClickDelBtn()}>delete</button>;
+			delBtn = <span className="vacation-delete-btn fa fa-times" onClick={() => this.handleOnClickDelBtn()}></span>
+			// delBtn = <button onClick={() => this.handleOnClickDelBtn()}>delete</button>;
 		}
 		
 		
-		return(<div className="vacation-date-range-row" >{text} {delBtn}</div>);
+		return(<div className="vacation-center-div"><div className="vacation-date-range-row" >{text} </div>{delBtn}</div>);
 	}
 }
 
@@ -176,7 +203,7 @@ class SingleVacationRow extends React.Component{
 				   ></SingleVacationDaySlot>);
 	}
 	renderDateRange(){
-		// console.log(this.props.vacationDate.startDate);
+		// 
 		return(<VacationDateRow
 				   count={this.props.key}
 				   vac={this.props.vacationDate}
@@ -189,11 +216,14 @@ class SingleVacationRow extends React.Component{
 		// 	vacationSlots.push(this.renderSingleSlot(i));
 		// }
 		vacationSlots.push(this.renderDateRange());
-		vacationSlots.push(<div className="vacation-add-btn" key="15"></div>);
+		// vacationSlots.push(<span className="vacation-delete-btn fa fa-times" onClick={this.props.deleteVacItem} key={this.props.key}></span>);
 		
 		// const rowStyle = {height: 'calc(100% / '+ this.props.numRows +')'};
-		return(<div className="vacation-days-row"><div className="vacation-rank-slot" > </div>
-				{vacationSlots} </div>)
+		// return(<div className="vacation-days-row"><div className="vacation-rank-slot" > </div>
+		// 		{vacationSlots} </div>)
+		return(<div className="vacation-days-row">
+					{vacationSlots} 
+				</div>)
 	}
 }
 
@@ -230,9 +260,10 @@ class OverviewTotalDaysViewer extends React.Component{
 	
 	render(){
 		let vacationRows = [];
-		console.log(this.props.vacs);
+		
 		const numRows = this.props.numMonths;
-		for(var i = 0; i < numRows; i++){
+		
+		for(var i = 0; i < this.props.vacs.length; i++){
 			
 			if(this.props.vacs){
 				vacationRows.push(this.renderSingleRow(i, numRows, this.props.vacs[i]));
@@ -249,6 +280,9 @@ class OverviewTotalDaysViewer extends React.Component{
 		
 		return(
 			<div className="vacation-total-days-viewer">
+				<div className="vacation-days-viewer-title">
+					나의 휴가일자
+				</div>
 				{vacationRows}
 			</div>
 		);
@@ -275,7 +309,7 @@ class VacationOverview extends React.Component{
 			user:null,
 			vac: null,
 			vacArray: null,
-			isLoading: false
+			isLoading: true
 			
 		}
 		// this.toggleOpenCal = this.toggleOpenCal.bind(this);
@@ -295,8 +329,8 @@ class VacationOverview extends React.Component{
 	async deleteAllVacs(){
 		const token = localStorage.getItem('token');
 		try{
-			let vac = await userDataAxios.delete('http://localhost:5000/vacationDatesAll/'+ token);
-			// console.log(vac);
+			let vac = await userDataAxios.delete('/vacationDatesAll/'+ token);
+			// 
 			if(vac.status == 200){
 				this.setState({
 					vacArray: null
@@ -306,7 +340,7 @@ class VacationOverview extends React.Component{
 			
 			// this.props.closeModal();
 		}catch(e){
-			console.log(e);
+			
 		}
 	}
 	
@@ -314,12 +348,12 @@ class VacationOverview extends React.Component{
 	async getUserData(){
 		
 		const token = localStorage.getItem('token');
-		// console.log(token);
+		// 
 		
 		try{
-			let user = await userDataAxios.get('http://localhost:5000/users/me/'+token); //req.params.token
-			// console.log(localStorage.getItem('token'));
-			// console.log(user.data.startDate);
+			let user = await userDataAxios.get('/users/me/'+token); //req.params.token
+			// 
+			// 
 			// return getUsers;
 			this.setState({
 				user:user.data
@@ -327,17 +361,17 @@ class VacationOverview extends React.Component{
 			
 			// this.props.closeModal();
 		}catch(e){
-			console.log(e);
+			
 		}
 	}
 	
 	async getVacData(){
 		const token = localStorage.getItem('token');
-		// console.log(token);
+		// 
 		
 		try{
-			let vac = await userDataAxios.get('http://localhost:5000/vacationDates/'+token); //req.params.token
-			// console.log(vac);
+			let vac = await userDataAxios.get('/vacationDates/'+token); //req.params.token
+			// 
 			
 			this.setState({
 				vac: vac,
@@ -347,26 +381,26 @@ class VacationOverview extends React.Component{
 			
 			// this.props.closeModal();
 		}catch(e){
-			console.log(e);
+			
 		}
 	}
 
 	async deleteVacItem(id){
 		const token = localStorage.getItem('token');
 		try{
-			let vac = await userDataAxios.delete('http://localhost:5000/vacationDates/'+ token + '/' + id);
+			let vac = await userDataAxios.delete('/vacationDates/'+ token + '/' + id);
 			// TODO: i can setState here without calling getVacData
 			this.getVacData();
 			
 			// this.props.closeModal();
 		}catch(e){
-			console.log(e);
+			
 		}
 	}
 
 	//TODO: react state update error
 	saveVac(vacData){
-		// console.log(this.state.vac, vacData);
+		// 
 		if(this._isMounted){
 			this.setState({
 				vacArray: vacData
@@ -387,20 +421,27 @@ class VacationOverview extends React.Component{
 	
 	async componentDidMount(){
 		this._isMounted = true;
-		// console.log(this.props.isLoggedIn);
+		// 
 		const token = localStorage.getItem('token');
 		if(token){
-			let vac = await userDataAxios.get('http://localhost:5000/vacationDates/'+token); //req.params.token
-			let user = await userDataAxios.get('http://localhost:5000/users/me/'+token); //req.params.token
+			let vac = await userDataAxios.get('/vacationDates/'+token); //req.params.token
+			let user = await userDataAxios.get('/users/me/'+token); //req.params.token
 			if(this._isMounted){				
 				this.setState({
 					vac: vac,
 					vacArray: vac.data,
-					user:user.data
+					user:user.data,
+					isLoading: false
 				});
 			}
-			// console.log('hello');
+			// 
 			
+		} else {
+			if(this._isMounted){				
+				this.setState({
+					isLoading: false
+				});
+			}
 		}
 		
 		var self = this;
@@ -415,11 +456,11 @@ class VacationOverview extends React.Component{
 					isLoading: true
 				});
 			}
-			// console.log('started');
+			// 
 			return config;
 
 			}, function (error) {
-				console.log('error request');
+				
 				if(self._isMounted){
 					self.setState({
 						isLoading: false
@@ -432,7 +473,7 @@ class VacationOverview extends React.Component{
 			// spinning hide
 			// UPDATE: Add this code to hide global loading indicator
 			// document.body.classList.remove('loading-indicator');
-			// console.log('finished');
+			// 
 			if(self._isMounted){
 					self.setState({
 						isLoading: false
@@ -441,7 +482,7 @@ class VacationOverview extends React.Component{
 
 			return response;
 			}, function (error) {
-				console.log('error response');
+				
 				if(self._isMounted){
 					self.setState({
 						isLoading: false
@@ -453,10 +494,12 @@ class VacationOverview extends React.Component{
 	componentWillUnmount() {
 		this._isMounted = false;
 	}	
-	
+	deleteAllConfirmAlert(){
+
+	}
 	render(){
-		// console.log(this.state.user);
-		// console.log(this.state.vac);
+		// 
+		// 
 		for(var i = 0; i < this.state.numMonthService; i++){
 			
 		}
@@ -477,39 +520,45 @@ class VacationOverview extends React.Component{
 		sortable.sort(function(a, b) {
 			return ('' + a[0]).localeCompare(b[0]);
 		});
-		// console.log(sortable, vacArray);
-		if(this.props.isLoggedIn){
-			return(
-			
-			<div className="vacation-overview-container">
+		// 
+		if(loading){
+			return (<div className="vacation-overview-container">
 					<LoadingScreen
-						isLoading={loading} 
-					/>
-					<OverviewTotalDaysViewer
-						startMonth={this.state.startMonth}
-						numMonths={this.state.numMonthService}
-						vacs={sortable}
-						deleteVacItem={this.deleteVacItem}
-					/>
-					<DateRangeSelector
-						onSaveVac={this.onSaveVac}
-						saveVac = {this.saveVac}
-						getUserData = {this.getUserData}
-						deleteAllVacs = {this.deleteAllVacs}
-					/>
+						isLoading={true}
+					/>				
+			</div>);
+		}else {
+			if(this.props.isLoggedIn){
+				return(
 				
-				
-			</div>
-			);
-		}
-		return(
+				<div className="vacation-overview-container">
+						<OverviewTotalDaysViewer
+							startMonth={this.state.startMonth}
+							numMonths={this.state.numMonthService}
+							vacs={sortable}
+							deleteVacItem={this.deleteVacItem}
+						/>
+						<DateRangeSelector
+							onSaveVac={this.onSaveVac}
+							saveVac = {this.saveVac}
+							getUserData = {this.getUserData}
+							deleteAllVacs = {this.deleteAllVacs}
+						/>
+					
+					
+				</div>
+				);
+			} else {
+				return(
 			
-			<div className="vacation-overview-container">
-					<LockedPage openLoginModal = {this.props.openLoginModal}></LockedPage>
-				
-				
-			</div>
-		);
+					<div className="vacation-overview-container">
+							<LockedPage openLoginModal = {this.props.openLoginModal}></LockedPage>
+						
+						
+					</div>
+				);
+			}
+		}
 	}
 }
 export default VacationOverview;

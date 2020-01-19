@@ -57,24 +57,8 @@ class Index extends React.Component{
 		this.finishedLoggingIn = this.finishedLoggingIn.bind(this);
 		this.returnVacationPage = this.returnVacationPage.bind(this);
 		this.tokenPlaced = this.tokenPlaced.bind(this);
+		this.resetCalcSwitcher = this.resetCalcSwitcher.bind(this);
 		
-		// const token = localStorage.getItem('token');
-		// var defaultDate = new Date();
-		// var mealUnit = 0;
-		// // localStorage.setItem('startDate', defaultDate);
-		// if(token){
-		// 	//if there is token, get the selected date from local storage
-		// 	var userData = this.getUserData();
-		// 	console.log("this is user data:", userData);
-		// 	defaultDate = new Date(localStorage.getItem('startDate'));
-		// 	if(localStorage.getItem('mealUnit')){
-		// 		mealUnit = localStorage.getItem('mealUnit');
-		// 	}
-		// 	if(defaultDate){
-		// 		defaultDate = new Date();
-		// 	}
-		// }
-	
 		
 		this.state = {
 			selectedType : 0,
@@ -90,7 +74,8 @@ class Index extends React.Component{
 			isDaysNotWolgeup: true,
 			// mealUnit: mealUnit,
 			mealUnit: 0,
-			isLoggedIn: false
+			isLoggedIn: false,
+			userLanguage: this.returnLangCode() //0 for korean, 1 for english
 		};
 	}
 	
@@ -102,17 +87,13 @@ class Index extends React.Component{
 	}
 	
 	onClickDay(selectedDate){
-		console.log("!!!!!!!!!!!!!!!!!!! " , selectedDate);
 		this.setState({selectedDate:selectedDate});
-		console.log(this.state.selectedDate);
 	}
 	
 	typeBtnClickHandler(typeNum) {
-		console.log(typeNum);
 		this.setState({
 			selectedType : typeNum
 		});
-		console.log(this.state.selectedType);
 		
 	}
 	
@@ -121,6 +102,11 @@ class Index extends React.Component{
 		
 		this.setState({
 			isDaysNotWolgeup : !isDaysNotWolgeup
+		});
+	}
+	resetCalcSwitcher(){
+		this.setState({
+			isDaysNotWolgeup : true
 		});
 	}
 	
@@ -146,7 +132,6 @@ class Index extends React.Component{
 	
 	async getUserData(){
 		const token = localStorage.getItem('token');
-		console.log(token);
 		
 		try{
 			let getUsers = await userDataAxios.get('http://localhost:5000/users/me/'+token); //req.params.token
@@ -215,6 +200,7 @@ class Index extends React.Component{
 			// };
 
 			// getUsers();
+
 		const token = localStorage.getItem('token');
 		var defaultDate = new Date();
 		var mealUnit = 0;
@@ -280,17 +266,19 @@ class Index extends React.Component{
 						selectedDate={this.state.selectedDate}
 						selectedType={this.state.selectedType}
 						isDaysNotWolgeup={this.state.isDaysNotWolgeup}
+						userLanguage={this.state.userLanguage}
 					/> 
 	}
 	returnVacationPage(){
 		return <VacationPage key={this.state.isLoggingIn}
+					userLanguage={this.state.userLanguage}
 				   isLoggedIn = {this.state.isLoggedIn}
 				   openLoginModal = {this.openLoginModal}
 				   />
 	}
 	returnMealPlanPage(){
-		console.log(this.state.mealUnit)
 		return <MealPlanPage 
+				   userLanguage={this.state.userLanguage}
 				   handleMealUnitChange={this.handleMealUnitChange} 
 				   mealUnit={this.state.mealUnit} 
 				   saveMealUnitChange={this.saveMealUnitChange}
@@ -321,6 +309,7 @@ class Index extends React.Component{
 		// });
 		//TODO: fix the component update stuff
 		return <MainPage
+				   userLanguage={this.state.userLanguage}
 				   key ={this.state.isLoggedIn}
 				   isLoggedIn={this.state.isLoggedIn}
 				   handleMealUnitChange={this.handleMealUnitChange} 
@@ -345,6 +334,15 @@ class Index extends React.Component{
 	}
 	returnCelebDates(){
 		return <CelebrityPage/>
+	}
+	returnLangCode(){
+		const language = window.navigator.userLanguage || window.navigator.language;
+		console.log(language, language.substring(0,2));
+		if(language.substring(0,2) == "en"){
+			console.log(language.substring(0,2))
+			return 1;
+		}
+		return 0;
 	}
 	
 	returnPageCodeBasedOnURL(){
@@ -399,9 +397,9 @@ class Index extends React.Component{
 	}
 	
 	updatePageNum = (ev) => {
-		console.log(ev.target);
+		// console.log(ev.target);
 		let pathString = ev.target.getAttribute('value');
-		console.log(ev.target.getAttribute('value'));
+		// console.log(ev.target.getAttribute('value'));
 		let pageNum = -1;
 		switch (pathString){
 			case "":
@@ -410,14 +408,8 @@ class Index extends React.Component{
 			case "vacation":
 				pageNum = 1;
 				break;
-			case "futureMe":
-				pageNum = 2;
-				break;
 			case "meal":
 				pageNum = 3;
-				break;
-			case "openBoard":
-				pageNum = 4;
 				break;
 			case "calculator":
 				pageNum = 5;
@@ -453,6 +445,7 @@ class Index extends React.Component{
 						closeSignupModal={this.closeSignupModal}
 						isLoggedIn={this.state.isLoggedIn}
 						onClickLogout={this.logoutCurrentUser}
+						userLanguage={this.state.userLanguage}
 					/>
 					<LoadingScreen
 						isLoading={this.state.isLoading}
@@ -468,6 +461,7 @@ class Index extends React.Component{
 						isMenuBarOpen={this.state.isMenuBarOpen}
 						pageNum={this.state.pageNum}
 						isLoggedIn={this.state.isLoggedIn}
+						userLanguage={this.state.userLanguage}
 					/>
 
 					<SignupModal
@@ -478,6 +472,7 @@ class Index extends React.Component{
 						selectedDate={this.state.selectedDate}
 						onChangeDate={this.onClickDay}
 						selectedType={this.state.selectedType}
+						userLanguage={this.state.userLanguage}
 					/>
 					<LoginModal
 						loginModalIsOpen={this.state.loginModalIsOpen}
@@ -490,6 +485,7 @@ class Index extends React.Component{
 						contentLabel="Login Modal"
 						onChangeDay={this.onClickDay}
 						subtitle={this.subtitle}
+						userLanguage={this.state.userLanguage}
 					/>
 
 					<Route path="/calculator/" component={this.returnCalculatorPage}/>
@@ -497,9 +493,6 @@ class Index extends React.Component{
 					<Route exact path="/" component={this.returnMainPage}/>
 					<Route path="/vacation-overview" component={this.returnVacationOverview}/>
 					<Route path="/meal/" component={this.returnMealPlanPage}/>
-					<Route path="/specialty/" component={this.returnSpecialtyPage}/>
-					<Route path="/new-vacation-overview/" component={this.returnNewVacationOverview}/>
-					<Route path="/celebrity/" component={this.returnCelebDates}/>
 				</div>
 			</Router>
 		);

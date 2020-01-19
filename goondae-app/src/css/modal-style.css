@@ -19,6 +19,38 @@
 .login-field{
 	margin-bottom: 8px;
 }
+.help-wrapper-div{
+	position: relative;
+}
+.enlistment-helper-div{
+	/*position: absolute;*/
+	font-size: 12px;
+	top: 3px;
+	width: 100%;
+}
+.enlistment-date-icon{
+	right: 20px;
+}
+.enlistment-date-help-box{
+	position: absolute;
+	background-color: grey;
+	/*top: 70px;*/
+	right: -50px;
+	border: 10px solid grey;
+
+}
+.enlistment-date-help-box:after{
+	content:'';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -20px;
+    width: 0;
+    height: 0;
+    border-top: solid 20px grey;
+    border-left: solid 20px transparent;
+    border-right: solid 20px transparent;
+}
 .login-modal-input-box{
 	font-size: 18px;
 	border: 1px solid #cacbcc;
@@ -112,13 +144,13 @@
 }
 @media only screen and (min-width: 800px){
 	.login-modal-open-btn{
-		right: 240px;
+		right: 280px;
 	}
 	.login-btn-without-switcher{
 		right: 100px !important;
 	}
 	.signup-modal-open-btn, .logout-modal-open-btn{
-		right: 150px;
+		right: 190px;
 	}
 	.signup-btn-without-switcher, .logout-btn-without-switcher {
 		right: 10px !important;

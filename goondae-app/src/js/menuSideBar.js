@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import * as myConstClass from './utils/languageConstants.js';
 
 class MenuBar extends React.Component{
 	render(){
@@ -8,7 +9,9 @@ class MenuBar extends React.Component{
 		const menuOverlayScreenClass = "overlay-whole-screen " + (this.props.isMenuBarOpen ? "menu-overlay-screen" : "" );
 		const menuBarItemClass = "menu-bar-item";
 		const arrowIconClass = "menu-bar-right-arrow-icon fa fa-chevron-right";
-		const topBarContent = this.props.isLoggedIn ? <div className="menu-bar-login-signup"><div className="menu-bar-logout-btn" onClick={this.props.onClickLogout} > 로그아웃</div></div> : <div className="menu-bar-login-signup"><div className="menu-bar-login-btn menu-bar-login-signup-btn" onClick={this.props.openLoginModal} > 로그인</div><div className="menu-bar-signup-btn menu-bar-login-signup-btn" onClick={this.props.openSignupModal} >회원가입</div></div>  
+		const topBarContent = this.props.isLoggedIn ? <div className="menu-bar-login-signup"><div className="menu-bar-logout-btn" onClick={this.props.onClickLogout} > {myConstClass.LOGOUT[this.props.userLanguage]}</div></div>
+		 : <div className="menu-bar-login-signup"><div className="menu-bar-login-btn menu-bar-login-signup-btn" onClick={this.props.openLoginModal} > {myConstClass.LOGIN[this.props.userLanguage]}</div>
+		 <div className="menu-bar-signup-btn menu-bar-login-signup-btn" onClick={this.props.openSignupModal} >{myConstClass.SIGNUP[this.props.userLanguage]}</div></div>  
 		
 		if(this.props.isLoggedIn){
 			
@@ -19,14 +22,11 @@ class MenuBar extends React.Component{
 			<div className={menuScreenClass}>
 				<div className={menuBarClass}>
 					{topBarContent}
-					<div id="menuBarTitle" className={menuBarItemClass}><Link className="menu-bar-link" to="/" onClick={this.props.updatePageNum} value="">군대닷컴</Link></div>
+					<div id="menuBarTitle" className={menuBarItemClass}><Link className="menu-bar-link" to="/" onClick={this.props.updatePageNum} value="">{myConstClass.GOONDAETITLE[this.props.userLanguage]}</Link></div>
 					
-					<div className={menuBarItemClass}><Link className="menu-bar-link" to="/vacation/" onClick={this.props.updatePageNum} value="vacation">휴가표<span className={arrowIconClass}></span></Link></div>
-					<div className={menuBarItemClass}><Link className="menu-bar-link" to="/meal/" onClick={this.props.updatePageNum} value="meal">식단표<span className={arrowIconClass}></span></Link></div>
-					<div className={menuBarItemClass}><Link className="menu-bar-link" to="/futureMe/" onClick={this.props.updatePageNum} value="futureMe">미래의 나에게<span className={arrowIconClass}></span></Link></div>					
-					<div className={menuBarItemClass}><Link className="menu-bar-link" to="/calculator/" onClick={this.props.updatePageNum} value="calculator">복무/월급 계산기<span className={arrowIconClass}></span></Link> </div>
-					<div className={menuBarItemClass}><Link className="menu-bar-link" to="/openBoard/" onClick={this.props.updatePageNum} value="openBoard">자유게시판 <span className={arrowIconClass}></span></Link> </div>
-					<div className={menuBarItemClass}><Link className="menu-bar-link" to="/celebrity/" onClick={this.props.updatePageNum} value="celebrity">유명인 전역일자<span className={arrowIconClass}></span></Link> </div>
+					<div className={menuBarItemClass}><Link className="menu-bar-link" to="/vacation/" onClick={this.props.updatePageNum} value="vacation">{myConstClass.VACATIONCHART[this.props.userLanguage]}<span className={arrowIconClass}></span></Link></div>
+					<div className={menuBarItemClass}><Link className="menu-bar-link" to="/meal/" onClick={this.props.updatePageNum} value="meal">{myConstClass.MEALPLAN[this.props.userLanguage]}<span className={arrowIconClass}></span></Link></div>
+					<div className={menuBarItemClass}><Link className="menu-bar-link" to="/calculator/" onClick={this.props.updatePageNum} value="calculator">{myConstClass.CALCULATOR[this.props.userLanguage]}<span className={arrowIconClass}></span></Link> </div>
 				</div>
 				<div className={menuOverlayScreenClass} onClick={this.props.toggleMenuBar}></div>
 			</div>

@@ -16,10 +16,12 @@ import SignupModal from '../js/signupModal.js';
 import LoadingScreen from '../js/loading.js';
 import axios from 'axios';
 import Modal from 'react-modal';
+import * as myConstClass from './utils/languageConstants.js';
 
 
 
 // Modal.setAppElement('#root');
+axios.defaults.baseURL = 'https://goondae-server.herokuapp.com';
 const logoutAxios = axios.create();
 class CalculatorPage extends React.Component{
 	constructor(props){
@@ -42,7 +44,7 @@ class CalculatorPage extends React.Component{
 		var mm = today.getMonth() + 1; //January is 0!
 		var yyyy = today.getFullYear();
 		
-		this.serviceTypes = ["육군", "해군", "공군", "해병대", "의경", "해경", "소방원", "공익"];
+		this.serviceTypes = myConstClass.SERVICETYPES[this.props.userLanguage];
 		this.numMonths = [21, 23, 24, 21, 21, 23, 23, 24];
 		this.shortenedNumMonths = [18, 20, 22, 18, 18, 20, 20, 21]; 
 		this.perRankMonthlyPay2017 = [163000, 176400, 195000, 216000];
@@ -88,7 +90,7 @@ class CalculatorPage extends React.Component{
 		const token = localStorage.getItem('token');
 		try{
 			let getLogoutUser = await
-			logoutAxios.post('http://localhost:5000/users/logout', {
+			logoutAxios.post('/users/logout', {
 				token: token
 			});
 			localStorage.removeItem('token');
@@ -105,7 +107,7 @@ class CalculatorPage extends React.Component{
 		return(
 			<div>
 				<div id="contents">
-					<div className="title-box">입대일을 선택해주세요</div>
+					<div className="title-box">{myConstClass.SELECTSTARTDATE[this.props.userLanguage]}</div>
 					
 					<CalendarInput 
 						onClick = {this.props.onClickDay}
@@ -129,6 +131,7 @@ class CalculatorPage extends React.Component{
 						perRankMonthlyPay2017={this.perRankMonthlyPay2017}
 						perRankMonthlyPay2018={this.perRankMonthlyPay2018}
 						perRankMonthlyPay2020={this.perRankMonthlyPay2020}
+						userLanguage={this.props.userLanguage}
 						/>
 				</div>
 			</div>

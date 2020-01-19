@@ -1,4 +1,5 @@
 import React from 'react';
+import * as myConstClass from './utils/languageConstants.js';
 
 const payMonthsType1= [4,11,18]; // TODO:순차적으로 업데이트해야 되는데 귀찮네 
 const payMonthsType2 = [4,11,17];
@@ -508,23 +509,23 @@ class ResultBox extends React.Component{
 		
 		const dayWolgeupResult = this.props.isDaysNotWolgeup ? (
 			<div className="result-box">
-			입대일 : <span>{formattedSelectedDate}</span>
+			{myConstClass.ENLISTMENTDATE[this.props.userLanguage]} : <span>{formattedSelectedDate}</span>
 			<br/>
-			기존 전역일 : <span>{formattedOriginalDate}</span>
+			{myConstClass.ORIGINALDISCHARGEDATE[this.props.userLanguage]} : <span>{formattedOriginalDate}</span>
 			<br/>
-			단축 후 전역일 : <span>{formattedUpdatedDate}</span>
+			{myConstClass.DISCHARGEDATE[this.props.userLanguage]} : <span>{formattedUpdatedDate}</span>
 			<br/>
-			단축일수 : <span>{updatedDaysSubtracted}일</span>
+			{myConstClass.DAYSSHORTENED[this.props.userLanguage]} : <span>{updatedDaysSubtracted}일</span>
 			</div>
 		) : (
 			<div className="result-box">
-			입대일 : <span>{formattedSelectedDate}</span>	
+			{myConstClass.ENLISTMENTDATE[this.props.userLanguage]} : <span>{formattedSelectedDate}</span>	
 			<br/>
-			입대 후 번 금액 : <span>{currentAmount}</span>
+			{myConstClass.MONEYEARNED[this.props.userLanguage]} : <span>{currentAmount}</span>
 			<br/>
-			지금부터 전역까지 벌 금액 : <span>{amountLeftToEarn}</span>
+			{myConstClass.MONEYLEFT[this.props.userLanguage]} : <span>{amountLeftToEarn}</span>
 			<br/>
-			입대부터 전역까지 벌 총 금액 : <span>{totalSalary}</span>
+			{myConstClass.TOTALPAY[this.props.userLanguage]} : <span>{totalSalary}</span>
 			<br/>
 			</div>
 		);

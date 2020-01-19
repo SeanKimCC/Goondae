@@ -1,0 +1,1 @@
+export const SERVERADDRESS = "https://goondae-server.herokuapp.com";

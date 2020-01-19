@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import '../css/menu-side-bar.css';
+import * as myConstClass from './utils/languageConstants.js';
 
 class MenuButton extends React.Component{
 	
@@ -89,7 +90,6 @@ class PageHeader extends React.Component{
 		const pageString = window.location.pathname;
 		let resultString = String(pageString.match(/^\/[a-z?-A-Z]+/g));
 		resultString = resultString.substring(1,);
-		console.log(resultString);
 		switch (resultString){
 			case "":
 				return 0;
@@ -99,15 +99,9 @@ class PageHeader extends React.Component{
 				break;
 			case "vacation-overview":
 				return 6;
-				break;	
-			case "futureMe":
-				return 2;
 				break;
 			case "meal":
 				return 3;
-				break;
-			case "openBoard":
-				return 4;
 				break;
 			case "calculator":
 				return 5;
@@ -121,36 +115,29 @@ class PageHeader extends React.Component{
 		const pageString = window.location.pathname;
 		let resultString = String(pageString.match(/^\/[a-z?-A-Z]+/g));
 		resultString = resultString.substring(1,);
-		console.log(resultString);
 		switch (resultString){
 			case "":
-				return "군대닷컴";
+				return myConstClass.GOONDAETITLE[this.props.userLanguage];
 				break;
 			case "vacation":
-				return "휴가 계획표";
+				return myConstClass.VACATIONCHART[this.props.userLanguage];
 				break;
 			case "vacation-overview":
-				return "휴가 수정";
-				break;	
-			case "futureMe":
-				return "미래의 나에게";
+				return myConstClass.VACATIONEDIT[this.props.userLanguage];
 				break;
 			case "meal":
-				return "식단표";
-				break;
-			case "openBoard":
-				return "자유게시판";
+				return myConstClass.MEALPLAN[this.props.userLanguage];
 				break;
 			case "calculator":
-				return "계산기";
+				return myConstClass.CALCULATOR[this.props.userLanguage];
 				break;
 			default:
-				return "군대닷컴";
+				return myConstClass.GOONDAETITLE[this.props.userLanguage];
 				break;
 		}
 	}
 	onBackButtonEvent(event){
-		console.log(event);
+		// console.log(event);
 	}
 	componentDidMount(){
 		const self = this;
@@ -158,31 +145,24 @@ class PageHeader extends React.Component{
 			const pageString = window.location.pathname;
 			let resultString = String(pageString.match(/^\/[a-z?-A-Z]+/g));
 			resultString = resultString.substring(1,);
-			console.log(resultString);
 			switch (resultString){
 				case "":
-					resultString = "군대닷컴";
+					return myConstClass.GOONDAETITLE[this.props.userLanguage];
 					break;
 				case "vacation":
-					resultString = "휴가 계획표";
+					return myConstClass.VACATIONCHART[this.props.userLanguage];
 					break;
 				case "vacation-overview":
-					resultString = "휴가 수정";
-					break;	
-				case "futureMe":
-					resultString = "미래의 나에게";
+					return myConstClass.VACATIONEDIT[this.props.userLanguage];
 					break;
 				case "meal":
-					resultString = "식단표";
-					break;
-				case "openBoard":
-					resultString = "자유게시판";
+					return myConstClass.MEALPLAN[this.props.userLanguage];
 					break;
 				case "calculator":
-					resultString = "계산기";
+					return myConstClass.CALCULATOR[this.props.userLanguage];
 					break;
 				default:
-					resultString = "군대닷컴";
+					return myConstClass.GOONDAETITLE[this.props.userLanguage];
 					break;
 			}
 			self.setState({
@@ -196,33 +176,31 @@ class PageHeader extends React.Component{
 	}
 	render(){
 		let pageTitleText = this.pageTitle();
-		console.log(pageTitleText);
 		let showSwitchBtn = false;
 		let showSwitchCalcBtn = false;
 		let showSwitchVacBtn = false;
 		let switchBtn = <div></div>;
 		var switchVacBtn, vacSwitchLink;
 		const pageNum = this.pageNum()
-		console.log(pageNum);
 		if(pageNum == 5){
 			const isDaysNotWolgeup = this.props.isDaysNotWolgeup;
-			pageTitleText = isDaysNotWolgeup ? "군복무 계산기" : "군월급 계산기";
+			pageTitleText = isDaysNotWolgeup ? myConstClass.DATECALCULATOR[this.props.userLanguage] : myConstClass.SALARYCALCULATOR[this.props.userLanguage];
 			showSwitchCalcBtn = true;
 		} else if(pageNum == 1){
 			showSwitchVacBtn = true;
-			switchVacBtn = "휴가 수정";
+			switchVacBtn = myConstClass.VACATIONEDIT[this.props.userLanguage];
 			vacSwitchLink = "/vacation-overview/";
 		} else if(pageNum == 6){
 			showSwitchVacBtn = true;
-			switchVacBtn = "휴가 계획표";
+			switchVacBtn = myConstClass.VACATIONCHART[this.props.userLanguage];
 			vacSwitchLink = "/vacation/";
 		}
 		showSwitchBtn = showSwitchVacBtn || showSwitchCalcBtn;
 		
-		console.log('page header render');
+
 		const isDaysNotWolgeup = this.props.isDaysNotWolgeup;
-		console.log(isDaysNotWolgeup);
-		const switchCalcBtn = !isDaysNotWolgeup ? "군복무 계산기" : "군월급 계산기";
+
+		const switchCalcBtn = !isDaysNotWolgeup ? myConstClass.DATECALCULATOR[this.props.userLanguage] : myConstClass.SALARYCALCULATOR[this.props.userLanguage];
 		const headerId = isDaysNotWolgeup ? "pageHeader" : "wolgeupPageHeader";
 		const btnClass = !isDaysNotWolgeup ? "fa-hourglass-half" : "fa-won-sign";
 		
@@ -266,9 +244,9 @@ class PageHeader extends React.Component{
 				<div id="goonbokmuTitle">
 					{switchBtn}
 					
-					<button className={loginBtnClass} onClick={() => this.props.onClickOpenLoginModal()}>로그인</button>
-					<button className={signupBtnClass} onClick={() => this.props.onClickOpenSignupModal()}>가입하기</button>
-					<button className={logoutBtnClass} onClick={() => this.props.onClickLogout()}>로그아웃</button>
+					<button className={loginBtnClass} onClick={() => this.props.onClickOpenLoginModal()}>{myConstClass.LOGIN[this.props.userLanguage]}</button>
+					<button className={signupBtnClass} onClick={() => this.props.onClickOpenSignupModal()}>{myConstClass.SIGNUP[this.props.userLanguage]}</button>
+					<button className={logoutBtnClass} onClick={() => this.props.onClickLogout()}>{myConstClass.LOGOUT[this.props.userLanguage]}</button>
 				</div>
 				<MenuButton
 					toggleMenuBar={this.props.toggleMenuBar}
@@ -281,65 +259,5 @@ class PageHeader extends React.Component{
 	}
 	
 }
-
-/*<VacationSwitcher
-						showVacSwitcher={showVacSwitcher}
-						pageTitleText = {pageTitleText}
-						btnText = {switchPageBtnText}
-						btnClass = {btnClass}
-						onCalcSwitcherClick={() => this.props.onCalcSwitcherClick()}
-						showSwitchCalcBtn = {showSwitchCalcBtn}
-					/>*/
-// class GoondaeDaysLeft extends React.Component{ //state to upper level and pass it down to resultBox as well.
-// 	constructor(props){
-// 		super(props);
-		
-// 		this.state = {
-// 			isDaysNotWolgeup : true,
-			
-// 		};
-// 	}
-	
-// 	componentDidMount(){
-		
-// 		// const gtmSCript2 = document.createElement("script");
-// 		// const scriptText = document.createTextNode(`window.dataLayer = window.dataLayer || [];
-// 		// function gtag(){dataLayer.push(arguments);}
-// 		// gtag('js', new Date());
-// 		// gtag('config', 'UA-113300855-1');`);
-		
-// 		// gtmSCript2.appendChild(scriptText);
-		
-// 		// document.head.appendChild(gtmSCript2);
-		
-		
-// 		// const gtmScript = document.createElement("script");
-// 		// gtmScript.src = "https://www.googletagmanager.com/gtag/js?id=UA-113300855-1";
-// 		// gtmScript.async = true;
-		
-// 		// document.head.appendChild(gtmScript);
-		
-		
-		
-		
-// 	}
-	
-// 	switcherClicked(){
-// 		const isDaysNotWolgeup = this.state.isDaysNotWolgeup;
-		
-// 		this.setState({
-// 			isDaysNotWolgeup : !isDaysNotWolgeup
-// 		});
-// 	}
-	
-// 	render() {
-// 		return (
-// 			<PageHeader 
-// 				isDaysNotWolgeup={this.props.isDaysNotWolgeup}
-// 				onClick={() => this.switcherClicked()}
-// 			/>
-// 		);
-// 	}
-// }
 
 export default PageHeader;

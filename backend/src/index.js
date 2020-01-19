@@ -5,6 +5,7 @@ const User = require('./models/user');
 const userRouter = require('./routers/user');
 const taskRouter = require('./routers/task');
 const vacRouter = require('./routers/vacation-date');
+const http = require("http");
 
 const auth = require('./middleware/auth');
 
@@ -63,6 +64,11 @@ app.use(vacRouter);
 // With middleware: 	new request -> do something -> run route handler
 //
 
+
+setInterval(function() {
+    http.get("http://goondae-web.herokuapp.com");
+    http.get("http://goondae-server.herokuapp.com");
+}, 300000); // every 5 minutes (300000)
 
 app.listen(port, () => {
 	console.log('Server is up on port : ' + port);

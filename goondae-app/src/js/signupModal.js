@@ -2,6 +2,7 @@ import React from 'react'
 import Modal from 'react-modal';
 import axios from 'axios'
 import moment from 'moment';
+import * as myConstClass from './utils/languageConstants.js';
 import '../css/modal-style.css';
 
 const oneDay = 24*60*60*1000;
@@ -22,13 +23,14 @@ const customStyles = {
   }
 };
 Modal.setAppElement('#root');
+axios.defaults.baseURL = 'https://goondae-server.herokuapp.com';
 const signupAxios = axios.create();
 
 class SignupHeader extends React.Component{
 	render() {
 		return (
 			<div className="login-modal-header">	
-				<h2 className="login-modal-header-text">가입!</h2>
+				<h2 className="login-modal-header-text">{myConstClass.SIGNUPSENTENCE[this.props.userLanguage]}</h2>
 				<button
 					className="login-modal-close-btn btn btn-default"
 					dataPurpose="close-popup"
@@ -45,20 +47,16 @@ class SignupHeader extends React.Component{
 class SignupBox extends React.Component{
 
 	keyPressed = (event) => {
-		console.log(event);
 		if(event.key === "Enter"){
 			this.props.handleSignupSubmit();
 		}
 	}
 	
 	render() {
-		console.log(this.props.selectedDate);
-		console.log(this.props.isLoggingIn);
 		const signupBtnClass = "login-modal-login-button " + (this.props.isSigningUp ? "login-modal-loading" : "" );
 		
 		const signupErrorMessage = "modal-message modal-error-message " + (this.props.showErrorMessage ? "" : "hidden");
 		const signupSuccessMessage = "modal-message modal-success-message " + (this.props.showSuccessMessage ? "" : "hidden");
-		console.log(signupSuccessMessage, this.props.showSuccessMessage);
 		
 		
 		const startDate = moment.utc(this.props.selectedDate);
@@ -66,15 +64,12 @@ class SignupBox extends React.Component{
 		// if(startDate.hour() != 0){
 		// 	startDate.hour(24,0,0,0);
 		// }
-		console.log(startDate);
+
 		// const selectedDate = moment.utc(new Date(selectedDateArr[2], selectedDateArr[1]-1, selectedDateArr[0]);
 		// console.log(selectedDate);
 		const startDateObj = startDate.year() + '-' + ((startDate.month()+1)>9 ? '' : '0') +(startDate.month()+1) + '-' + (startDate.date()>9 ? '' : '0') + startDate.date();
 		
 		const selectedTypeObj = this.props.selectedType;
-		console.log(selectedTypeObj);
-		
-		console.log("@@@@@@@@@" + startDateObj);
 
 		var errorMessage1 = "모든 항목을 확인하고";
 		var errorMessage2 = "입력해 주십시오.";
@@ -92,26 +87,29 @@ class SignupBox extends React.Component{
 				<div className={signupErrorMessage}>{errorMessage1}<br/> {errorMessage2}</div>
 				<div className={signupSuccessMessage}>가입이 완료되었습니다!</div>
 				<form>
+					
 					<div className="login-field">
+						<div className="enlistment-helper-div">{myConstClass.ENLISTMENTDATEHELP[this.props.userLanguage]}</div>
 						<span className="fas fa-calendar-day login-modal-field-icon"></span>
 						<input className="login-modal-input-box" type="date" name="startDate" 
 							min="2010-01-01"
 							max="2030-01-01" 
 							onKeyPress={this.keyPressed}
-							onChange={(e) => this.props.handleDateChange(e)} placeholder="입대일자" value={startDateObj}/>
+							onChange={(e) => this.props.handleDateChange(e)} placeholder={myConstClass.ENLISTMENTDATE[this.props.userLanguage]} value={startDateObj}/>
 
 					</div>
 					<div className="login-field">
-						<span className="fas fa-calendar-day login-modal-field-icon"></span>
+						<span className="fas fa-chevron-circle-down login-modal-field-icon"></span>
 						<select className="login-modal-input-box" id="mySelect" name="serviceType" onChange={(e) => this.props.handleChange(e)}>
-						 	<option value="0">육군</option>
-						 	<option value="1">해군</option>
-						 	<option value="2">공군</option>
-						 	<option value="3">해병대</option>
-							<option value="4">의무경찰</option>
-						 	<option value="5">해양경찰</option>
-						 	<option value="6">의무소방원</option>
-						 	<option value="7">사회복무요원</option>
+							<option disabled>{myConstClass.PLEASESELECT[this.props.userLanguage]}</option>
+						 	<option value="0">{myConstClass.LONGSERVICETYPES[this.props.userLanguage][0]}</option>
+						 	<option value="1">{myConstClass.LONGSERVICETYPES[this.props.userLanguage][1]}</option>
+						 	<option value="2">{myConstClass.LONGSERVICETYPES[this.props.userLanguage][2]}</option>
+						 	<option value="3">{myConstClass.LONGSERVICETYPES[this.props.userLanguage][3]}</option>
+							<option value="4">{myConstClass.LONGSERVICETYPES[this.props.userLanguage][4]}</option>
+						 	<option value="5">{myConstClass.LONGSERVICETYPES[this.props.userLanguage][5]}</option>
+						 	<option value="6">{myConstClass.LONGSERVICETYPES[this.props.userLanguage][6]}</option>
+						 	<option value="7">{myConstClass.LONGSERVICETYPES[this.props.userLanguage][7]}</option>
 						</select>
 
 					</div>
@@ -119,7 +117,7 @@ class SignupBox extends React.Component{
 						<span className="fas fa-signature login-modal-field-icon"></span>
 						<input className="login-modal-input-box" type="text" name="name"  
 							onKeyPress={this.keyPressed}
-							onChange={(e) => this.props.handleChange(e)} placeholder="성명"/>
+							onChange={(e) => this.props.handleChange(e)} placeholder={myConstClass.FULLNAME[this.props.userLanguage]}/>
 
 					</div>
 					<div className="login-field">
@@ -127,7 +125,7 @@ class SignupBox extends React.Component{
 						<span className="fas fa-envelope login-modal-field-icon"></span>
 						<input className="login-modal-input-box" type="text" name="email"  
 							onKeyPress={this.keyPressed}
-							onChange={(e) => this.props.handleChange(e)} placeholder="아이디"/>
+							onChange={(e) => this.props.handleChange(e)} placeholder={myConstClass.USERNAME[this.props.userLanguage]}/>
 
 					</div>
 					<div className="login-field">
@@ -135,12 +133,12 @@ class SignupBox extends React.Component{
 							<span className="fas fa-key login-modal-field-icon"></span>
 							<input className="login-modal-input-box" type="text" name="password"  
 							onKeyPress={this.keyPressed}
-								onChange={(e) => this.props.handleChange(e)} placeholder="비밀번호"/>
+								onChange={(e) => this.props.handleChange(e)} placeholder={myConstClass.PASSWORD[this.props.userLanguage]}/>
 						</div>
 					</div>
 					
 					<div className="login-field">
-						<input className={signupBtnClass} type="button" name="submit" onClick={() => this.props.handleSignupSubmit()} value="가입하기" />
+						<input className={signupBtnClass} type="button" name="submit" onClick={() => this.props.handleSignupSubmit()} value={myConstClass.SIGNUP[this.props.userLanguage]} />
 					</div>
 					<div className="login-field">
 						<a link="" onClick={() => this.props.openSignupModal()}></a>
@@ -162,7 +160,6 @@ class SignupModal extends React.Component{
 		this.handleSignupSubmit = this.handleSignupSubmit.bind(this);
 		this.closeSignupModal = this.closeSignupModal.bind(this);
 		// this.handlePasswordChange = this.handlePasswordChange.bind(this);
-		console.log("!!!!Signup" + this.props.selectedDate);
 		this.state = {
 			email: '',
 			password: '',
@@ -175,7 +172,6 @@ class SignupModal extends React.Component{
 		
 	}
 	componentDidMount(){
-		console.log("@@@@@Signup" + this.props.selectedDate);
 		var self = this;
 		signupAxios.interceptors.request.use(function (config) {
 
@@ -185,7 +181,6 @@ class SignupModal extends React.Component{
 			self.setState({
 				isSigningUp: true
 			});
-			console.log('started signing in');
 			return config;
 
 			}, function (error) {
@@ -204,7 +199,6 @@ class SignupModal extends React.Component{
 			// spinning hide
 			// UPDATE: Add this code to hide global loading indicator
 			// document.body.classList.remove('loading-indicator');
-			console.log('finished1111');
 			self.setState({
 				isSigningUp: false,
 				// email: '',
@@ -233,8 +227,6 @@ class SignupModal extends React.Component{
 	handleDateChange(e){
 		this.props.onChangeDate(moment.utc(new Date(e.target.value)));
 		this.setState({[e.target.name]: moment.utc(new Date(e.target.value))});
-		console.log("hello" , e.target.value);
-		console.log(this.state.startDate);
 		// const dateValue = e.target.value;
 		// console.log(dateValue.substr(5,2));
 		// const newDate = dateValue.substr(0,4) + "-" + dateValue.substr(5,2)  + "-" + dateValue.substr(8,2) ;
@@ -244,18 +236,15 @@ class SignupModal extends React.Component{
 	}
 	
 	handleDropdownChange(e){
-		console.log(e.label, e.value);
 		this.setState({serviceType : e.value});
 	}
 	handleChange(e){
-		console.log(e.target.value);
 		this.setState({[e.target.name]: e.target.value});
 	}
 	
 	closeSignupModal(){
 		this.props.closeSignupModal();
 		this.setState({showErrorMessage:false, email:'', password:'', isSigningIn: false, showSuccessMessage:false});
-		console.log('closing modal');
 		
 	}
 	
@@ -292,7 +281,6 @@ class SignupModal extends React.Component{
 		
 		const selectedDate = this.state.startDate;
 		// const date = moment.utc(new Date(selectedDate[2],selectedDate[1]-1,selectedDate[0]);
-		console.log(selectedDate);
 		const date = moment.utc(new Date(selectedDate.valueOf()));
 		
 		var subtractStartDay;
@@ -344,20 +332,12 @@ class SignupModal extends React.Component{
 	}
 	
 	async handleSignupSubmit(){
-		
-		console.log('hello');
-		console.log(this.state.email);
-		console.log(this.state.password);
-		console.log(this.state.isSigningUp);
 		try{
-			console.log(this.state.startDate);
 			const startDate = moment.utc(new Date(this.props.selectedDate));
-			console.log(startDate);
 			const endDate = this.calculateUpdatedDaysLeft()[0];
-			console.log(endDate);
 			let getUsers = await
 			// signupAxios.post('http://localhost:5000/users', {
-			signupAxios.post('http://localhost:5000/users', {
+			signupAxios.post('/users', {
 				name: this.state.name,
 				email: this.state.email,
 				password: this.state.password,
@@ -366,13 +346,11 @@ class SignupModal extends React.Component{
 				endDate: endDate,
 				mealUnit: 0
 			});
-			console.log(getUsers);
 			
 			// this.props.closeModal();
 		}catch(e){
 			console.log(e);
 		}
-		console.log(this.state.isSigningUp);
         
 
         // getUsers();
@@ -382,11 +360,8 @@ class SignupModal extends React.Component{
 	// 	this.setState({password: val});
 	// }
 	render() {
-		console.log("####Signup" + this.props.selectedDate);
 		const startDate = moment.utc(new Date(this.state.startDate));
-		console.log(startDate);
 		const endDate = this.calculateUpdatedDaysLeft()[0];
-		console.log(endDate);
 		return (
 			<div>
 				<Modal
@@ -395,8 +370,11 @@ class SignupModal extends React.Component{
 				style={customStyles}
 				contentLabel="Example Modal"
 				>
-					<SignupHeader closeSignupModal={this.closeSignupModal}/>
+					<SignupHeader 
+						userLanguage={this.props.userLanguage}
+						closeSignupModal={this.closeSignupModal}/>
 					<SignupBox
+						userLanguage={this.props.userLanguage}
 						showErrorMessage={this.state.showErrorMessage}
 						showSuccessMessage={this.state.showSuccessMessage}
 						handleChange={this.handleChange}

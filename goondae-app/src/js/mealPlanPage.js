@@ -5,6 +5,7 @@ import '../css/font-addition.css';
 import '../css/goonbokmu-content.css';
 import '../css/meal-plan.css';
 import '../css/bootstrap-4.0.0/bootstrap.css';
+import * as myConstClass from './utils/languageConstants.js';
 
 // var json = require('../json/2019-june-meal.json'); 
 
@@ -51,8 +52,7 @@ class MealPlanPage extends React.Component{
 		newMealsArray.push(mealData.중식.split(" "));
 		newMealsArray.push(mealData.석식.split(" "));
 		newMealsArray.push(mealData.후식.split(" "));
-		
-		console.log(newMealsArray);
+	
 		
 		const keyStringArray = ['dateItem:', 'breakfastItem:', 'lunchItem:', 'dinnerItem:', 'dessertItem:'];
 		
@@ -84,14 +84,14 @@ class MealPlanPage extends React.Component{
 		newMealsArray.push(mealData.석식.split(" "));
 		newMealsArray.push(mealData.후식.split(" "));
 		
-		console.log(isOnMainPage);
+
 		const dateClass = isOnMainPage ? "meal-cell date-meal-cell-mainp" : "meal-cell date-meal-cell";
 		const breakfastClass = isOnMainPage ? "meal-cell breakfast-meal-cell-mainp" : "meal-cell breakfast-meal-cell";
 		const lunchClass = isOnMainPage ? "meal-cell lunch-meal-cell-mainp" : "meal-cell lunch-meal-cell";
 		const dinnerClass = isOnMainPage ? "meal-cell dinner-meal-cell-mainp" : "meal-cell dinner-meal-cell";
 		const dessertClass = isOnMainPage ? "meal-cell dessert-meal-cell-mainp" : "meal-cell dessert-meal-cell";
 		
-		console.log(newMealsArray);
+
 		
 		const keyStringArray = ['dateItem:', 'breakfastItem:', 'lunchItem:', 'dinnerItem:', 'dessertItem:'];
 		
@@ -131,26 +131,26 @@ class MealPlanPage extends React.Component{
 		// 	{value: 11, label: '제8623부대'},
 		// 	{value: 12, label: '제2171부대'},
 		// 	{value: 13, label: '제9030부대'}];
+
 		const options = [
-			{value: 0, label: '육군훈련소'},
-			{value: 1, label: '제8902부대'},
-			{value: 2, label: '제5021부대'},
-			{value: 3, label: '제6282부대'},
-			{value: 4, label: '제3296부대'},
-			{value: 5, label: '제7369부대'},
-			{value: 6, label: '제6176부대'},
-			{value: 7, label: '제1691부대'},
-			{value: 8, label: '제5322부대'},
+			{value: 0, label: myConstClass.MILITARYUNITS[0][0]},
+			{value: 1, label: myConstClass.MILITARYUNITS[0][1]},
+			{value: 2, label: myConstClass.MILITARYUNITS[0][2]},
+			{value: 3, label: myConstClass.MILITARYUNITS[0][3]},
+			{value: 4, label: myConstClass.MILITARYUNITS[0][4]},
+			{value: 5, label: myConstClass.MILITARYUNITS[0][5]},
+			{value: 6, label: myConstClass.MILITARYUNITS[0][6]},
+			{value: 7, label: myConstClass.MILITARYUNITS[0][7]},
+			{value: 8, label: myConstClass.MILITARYUNITS[0][8]},
 			{value: 9, label: '제10급양대'},
-			{value: 10, label: '제6335부대'},
-			{value: 11, label: '제8623부대'},
-			{value: 12, label: '제2171부대'},
-			{value: 13, label: '제9030부대'}];
+			{value: 10, label: myConstClass.MILITARYUNITS[0][10]},
+			{value: 11, label: myConstClass.MILITARYUNITS[0][11]},
+			{value: 12, label: myConstClass.MILITARYUNITS[0][12]},
+			{value: 13, label: myConstClass.MILITARYUNITS[0][13]}];
 		
 		const defaultOption = options[this.props.mealUnit];
 		const unitName = defaultOption.label;
 		const currentUnitMealData = mealDataJson[unitName];
-		console.log(mealDataJson, unitName, currentUnitMealData)
 		const lastMonthMealData = currentUnitMealData;
 		const nextMonthMealData = currentUnitMealData;
 		
@@ -166,7 +166,7 @@ class MealPlanPage extends React.Component{
 			const today = new Date();
 			var lastDayOfNextMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
 			lastDayOfNextMonth.setDate(lastDayOfNextMonth.getDate() - 1);
-			console.log(today.getDate());
+
 			if(today.getDate() === 1) {
 				mealRows.push(this.renderDayMealColumn(lastMonthMealData[-1], -1, true));
 				mealRows.push(this.renderDayMealColumn(currentUnitMealData[0], 0, true));
@@ -187,7 +187,6 @@ class MealPlanPage extends React.Component{
 			dinnerClass += "-mainp";
 			dessertClass += "-mainp";
 		} else {
-			console.log(currentUnitMealData);
 			for(var i = 0; i < currentUnitMealData.length; i++){
 				mealRows.push(this.renderDayMealRow(currentUnitMealData[i], i, false));
 				// dateCell.push(this.renderMealOfTheDay(currentUnitMealData[i].날짜,"date",i));

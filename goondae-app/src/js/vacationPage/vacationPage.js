@@ -7,6 +7,7 @@ import LockedPage from '../lockedPage.js';
 import axios from 'axios';
 import Modal from 'react-modal';
 import moment from 'moment';
+import * as myConstClass from '../utils/languageConstants.js';
 
 // class DayInMonthCalendar extends React.Component{
 // 	render(){
@@ -16,6 +17,7 @@ import moment from 'moment';
 // 		)
 // 	}
 // }
+axios.defaults.baseURL = 'https://goondae-server.herokuapp.com';
 const userDataAxios = axios.create(); 
 class MonthCalendar extends React.Component{
 	
@@ -27,9 +29,9 @@ class MonthCalendar extends React.Component{
 		} else if (ind == 6){
 			dayClass += " last-day-of-week";
 		}
-		// console.log(this.props.vacationDates, this.props.yearNum*10000+this.props.monthNum*100+i, this.props.vacationDates.has(this.props.yearNum*10000+this.props.monthNum*100+i));
+		// 
 		if(this.props.vacationDates.has(this.props.yearNum*10000+this.props.monthNum*100+i)){
-			// console.log("Hello");
+			// 
 			dayClass += " vacation-day";
 		}
 		
@@ -52,7 +54,7 @@ class MonthCalendar extends React.Component{
 			weekInMonth.push(0);
 		}
 		for(var i = 0; i < numDaysInMonth; i++){
-			// console.log(daysInMonth);
+			// 
 			weekInMonth.push(i+1);
 			dayNumOfDay++;
 			if(dayNumOfDay == 7){
@@ -69,7 +71,7 @@ class MonthCalendar extends React.Component{
 		
 		
 		
-		// console.log(daysInMonth);
+		// 
 		const numRows = daysInMonth.length;
 		let hello = [];
 		
@@ -119,14 +121,15 @@ class VacationPage extends React.Component{
 		}
 		
 	}
+
 	
 	_isMounted = false;
 	async componentDidMount(){
 		this._isMounted = true;
 		const token = localStorage.getItem('token');
 		if(token){
-			let vac = await userDataAxios.get('http://localhost:5000/vacationDates/'+token); //req.params.token
-			let user = await userDataAxios.get('http://localhost:5000/users/me/'+token); //req.params.token
+			let vac = await userDataAxios.get('/vacationDates/'+token); //req.params.token
+			let user = await userDataAxios.get('/users/me/'+token); //req.params.token
 			if(this._isMounted){
 				this.setState({
 					vac: vac,
@@ -134,7 +137,7 @@ class VacationPage extends React.Component{
 					user:user.data
 				});
 			}
-			console.log('hello');
+			
 			
 		}
 		
@@ -150,11 +153,11 @@ class VacationPage extends React.Component{
 					isLoading: true
 				});
 			}
-			console.log('started');
+			
 			return config;
 
 			}, function (error) {
-				console.log('error request');
+				
 				if(self._isMounted){
 					self.setState({
 						isLoading: false
@@ -167,7 +170,7 @@ class VacationPage extends React.Component{
 			// spinning hide
 			// UPDATE: Add this code to hide global loading indicator
 			// document.body.classList.remove('loading-indicator');
-			console.log('finished');
+			
 			if(self._isMounted){
 					self.setState({
 						isLoading: false
@@ -176,7 +179,7 @@ class VacationPage extends React.Component{
 
 			return response;
 			}, function (error) {
-				console.log('error response');
+				
 				if(self._isMounted){
 					self.setState({
 						isLoading: false
@@ -195,18 +198,18 @@ class VacationPage extends React.Component{
 		//korean calendar starts from monday, monday = 1, 
 		//to get korStartDayNum from startDayNum, k = (s + 6) % 7
 		// const koreanStartDayNum = (startDayNum + 6) % 7
-		// console.log(vacationDates);
+		// 
 		return (
 			<div className="month-calendar">
-				<div className="month-name-row">{yearNum}년 {monthNum}월</div>
+				<div className="month-name-row">{yearNum}{myConstClass.YEAR[this.props.userLanguage]} {myConstClass.MONTHOFYEAR[this.props.userLanguage][monthNum-1]}</div>
 				<div className="day-name-row">
-					<div className="day-in-month-calendar first-day-of-week">일</div>
-					<div className="day-in-month-calendar">월</div>
-					<div className="day-in-month-calendar">화</div>
-					<div className="day-in-month-calendar">수</div>
-					<div className="day-in-month-calendar">목</div>
-					<div className="day-in-month-calendar">금</div>
-					<div className="day-in-month-calendar last-day-of-week">토</div>					
+					<div className="day-in-month-calendar first-day-of-week">{myConstClass.DAYSOFWEEK[this.props.userLanguage][0]}</div>
+					<div className="day-in-month-calendar">{myConstClass.DAYSOFWEEK[this.props.userLanguage][1]}</div>
+					<div className="day-in-month-calendar">{myConstClass.DAYSOFWEEK[this.props.userLanguage][2]}</div>
+					<div className="day-in-month-calendar">{myConstClass.DAYSOFWEEK[this.props.userLanguage][3]}</div>
+					<div className="day-in-month-calendar">{myConstClass.DAYSOFWEEK[this.props.userLanguage][4]}</div>
+					<div className="day-in-month-calendar">{myConstClass.DAYSOFWEEK[this.props.userLanguage][5]}</div>
+					<div className="day-in-month-calendar last-day-of-week">{myConstClass.DAYSOFWEEK[this.props.userLanguage][6]}</div>					
 				</div>
 				<MonthCalendar
 					startDayNum={startDayNum}
@@ -220,11 +223,11 @@ class VacationPage extends React.Component{
 	
 	render(){
 		const vacationPageContent = []; //array of month calendars
-		console.log(this.state.vacArray);
+		
 		if(this.state.user && this.state.vacArray){
 			const userData = this.state.user;
 			const vacArray = this.state.vacArray;
-			console.log(this.state.vacArray);
+			
 			var vacDateSet = new Set();
 			for(var i = 0; i < vacArray.length; i++){
 				var currDate = moment(vacArray[i].startDate); 
@@ -237,7 +240,7 @@ class VacationPage extends React.Component{
 				}
 				vacDateSet.add(currDate.year()*10000 + (currDate.month()+1)*100 + currDate.date());
 			}
-			// console.log(vacDateSet);
+			// 
 			const startMonth = moment(userData.startDate).month();
 			const startYear = moment(userData.startDate).year();
 			const endMonth = moment(userData.endDate).month();
@@ -251,21 +254,29 @@ class VacationPage extends React.Component{
 				const newYear = moment(newTime).year();
 				// const momentStartDate = moment(vacArray[vacArrCount].startDate);
 				// const momentEndDate = moment(vacArray[vacArrCount].endDate);
-				// console.log(newMonth, moment(vacArray[vacArrCount].startDate).month());
+				// 
 				vacationPageContent.push(this.renderSingleMonthlyCalendar(newYear, newMonth+1, moment(newTime).day(), vacDateSet));
 				
 				newTime = moment(newTime).add(1, 'M');
-				// console.log(newTime, vacArray[vacArrCount]);
+				// 
 				count += 1;
 				
 			}
 		}
 		const monthNum = 2;
-		if(this.props.isLoggedIn){
+
+		var loadingClass = "loading-screen ";
+		if(this.state.isLoading){
 			return(
-				<div className="vacation-calendars-container">{vacationPageContent}</div>
-			);
-		}	
+				<div className="vacation-calendars-container"><div className="loading-screen "><div className="lds-dual-ring"></div></div>{vacationPageContent}</div>
+			);			
+		} else {
+			if(this.props.isLoggedIn){
+				return(
+					<div className="vacation-calendars-container"><div className="loading-screen hidden"></div>{vacationPageContent}</div>
+				);
+			}
+		}		
 		return(
 			<div className="vacation-calendars-container">
 				<LockedPage openLoginModal = {this.props.openLoginModal}></LockedPage>
