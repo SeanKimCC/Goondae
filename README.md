@@ -18,9 +18,9 @@ To use the Vacation Planner, users must sign up and log in.
 
 ![Signup screenshot](/goondae-readme/signup.png)
 
-![Login_screenshot](//goondae-readme/login.png)
+![Login_screenshot](/goondae-readme/login.png)
 
-![Vacation1 screenshot](/goondae-readme/vacation1.png)
+![Vacation1 screenshot](/goondae-readme/vacation.png)
 ![Vacation2 screenshot](/goondae-readme/vacation2.png)
 ![Vacation3 screenshot](/goondae-readme/vacation3.png)
 ![Vacation4 screenshot](/goondae-readme/vacation4.png)
