@@ -16,6 +16,6 @@ The Goondae website consists of three main features that are useful to soldiers 
 
 To use the Vacation Planner, users must sign up.
 
-![Signup screenshot](/goondae-readme/signup.png | width=100)
+![Signup screenshot](/goondae-readme/signup.png){:height="700px" width="400px"}
 
 
