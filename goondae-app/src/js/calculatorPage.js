@@ -21,7 +21,7 @@ import * as myConstClass from './utils/languageConstants.js';
 
 
 // Modal.setAppElement('#root');
-axios.defaults.baseURL = 'https://goondae-server.herokuapp.com';
+axios.defaults.baseURL = myConstClass.SERVERADDRESS;
 const logoutAxios = axios.create();
 class CalculatorPage extends React.Component{
 	constructor(props){

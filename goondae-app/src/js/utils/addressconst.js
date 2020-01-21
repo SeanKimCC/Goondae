@@ -1,1 +1,1 @@
-export const SERVERADDRESS = "https://goondae-server.herokuapp.com";
+export const SERVERADDRESS = "https://goondae-backend.herokuapp.com";

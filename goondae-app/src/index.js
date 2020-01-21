@@ -25,10 +25,14 @@ import MainPage from './js/mainPage.js';
 import axios from 'axios';
 import Modal from 'react-modal';
 import { BrowserRouter as Router, Route } from "react-router-dom";
+import * as myConstClass from './js/utils/languageConstants.js';
+
 
 //Think about whether all the states needed in different pages (that is shared with nav bar) should be in the main page
 //Maybe there's another method. Right now, since the main page only passes today to nav bar, things aren't calculated properly
 
+
+axios.defaults.baseURL = myConstClass.SERVERADDRESS;
 Modal.setAppElement('#root');
 const logoutAxios = axios.create();
 const userDataAxios = axios.create();
@@ -134,7 +138,7 @@ class Index extends React.Component{
 		const token = localStorage.getItem('token');
 		
 		try{
-			let getUsers = await userDataAxios.get('http://localhost:5000/users/me/'+token); //req.params.token
+			let getUsers = await userDataAxios.get('/users/me/'+token); //req.params.token
 			console.log(localStorage.getItem('token'));
 			console.log(getUsers.data.startDate);
 			// return getUsers;
@@ -157,7 +161,7 @@ class Index extends React.Component{
 		const token = localStorage.getItem('token');
 		try{
 			let getLogoutUser = await
-			userDataAxios.post('http://localhost:5000/users/logoutAll', {
+			userDataAxios.post('/users/logoutAll', {
 				token: token
 			});
 			console.log(getLogoutUser);
@@ -292,7 +296,7 @@ class Index extends React.Component{
 		const token = localStorage.getItem('token');
 		try{
 			let getLogoutUser = await
-			userDataAxios.patch('http://localhost:5000/users/me', {
+			userDataAxios.patch('/users/me', {
 				token: token,
 				mealUnit: this.state.mealUnit
 			});
@@ -324,6 +328,7 @@ class Index extends React.Component{
 				   isLoggedIn={this.state.isLoggedIn}
 				   isLoggingIn={this.state.isLoggingIn}
 				   openLoginModal={this.openLoginModal}
+				   userLanguage={this.state.userLanguage}
 			/>
 	}
 	returnNewVacationOverview(){
@@ -473,6 +478,7 @@ class Index extends React.Component{
 						onChangeDate={this.onClickDay}
 						selectedType={this.state.selectedType}
 						userLanguage={this.state.userLanguage}
+						openLoginModal={this.openLoginModal}
 					/>
 					<LoginModal
 						loginModalIsOpen={this.state.loginModalIsOpen}

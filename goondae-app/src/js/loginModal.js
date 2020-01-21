@@ -21,7 +21,7 @@ const customStyles = {
 };
 
 Modal.setAppElement('#root');
-axios.defaults.baseURL = 'https://goondae-server.herokuapp.com';
+axios.defaults.baseURL = myConstClass.SERVERADDRESS;
 const loginAxios = axios.create();
 
 class LoginHeader extends React.Component{
@@ -73,7 +73,7 @@ class LoginBox extends React.Component{
 					<div className="login-field">
 						<div>
 							<span className="fas fa-key login-modal-field-icon"></span>
-							<input className="login-modal-input-box" type="text" name="password" 
+							<input className="login-modal-input-box" type="password" name="password" 
 								onChange={(e) => this.props.handleChange(e)} 
 								onKeyPress={this.keyPressed}
 								placeholder={myConstClass.PASSWORD[this.props.userLanguage]}/>

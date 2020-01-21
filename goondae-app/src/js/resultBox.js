@@ -26,10 +26,10 @@ class ResultBox extends React.Component{
 	formatDateObject(date){
 
 		var dd = date.getDate();
-		var mm = date.getMonth() + 1; //January is 0!
+		var mm = date.getMonth(); //January is 0!
 		var yyyy = date.getFullYear();
 		
-		var dateString = yyyy.toString() + "년 " + mm.toString() + "월 " + dd.toString() + "일";
+		var dateString = yyyy.toString() + myConstClass.CALCYEAR[this.props.userLanguage] + myConstClass.MONTHOFYEAR[this.props.userLanguage][mm] + " " + dd.toString() + myConstClass.CALCDAY[this.props.userLanguage];
 		
 		return (dateString);
 	}
@@ -494,7 +494,7 @@ class ResultBox extends React.Component{
 		
 		const selectedDate = this.props.selectedDate;
 		// var formattedSelectedDate = selectedDate[2] + "년 " + selectedDate[1] + "월 " + selectedDate[0] + "일";
-		var formattedSelectedDate = selectedDate.getFullYear() + "년 " + (selectedDate.getMonth() + 1) + "월 " + selectedDate.getDate() + "일";
+		var formattedSelectedDate = selectedDate.getFullYear() + myConstClass.CALCYEAR[this.props.userLanguage] + myConstClass.MONTHOFYEAR[this.props.userLanguage][selectedDate.getMonth()] + " " + selectedDate.getDate() + myConstClass.CALCDAY[this.props.userLanguage];
 		
 		// const numDaysLeft = 1; 
 		var updatedDaysLeft = this.calculateUpdatedDaysLeft();
@@ -515,7 +515,7 @@ class ResultBox extends React.Component{
 			<br/>
 			{myConstClass.DISCHARGEDATE[this.props.userLanguage]} : <span>{formattedUpdatedDate}</span>
 			<br/>
-			{myConstClass.DAYSSHORTENED[this.props.userLanguage]} : <span>{updatedDaysSubtracted}일</span>
+			{myConstClass.DAYSSHORTENED[this.props.userLanguage]} : <span>{updatedDaysSubtracted}{myConstClass.CALCLASTDAY[this.props.userLanguage]}</span>
 			</div>
 		) : (
 			<div className="result-box">

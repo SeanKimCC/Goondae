@@ -67,7 +67,7 @@ app.use(vacRouter);
 
 setInterval(function() {
     http.get("http://goondae-web.herokuapp.com");
-    http.get("http://goondae-server.herokuapp.com");
+    http.get("http://goondae-backend.herokuapp.com");
 }, 300000); // every 5 minutes (300000)
 
 app.listen(port, () => {

@@ -3,7 +3,7 @@ const User = require('../models/user');
 
 const auth = async(req, res, next)=>{
 	try {
-		console.log("this is auth.js", req.params.token);
+		// console.log("this is auth.js", req.params.token);
 		let token;
 		if(req.body.token){ //these if statements are different ways of receiving token. req.body if a post request, req.params if a get request
 			
@@ -13,11 +13,11 @@ const auth = async(req, res, next)=>{
 		} else {
 			token = req.header('Authorization').replace('Bearer ', '');
 		}
-		console.log(token);
+		// console.log(token);
 		const decoded = jwt.verify(token, 'thisismynewcourse');
-		console.log(decoded._id, "auth.js");
+		// console.log(decoded._id, "auth.js");
 		user = await User.findOne({ _id: decoded._id, 'tokens.token': token});
-		console.log(user);
+		// console.log(user);
 		if(!user){
 			throw new Error('No user found');
 		}

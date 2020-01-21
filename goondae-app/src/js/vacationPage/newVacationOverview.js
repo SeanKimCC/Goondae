@@ -6,8 +6,9 @@ import '../../css/vacation-overview.css';
 import CalendarInput from '../../js/calendarInput.js';
 import axios from 'axios';
 import Modal from 'react-modal';
+import * as myConstClass from '../../js/utils/languageConstants.js';
 
-axios.defaults.baseURL = 'https://goondae-server.herokuapp.com';
+axios.defaults.baseURL = myConstClass.SERVERADDRESS;
 const saveButtonAxios = axios.create();
 class SaveButton extends React.Component{
 	OnClick(){

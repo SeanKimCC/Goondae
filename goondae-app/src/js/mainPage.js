@@ -22,7 +22,7 @@ import axios from 'axios';
 import Modal from 'react-modal';
 import moment from 'moment';
 
-axios.defaults.baseURL = 'https://goondae-server.herokuapp.com';
+axios.defaults.baseURL = myConstClass.SERVERADDRESS;
 const userDataAxios = axios.create();
 
 const perRankMonthlyPay2017Prop = [163000, 176400, 195000, 216000];

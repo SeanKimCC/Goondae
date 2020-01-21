@@ -27,23 +27,19 @@ function checkIfTwoDateRangesCoincide(date1, numDays1, date2, numDays2){
 
 router.post('/vacationDate', auth, async(req, res) => {
 	// const task = new Task(req.body);
-	console.log("heelo");
+	// console.log("heelo");
+	console.log("5");
 	const vacationDate = new VacationDate({
 		...req.body,
 		owner: req.user._id
 	});
 	
 	try{
-		//find a vacation date that coincides with the one being created
-		const findDup = VacationDate.findOne({
-			
-			owner: req.user._id 
-		});
 		
 		await vacationDate.save();
-		console.log("vac-date: ",vacationDate);
-		const vacationDates = await VacationDate.find({});
-		res.status(201).send(vacationDates);
+		// // console.log("vac-date: ",vacationDate);
+		// const vacationDates = await VacationDate.find({});//problem
+		res.status(201).send(vacationDate);
 	}catch(e){
 		res.status(400).send(e);
 	}
@@ -54,6 +50,7 @@ router.post('/vacationDate', auth, async(req, res) => {
 // PAGINATION : GET /tasks?limit=10&skip=0
 // SORTING DATA : GET /tasks?sortBy=createdAt:desc
 router.get('/vacationDates/:token', auth, async(req, res) => {
+	// console.log(req.user);
 	const match = {};
 	const sort = {};
 	
@@ -80,6 +77,7 @@ router.get('/vacationDates/:token', auth, async(req, res) => {
 				sort
 			}
 		}).execPopulate();
+		// console.log(vacationDates);
 		res.send(req.user.vacationDates);
 	}catch(e){
 		res.status(500).send(e);
@@ -87,6 +85,7 @@ router.get('/vacationDates/:token', auth, async(req, res) => {
 });
 
 router.get('/allVacationDates', auth, async(req, res) => {
+	console.log("1");
 	try{
 		const vacationDates = await VacationDate.find({});
 		res.send(vacationDates);
@@ -110,6 +109,7 @@ router.get('/vacationDates/:id', auth, async(req, res) => {
 });
 
 router.patch('/vacationDates/:id', auth, async(req,res)=>{
+	console.log("2");
 	const updates = Object.keys(req.body);
 	const allowedUpdates = ['description', 'completed', 'startDate', 'endDate', 'vacationTypesAndNumbers'];
 	const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
@@ -139,6 +139,7 @@ router.patch('/vacationDates/:id', auth, async(req,res)=>{
 });
 
 router.delete('/vacationDates/:token/:id', auth, async(req, res) => {
+	console.log("3");
 	const _id = req.params.id;
 	
 	try{
@@ -153,6 +154,7 @@ router.delete('/vacationDates/:token/:id', auth, async(req, res) => {
 });
 
 router.delete('/vacationDatesAll/:token', auth, async(req,res) => {
+	console.log("4");
 	try{
 		const vacationDates = await VacationDate.deleteMany({owner: req.user._id});
 		//@!!!!! find and delete here

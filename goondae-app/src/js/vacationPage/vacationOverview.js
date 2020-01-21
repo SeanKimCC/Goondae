@@ -17,7 +17,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import Modal from 'react-modal';
 import moment from 'moment';
 
-axios.defaults.baseURL = 'https://goondae-server.herokuapp.com';
+axios.defaults.baseURL = myConstClass.SERVERADDRESS;
 const saveButtonAxios = axios.create();
 const userDataAxios = axios.create(); 
 moment.locale('kr');
@@ -87,7 +87,7 @@ class DateRangeSelector extends React.Component{
 			
 			this.props.saveVac(user.data);
 			
-			// this.props.onSaveVac();
+			this.props.onSaveVac();
 			//!!can't perform react state update on unmounted component !!!!!!
 			//https://www.npmjs.com/package/react-date-range
 		}catch(e){
@@ -96,7 +96,7 @@ class DateRangeSelector extends React.Component{
 	}
 	submit = () => {
 	    confirmAlert({
-	      title: '휴가일자를 모두 지우시겠습니까?',
+	      title: myConstClass.DELETEALLVACS[this.props.userLanguage],
 	      buttons: [
 	        {
 	          label: 'Yes',
@@ -119,8 +119,8 @@ class DateRangeSelector extends React.Component{
 					lang="jp"
                 />
                 <div className="date-btn-box">
-               		<button className="date-btn add-vac-btn" onClick={this.addVacation}>저장</button>
-	                <button className="date-btn delete-all-vac-btn" onClick={this.submit}>모두 삭제</button>					
+               		<button className="date-btn add-vac-btn" onClick={this.addVacation}>{myConstClass.SAVE[this.props.userLanguage]}</button>
+	                <button className="date-btn delete-all-vac-btn" onClick={this.submit}>{myConstClass.DELETEALL[this.props.userLanguage]}</button>					
 				</div>
 				
 			</div>)
@@ -167,7 +167,7 @@ class VacationDateRow extends React.Component{
 	
 	dateToKorean(startDate, endDate){
 		const startMomentDate = (this.props.userLanguage == 0) ? moment(startDate).format('YYYY년 MM월 DD일') : moment(startDate).format('MM-DD-YYYY');
-		const endMomentDate = (this.props.userLanguage == 0) ? moment(endDate).format('YYYY년 MM월 DD일') : moment(startDate).format('MM-DD-YYYY');
+		const endMomentDate = (this.props.userLanguage == 0) ? moment(endDate).format('YYYY년 MM월 DD일') : moment(endDate).format('MM-DD-YYYY');
 		// 
 		return startMomentDate + ' ~ ' + endMomentDate;
 	}
@@ -260,6 +260,7 @@ class OverviewTotalDaysViewer extends React.Component{
 	
 	render(){
 		let vacationRows = [];
+		let vacationEmpty;
 		
 		const numRows = this.props.numMonths;
 		
@@ -276,13 +277,16 @@ class OverviewTotalDaysViewer extends React.Component{
 		if(this.props.isLoggedIn == false){
 			vacationRows = (<div></div>);
 		}
-		
+		if(this.props.vacs.length == 0){
+			vacationEmpty=(<div className="vacation-empty-div">{myConstClass.NOVACSMESSAGE[this.props.userLanguage]}</div>)
+		}
 		
 		return(
 			<div className="vacation-total-days-viewer">
 				<div className="vacation-days-viewer-title">
-					나의 휴가일자
+					{myConstClass.VACATIONDATES[this.props.userLanguage]}
 				</div>
+				{vacationEmpty}
 				{vacationRows}
 			</div>
 		);
@@ -325,7 +329,6 @@ class VacationOverview extends React.Component{
 	renderRowOfVacation(){
 		return <div></div>
 	}
-	
 	async deleteAllVacs(){
 		const token = localStorage.getItem('token');
 		try{
@@ -537,8 +540,10 @@ class VacationOverview extends React.Component{
 							numMonths={this.state.numMonthService}
 							vacs={sortable}
 							deleteVacItem={this.deleteVacItem}
+							userLanguage={this.props.userLanguage}
 						/>
 						<DateRangeSelector
+							userLanguage={this.props.userLanguage}
 							onSaveVac={this.onSaveVac}
 							saveVac = {this.saveVac}
 							getUserData = {this.getUserData}

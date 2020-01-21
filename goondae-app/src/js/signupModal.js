@@ -23,7 +23,7 @@ const customStyles = {
   }
 };
 Modal.setAppElement('#root');
-axios.defaults.baseURL = 'https://goondae-server.herokuapp.com';
+axios.defaults.baseURL = myConstClass.SERVERADDRESS;
 const signupAxios = axios.create();
 
 class SignupHeader extends React.Component{
@@ -71,12 +71,12 @@ class SignupBox extends React.Component{
 		
 		const selectedTypeObj = this.props.selectedType;
 
-		var errorMessage1 = "모든 항목을 확인하고";
-		var errorMessage2 = "입력해 주십시오.";
+		var errorMessage1 = myConstClass.SIGNUPERROR1[this.userLanguage];
+		var errorMessage2 = myConstClass.SIGNUPERROR2[this.userLanguage];
 		switch (this.props.errorStatusCode){
 			case 406:
-				errorMessage1 = "등록 되어있는";
-				errorMessage2 = "이메일 주소입니다.";
+				errorMessage1 = myConstClass.SIGNUPEXISTINGEMAIL1[this.userLanguage];
+				errorMessage2 = myConstClass.SIGNUPEXISTINGEMAIL2[this.userLanguage];
 
 		}
 		
@@ -85,7 +85,7 @@ class SignupBox extends React.Component{
 				<div>
 				</div>
 				<div className={signupErrorMessage}>{errorMessage1}<br/> {errorMessage2}</div>
-				<div className={signupSuccessMessage}>가입이 완료되었습니다!</div>
+				<div className={signupSuccessMessage}>{myConstClass.SIGNUPCOMPLETE[this.props.userLanguage]}</div>
 				<form>
 					
 					<div className="login-field">
@@ -131,7 +131,7 @@ class SignupBox extends React.Component{
 					<div className="login-field">
 						<div>
 							<span className="fas fa-key login-modal-field-icon"></span>
-							<input className="login-modal-input-box" type="text" name="password"  
+							<input className="login-modal-input-box" type="password" name="password"  
 							onKeyPress={this.keyPressed}
 								onChange={(e) => this.props.handleChange(e)} placeholder={myConstClass.PASSWORD[this.props.userLanguage]}/>
 						</div>
@@ -208,6 +208,7 @@ class SignupModal extends React.Component{
 
 			});
 			self.closeSignupModal();
+			self.openLoginModal();
 
 			return response;
 			}, function (error) {
@@ -241,11 +242,12 @@ class SignupModal extends React.Component{
 	handleChange(e){
 		this.setState({[e.target.name]: e.target.value});
 	}
-	
+	openLoginModal(){
+		this.props.openLoginModal();
+	}
 	closeSignupModal(){
 		this.props.closeSignupModal();
 		this.setState({showErrorMessage:false, email:'', password:'', isSigningIn: false, showSuccessMessage:false});
-		
 	}
 	
 	

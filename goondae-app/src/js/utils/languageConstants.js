@@ -6,7 +6,7 @@ export const DAY = [""]
 export const SERVICETYPES = [["육군", "해군", "공군", "해병대", "의경", "해경", "소방원", "공익"],["Army", "Navy", "Air Force", "Marine", "Police", "Naval Police", "Fire Fighter", "Pulbic Service"]];
 export const LONGSERVICETYPES = [["육군", "해군", "공군", "해병대", "의무경찰", "해양경찰", "의무소방원", "사회복무요원"],["Army", "Navy", "Air Force", "Marine", "Police", "Naval Police", "Fire Fighter", "Pulbic Service"]];
 export const SELECTSTARTDATE = ["입대일을 선택해주세요","Select the date of your enlistment"];
-
+export const SERVERADDRESS = "https://goondae-backend.herokuapp.com";
 //Signup modal consts
 export const PLEASESELECT = ["병역의 종류를 선택해주세요.", "Please select your branch"];
 export const LOGIN = ["로그인", "Log In"];
@@ -14,9 +14,15 @@ export const LOGOUT = ["로그아웃", "Log Out"];
 export const SIGNUP = ["가입하기", "Sign Up"];
 export const SIGNUPSENTENCE = ['가입하고 군생활을 한눈에 정리해보세요!', 'Sign up!'];
 export const LOGINSENTENCE = ['로그인 하세요!', 'Log in!'];
+export const SIGNUPERROR1 = ["모든 항목을 확인하고", "Check if you have filled in"];
+export const SIGNUPERROR2 = ["입력해 주십시오.", "all of the entries."];
+export const SIGNUPEXISTINGEMAIL1 =["등록 되어있는", "Email you have entered"];
+export const SIGNUPEXISTINGEMAIL2 =["이메일 주소입니다.", "already exists."];
+export const SIGNUPCOMPLETE =["가입이 완료 되었습니다!", "You have signed up successfully!"]
+
 export const CHECKYOURINPUT1 = ["아이디와 비밀번호를 확인하고", "Check your username and password,"];
 export const CHECKYOURINPUT2 = ["다시 입력해 주십시오.", "and try again."];
-export const USERNAME = ["아이디", "Username"];
+export const USERNAME = ["이메", "Email"];
 export const PASSWORD = ["비밀번호", "Password"];
 export const FULLNAME = ["성명", "Full name"];
 export const ENLISTMENTDATEHELP = ["입대일을 입력해주세요.", "Select your enlistment date."];
@@ -28,6 +34,7 @@ export const VACATIONTITLE = ["휴가표", "Vacation Chart"];
 export const VACATIONEDIT = ["휴가 수정", "Edit Dates"];
 export const MEALPLAN = ["식단표","Monthly Menu"];
 export const CALCULATOR = ["복무/월급 계산기","Date/Salary Calculator"];
+export const VACATIONDATES = ["나의 휴가일자", "My Planned Vacation Days"];
 
 //main page
 export const DAYS=["일", " days"];
@@ -62,6 +69,14 @@ export const TOTALPAYSHORT = ["총 봉급","Total Pay"];
 export const DATECALCULATOR = ["군복무 계산기", "Date Calculator"];
 export const SALARYCALCULATOR = ["군월급 계산기", "Salary Calculator"];
 
+export const DELETEALLVACS = ['휴가일자를 모두 지우시겠습니까?', 'Are you sure?'];
+export const NOVACSMESSAGE = ["입력한 휴가일자가 없습니다.", "You don't have any saved vacation dates."];
+
+//calculator page
+export const CALCYEAR =["년 ", " "];
+// export const CALCMONTH = ["월 ", "-"];
+export const CALCDAY = ["일", ""];
+export const CALCLASTDAY = ["일", " Days"];
 
 //military units
 export const MILITARYUNITS = [
@@ -71,3 +86,4 @@ export const MILITARYUNITS = [
 
 
 export const SAVE = ["저장", "Save"];
+export const DELETEALL =["모두 삭제", "Delete All"];

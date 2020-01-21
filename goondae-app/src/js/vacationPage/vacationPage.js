@@ -17,7 +17,7 @@ import * as myConstClass from '../utils/languageConstants.js';
 // 		)
 // 	}
 // }
-axios.defaults.baseURL = 'https://goondae-server.herokuapp.com';
+axios.defaults.baseURL = myConstClass.SERVERADDRESS;
 const userDataAxios = axios.create(); 
 class MonthCalendar extends React.Component{
 	
